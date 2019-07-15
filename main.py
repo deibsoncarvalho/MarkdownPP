@@ -97,7 +97,7 @@ def main():
     else:
         mdpp = open(args.FILENAME, 'r')
         if args.output:
-            md = open(args.output, 'w')
+            md = open(args.output, 'w+')
         else:
             md = sys.stdout
 
@@ -109,17 +109,16 @@ def main():
                     modules.remove(module)
                 else:
                     print('Cannot exclude ', module, ' - no such module')
-
-        template = Template(mdpp.read())
+                    
+        MarkdownPP.MarkdownPP(input=mdpp, output=md, modules=modules)
+        md.seek(0)
+        template = Template(md.read())
         mdpp.close()
-        temp = open("temp", 'w+')
-        temp.write(template.render())
-        temp.seek(0)
-        MarkdownPP.MarkdownPP(input=temp, output=md, modules=modules)
-
-        temp.close()
         md.close()
 
+        md = open(args.output, 'w')
+        md.write(template.render())
+        md.close()
 
 if __name__ == "__main__":
     main()
