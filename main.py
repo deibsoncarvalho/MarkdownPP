@@ -15,8 +15,7 @@ import os
 import time
 from watchdog.observers import Observer
 from watchdog.events import PatternMatchingEventHandler
-
-from jinja2 import PackageLoader, Environment
+from jinja2 import Template
 
 
 # Terminal output ANSI color codes
@@ -111,13 +110,14 @@ def main():
                 else:
                     print('Cannot exclude ', module, ' - no such module')
 
-        env = Environment(loader=PackageLoader('MarkdownPP', 'templates'))
-        template = env.get_template(mdpp)
-        template.render(name='firefly-rk3399')
-
-        MarkdownPP.MarkdownPP(input=mdpp, output=md, modules=modules)
-
+        template = Template(mdpp.read())
         mdpp.close()
+        temp = open("temp", 'w+')
+        temp.write(template.render())
+        temp.seek(0)
+        MarkdownPP.MarkdownPP(input=temp, output=md, modules=modules)
+
+        temp.close()
         md.close()
 
 
