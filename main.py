@@ -10,6 +10,7 @@ from __future__ import unicode_literals
 import argparse
 import sys
 import MarkdownPP
+import json
 
 import os
 import time
@@ -72,6 +73,9 @@ def main():
     parser.add_argument('-e', '--exclude', help='List of modules to '
                         'exclude, separated by commas. Available modules: '
                         + ', '.join(MarkdownPP.modules.keys()))
+
+    parser.add_argument('-f', '--file', help='Json file name, to load the '
+                        'environment args. ')
     args = parser.parse_args()
 
     # If watch flag is on, watch dirs instead of processing individual file
@@ -101,6 +105,13 @@ def main():
         else:
             md = sys.stdout
 
+        if args.file:
+            env_f = open(args.file, 'r') 
+            env_dict = json.load(env_f)
+            env_f.close()
+        else:
+            env_dict = {}
+        
         modules = list(MarkdownPP.modules)
 
         if args.exclude:
@@ -117,7 +128,7 @@ def main():
         md.close()
 
         md = open(args.output, 'w')
-        md.write(template.render())
+        md.write(template.render(env_dict))
         md.close()
 
 if __name__ == "__main__":
