@@ -76,6 +76,12 @@ def main():
 
     parser.add_argument('-f', '--file', help='Json file name, to load the '
                         'environment args. ')
+
+    parser.add_argument('-E', '--env', help='Indicate environmental variables. '
+                        'Can overwrite the variables in Json. Variables are '
+                        'separated by spaces. '
+                        'Example: -E "name=zhangsan args=10". ')
+
     args = parser.parse_args()
 
     # If watch flag is on, watch dirs instead of processing individual file
@@ -111,6 +117,11 @@ def main():
             env_f.close()
         else:
             env_dict = {}
+
+        if args.env:
+            list_env = args.env.split(' ')
+            for i in list_env:
+                env_dict[i.split('=')[0]] = i.split('=')[1]
         
         modules = list(MarkdownPP.modules)
 
@@ -122,14 +133,14 @@ def main():
                     print('Cannot exclude ', module, ' - no such module')
                     
         MarkdownPP.MarkdownPP(input=mdpp, output=md, modules=modules)
-        md.seek(0)
-        template = Template(md.read())
+        if md != sys.stdout:
+            md.seek(0)
+            template = Template(md.read())
+            md.close()
+            md = open(args.output, 'w')
+            md.write(template.render(env_dict))
+            md.close()
         mdpp.close()
-        md.close()
-
-        md = open(args.output, 'w')
-        md.write(template.render(env_dict))
-        md.close()
 
 if __name__ == "__main__":
     main()
