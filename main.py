@@ -16,7 +16,7 @@ import os
 import time
 from watchdog.observers import Observer
 from watchdog.events import PatternMatchingEventHandler
-from jinja2 import Template
+from jinja2 import *
 
 
 # Terminal output ANSI color codes
@@ -107,7 +107,7 @@ def main():
     else:
         mdpp = open(args.FILENAME, 'r')
         if args.output:
-            md = open(args.output, 'w+')
+            md = open(args.output, 'w')
         else:
             md = sys.stdout
 
@@ -133,14 +133,19 @@ def main():
                     print('Cannot exclude ', module, ' - no such module')
                     
         MarkdownPP.MarkdownPP(input=mdpp, output=md, modules=modules)
+        md.close()
+
+
         if md != sys.stdout:
-            md.seek(0)
-            template = Template(md.read())
-            md.close()
+            Env = Environment(loader = FileSystemLoader(searchpath="./"))
+            template = Env.get_template(args.output)
             md = open(args.output, 'w')
             md.write(template.render(env_dict))
             md.close()
+
         mdpp.close()
 
 if __name__ == "__main__":
     main()
+
+    
