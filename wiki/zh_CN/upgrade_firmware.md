@@ -2,20 +2,20 @@
 
 ## 前言
 
-本文介绍了如何将主机上的固件文件，通过 双公头 USB 数据线烧录到开发板的闪存中。升级时，需要根据主机操作系统和固件类型来选择合适的升级方式。
+本文介绍了如何将主机上的固件文件，通过 Type-C 数据线烧录到开发板的闪存中。升级时，需要根据主机操作系统和固件类型来选择合适的升级方式。
 
 ## 准备工作
 
-* AIO-3399J 开发板
+* Firefly-RK3399 开发板
 * 固件
 * 主机
-* 良好的双公头 USB 数据线文介绍了如何将主机上的固件文件，通过双公头 USB 数据线烧录到开发板的闪存中。升级时，需要根据主机操作系统和固件类型来选择合适的升级方式。
+* 良好的 Type-C 数据线
 
 固件文件一般有两种：
 
 * 单个统一固件 update.img, 将启动加载器、参数和所有分区镜像都打包到一起，用于固件发布。
 * 多个分区镜像,如 kernel.img, rootfs.img, recovery.img 等，在开发阶段生成。
-* 可以在这里找到已编译好的统一 [AIO-3399J 固件]，下载后解压。也可以参考编译固件的说明自行编译。
+* 可以在这里找到已编译好的统一 [Firefly-RK3399 固件]，下载后解压。也可以参考编译固件的说明自行编译。
 
 主机操作系统支持：
 > * Windows XP （32/64位）
@@ -39,16 +39,16 @@
 
 设备进入升级模式的方式如下：
 
-* 一种方法是设备先断开电源适配器和双公头 USB 数据线的连接：
+* 一种方法是设备先断开电源适配器和 Type-C 数据线的连接：
 
-   * 双公头 USB 数据线一端连接主机，一端连接开发板
+   * USB 一端连接主机，Type-C 一端连接开发板 Type-C 母口
    * 按住设备上的 RECOVERY （恢复）键并保持
    * 接上电源
    * 大约两秒钟后，松开 RECOVERY 键
 
-* 另一种方法，无需断开电源适配器和双公头 USB 数据线的连接：
+* 另一种方法，无需断开电源适配器和 Type-C 数据线的连接：
 
-   * 双公头 USB 数据线一端连接主机，一端连接开发板
+   * USB 一端连接主机，Type-C 一端连接开发板 Type-C 母口
    * 按住设备上的 RECOVERY （恢复）键并保持
    * 短按一下 RESET（复位）键
    * 大约两秒钟后，松开 RECOVERY 键
@@ -169,5 +169,5 @@ sudo upgrade_tool ef update.img	# 擦除
 
 [烧写须知]: upgrade_table.html
 
-[AIO-3399J 固件]: http://http://www.t-firefly.com/doc/download/page/id/31.html#other_80
-[Linux_Upgrade_Tool]: http://www.t-firefly.com/doc/download/page/id/31.html#linux_12
+[Firefly-RK3399 固件]: http://www.t-firefly.com/doc/download/page/id/3.html#other_14
+[Linux_Upgrade_Tool]: http://www.t-firefly.com/doc/download/page/id/3.html#linux_12

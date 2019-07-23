@@ -18,13 +18,13 @@ function usage(){
 
 function build_clean(){
     echo clean *.md in zh_CN
-    cd ${TOP_DIR}/zh_CN/base && rm *.md && cd -
+    cd ${TOP_DIR}/zh_CN && rm *.md && cd -
     echo clean *.md in en
     cd ${TOP_DIR}/en && rm *.md && cd -
 }
 
 function build_md(){
-    cd ${TOP_DIR}/zh_CN/base
+    cd ${TOP_DIR}/zh_CN
     files=$(ls *.mdpp)
     for file in $files
     do 
