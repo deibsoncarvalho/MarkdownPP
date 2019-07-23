@@ -1,0 +1,20 @@
+# 烧写须知(重要)
+<font color=#ff0000 size=5>请认真阅读本章再对EMMC进行烧写！！！</font>
+
+
+* 烧写工具下载地址
+
+	- [upgrade_tool_1.34](http://www.t-firefly.com/doc/download/page/id/53.html#other_168)
+	
+	- [Android_tool_2.58](http://www.t-firefly.com/doc/download/page/id/53.html#other_167)
+
+* 固件说明
+	
+	- <font color=#ff0000 >官方固件</font>:官方固件命名中<font color=#ff0000 >不带</font>`SDBOOT`或者`sd`字样的是emmc启动固件，使用emmc启动请烧写emmc启动固件.<font color=#ff0000 >反之</font>，则是sd卡启动固件，用来制作sd卡
+	
+	- <font color=#ff0000 >DIY固件</font>:用户使用SDK自己编译后使用`./build.sh updateimg`打包出来的是emmc启动固件,`./build.sh sdbootimg`打包出来的是sd卡启动固件，使用emmc启动请烧写emmc启动固件
+![](img/rk3399-pc-table.png)
+
+<font color=#ff0000 size=5>现在可以根据上表在[《烧写emmc》]找到合适的方法烧写emmc</font>
+
+!INCLUDE "include/map.md"

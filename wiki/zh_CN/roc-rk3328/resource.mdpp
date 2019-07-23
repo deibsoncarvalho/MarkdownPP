@@ -1,0 +1,56 @@
+# 固件和工具
+
+- [固件下载页面][下载页面]
+
+固件烧写工具：
+
+- 烧写 SD 卡
+    + 图形界面烧写工具：
+        * [SDCard Installer] (Linux/Windows/Mac)
+        * [Etcher] (Linux/Windows/Mac)
+		* [SD Firmware Tool] (Windows)
+    + 命令行烧写工具
+        * [dd] (Linux)
+- 烧写 eMMC
+    + 图形界面烧写工具：
+        * [AndroidTool] (Windows)
+    + 命令行烧写工具：
+        * [upgrade_tool] (Linux)
+
+# 文档和参考
+
+- [Partition and Storage Map](http://opensource.rock-chips.com/wiki_Partitions)
+
+# 硬件规格书和接口
+
+规格书：
+
+- [ROC-RK3328-CC 原理图](http://www.t-firefly.com/download/ROC-RK3288-CC/ROC-RK3328-CC-V1.0-A_yl.pdf)
+- [ROC-RK3328-CC 贴片图](http://www.t-firefly.com/download/ROC-RK3288-CC/ROC-RK3328-CC-V1.0-A_tp.pdf)
+- [Rockchip RK3328 规格书](http://www.t-firefly.com/download/ROC-RK3288-CC/Rockchip%20RK3328%20Datasheet%20V1.0-20170117.pdf)
+- [Rockchip RK805 规格书 V1.1](http://files.pine64.org/doc/rock64/Rockchip_RK805_Datasheet_V1.1%C2%A020160921.pdf)
+
+扩展口：
+
+![](img/hw_expansion_interface.png)
+
+开发板正面：
+
+![](img/hw_board_interface_top.png)
+
+开发板背面：
+
+![](img/hw_board_interface_bottom.png)
+
+# 社区
+
+Firefly：
+
+- [论坛]
+- [脸书]
+- [Google+]
+- [油管]
+- [推特]
+- [在线商城]
+
+!INCLUDE "include/ref.md"

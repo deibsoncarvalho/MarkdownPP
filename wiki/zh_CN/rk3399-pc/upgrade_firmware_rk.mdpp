@@ -1,0 +1,110 @@
+# 烧写RK固件 
+
+## 前言
+
+使用RK的打包方式生成的RK固件烧写方式会在本章进行单独的说明。
+
+## 准备工作
+
+* FireFly-RK3399 开发板
+* 固件
+* 主机
+* 良好的Type-C数据线
+* SD卡或emmc
+
+
+## 准备工具
+
+* Androidtool (Windows、emmc）
+* upgrade_tool (Linux、emmc)
+* SD Firmware tool (Windows、SD卡)
+
+## 烧写emmc
+以下的方法在正常情况下进入[RKUSB]模式烧写就可以了，如果loader损坏请进入[Maskrom]模式。
+
+### Androidtool
+安装方法参照[这里](upgrade_firmware_emmc.html#Androidtool)
+
+#### 烧写统一固件
+
+烧写统一固件 update.img 的步骤如下:
+
+1. 切换至"升级固件"页。
+2. 按"固件"按钮，打开要升级的固件文件。升级工具会显示详细的固件信息。
+3. 按"升级"按钮开始升级。
+4. 如果升级失败，可以尝试先按"擦除Flash"按钮来擦除 Flash，然后再升级。
+
+**注意：如果你烧写的固件laoder版本与原来的机器的不一致，请在升级固件前先执行"擦除Flash"。**   
+
+![](img/upgrade_firmware4.png)
+
+#### 烧写分区映像
+
+烧写分区映像的步骤如下：
+
+1. 切换至"下载镜像"页。
+2. 勾选需要烧录的分区，可以多选。
+3. 确保映像文件的路径正确，需要的话，点路径右边的空白表格单元格来重新选择。
+4. 点击"执行"按钮开始升级，升级结束后设备会自动重启。
+
+![](img/upgrade_firmware3.png)
+### upgrade_tool
+安装方法参照[这里](upgrade_firmware_emmc.html#upgrade_tool)
+
+#### 烧写统一固件
+```
+sudo upgrade_tool uf update.img
+```
+
+#### 烧写分区镜像
+第一行`xxx.bin`是编译 U-Boot 时复制进去的 loader 文件，也直接到此处[下载]((https://github.com/rockchip-linux/rkbin/tree/master/rk33)) `rk3399_loader_v1.12.xxx.bin`文件。
+
+```
+sudo upgrade_tool di -b /path/to/boot.img
+sudo upgrade_tool di -k /path/to/kernel.img
+sudo upgrade_tool di -s /path/to/system.img
+sudo upgrade_tool di -r /path/to/recovery.img
+sudo upgrade_tool di -m /path/to/misc.img
+sudo upgrade_tool di resource /path/to/resource.img
+sudo upgrade_tool di -p paramater   #烧写 parameter
+sudo upgrade_tool ul bootloader.bin # 烧写 bootloader
+```
+
+如果因 flash 问题导致升级时出错，可以尝试低级格式化、擦除 nand flash：   
+```
+sudo upgrade_tool lf   # 低级格式化
+sudo upgrade_tool ef   # 擦除
+```
+
+## SD卡烧写
+
+<a id="SD_Firmware_Tool"></a>
+### SD Firmware Tool
+
+#### 烧写统一固件
+
+首先，到[SD Firmware Tool 下载页面](https://pan.baidu.com/s/1migPY1U#list/path=%2FPublic%2FDevBoard%2FROC-RK3328-CC%2FTools%2FSD_Firmware_Tool&parentPath=%2FPublic%2FDevBoard%2FROC-RK3328-CC)去下载 `SD_Firmware_Tool`，并解压。
+
+运行 `SD_Firmware_Tool.exe`:
+
+![](img/sdfirmwaretool.zh_CN.png)
+
+1. 插入 SD 卡。
+2. 从组合框中选择 SD 卡对应的设备。
+3. 勾选 "SD启动" 选项。
+4. 点击 "选择固件" 按钮，在文件对话框中选择固件。
+5. 点击 "开始创建" 按钮。
+6. 然后会显示警告对话框，选择 "是" 来确保选择了正确的SD卡设备。
+7. 等待操作完成，直到提示成功对话框出现：
+
+    ![](img/sdfirmwaretool_done.zh_CN.png)
+
+8. 拔出 SD 卡。
+
+
+
+
+
+
+
+!INCLUDE "include/map.md"

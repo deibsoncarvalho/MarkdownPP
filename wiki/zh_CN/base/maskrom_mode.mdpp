@@ -1,0 +1,14 @@
+# MaskRom模式
+
+***有关启动模式的介绍，请参阅[《启动模式》](bootmode.html)一章*** 
+
+## 简介
+
+`MaskRom` 模式是设备变砖的最后一条防线。强行进入 `MaskRom` 涉及硬件操作，有一定风险，因此仅在设备进入不了 `Loader` 模式的情况下，方可尝试 `MaskRom` 模式。进入 `MaskRom` 的原理是人为的把 Flash 的数据脚与地线短接，系统会认为 Flash 数据出错，从而清除 Flash 数据。
+
+** 请小心阅读，并谨慎操作！** 
+
+!INCLUDE "include/maskrom_mode1.mdpp"
+此时设备就会进入 MaskRom 模式。
+
+![](img/maskrom2.jpg)

@@ -1,0 +1,25 @@
+{# ~~~~这一句是注释，为了排版，不要删除，不要理会~~~~~ #}
+
+{%- if board_name == "Firefly-RK3399" -%}
+mkdir linux-sdk
+cd linux-sdk
+../repo/repo init --repo-url https://github.com/FireflyTeam/repo.git -u https://github.com/FireflyTeam/manifests.git -b linux-sdk -m rk3399/rk3399_linux_release.xml
+{% endif %}
+
+{%- if board_name == "AIO-3399J" -%}
+mkdir linux-sdk
+cd linux-sdk
+../repo/repo init --repo-url https://github.com/FireflyTeam/repo.git -u https://github.com/FireflyTeam/manifests.git -b linux-sdk -m rk3399/rk3399_linux_release.xml
+{% endif %}
+
+{%- if board_name == "AIO-3399C" -%}
+mkdir linux-sdk
+cd linux-sdk
+../repo/repo init --repo-url https://github.com/FireflyTeam/repo.git -u https://github.com/FireflyTeam/manifests.git -b linux-sdk -m rk3399/rk3399_linux_release.xml
+{% endif %}
+
+{%- if board_name == "AIO-3399PRO-JD4" -%}
+mkdir linux-sdk
+cd linux-sdk
+../repo/repo init --repo-url https://github.com/FireflyTeam/repo.git -u https://github.com/FireflyTeam/manifests.git -b linux-sdk -m rk3399pro/rk3399pro_linux_release.xml
+{% endif %}
