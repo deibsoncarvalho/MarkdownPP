@@ -13,6 +13,7 @@ function usage(){
     echo "| default                   show this menu |"
     echo "| clean                clean all .md files |"
     echo "| board name               build .md files |"
+    echo "| html                          build html |"
     echo "--------------------------------------------"
 }
 
@@ -37,6 +38,19 @@ function build_md(){
     do 
         markdown-pp $file -f $json -o ${file%.*}.md
     done   
+    
+    cd $TOP_DIR
+}
+
+function build_html(){
+    echo "==================build html=================="
+    cd $TOP_DIR && make
+    if [ $? -eq 0 ]; then
+        echo "=============== build html ok! ==============="
+    else
+        echo "============= build html failed! ============="
+        exit 1
+    fi 
 }
 
 if [ $build_target == usage ]; then
@@ -49,6 +63,8 @@ elif [ -e "${TOP_DIR}/json/${build_target}.json" ]; then
 json="${TOP_DIR}/json/${build_target}.json"
 build_md
 exit 0
+elif [ $build_target == html ]; then
+build_html
 else
 echo No such command or no ${build_target}.json in json file
 exit 1

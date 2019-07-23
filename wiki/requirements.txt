@@ -1,0 +1,7 @@
+-e git+https://github.com/FireflyTeam/recommonmark#egg=recommonmark
+sphinx-rtd-theme
+sphinxprettysearchresults
+readthedocs-sphinx-ext
+jieba
+pypinyin
+MarkdownPP

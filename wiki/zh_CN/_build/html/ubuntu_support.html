@@ -1,0 +1,1642 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="zh-CN" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="zh-CN" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Ubuntu 应用层支持 &mdash; Firefly Wiki</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script type="text/javascript" src="_static/translations.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="搜索" href="search.html" />
+    <link rel="next" title="编译 Buildroot 固件" href="buildroot_compile.html" />
+    <link rel="prev" title="编译 Ubuntu 固件 ( GPT )" href="linux_compile_gpt.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Firefly-RK3399 Manual
+          
+
+          
+            
+            <img src="_static/Logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">上手教程</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="started.html">入手指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="debug.html">串口调试</a></li>
+</ul>
+<p class="caption"><span class="caption-text">烧写固件</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="bootmode.html">启动模式说明</a></li>
+<li class="toctree-l1"><a class="reference internal" href="upgrade_table.html">烧写须知(重要)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="upgrade_firmware.html">升级固件</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maskrom_mode.html">MaskRom模式</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Linux开发</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="linux_build_ubuntu_rootfs.html">创建 Ubuntu 根文件系统</a></li>
+<li class="toctree-l1"><a class="reference internal" href="linux_compile_gpt.html">编译 Ubuntu 固件 ( GPT )</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Ubuntu 应用层支持</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#shi-pin-ying-jian-bian-jie-ma-zhi-chi">视频硬件编解码支持</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#gstreamer">Gstreamer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mpp">Mpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#opengl-es">OpenGL-ES</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#opencl">OpenCL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tensorflow-lite">TensorFlow Lite</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ping-mu-xuan-zhuan">屏幕旋转</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ping-mu-jian-pan">屏幕键盘</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sheng-yin-pei-zhi">声音配置</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#cong-ming-ling-xing-zhi-ding-yin-pin-she-bei">从命令行指定音频设备</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#zai-tu-xing-jie-mian-zhong-xuan-ze-yin-pin-she-bei">在图形界面中选择音频设备</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#kai-ji-qi-dong-ying-yong-cheng-xu">开机启动应用程序</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#abd-tiao-shi">ABD 调试</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#xia-zai-adb">下载 ADB</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#adb-lian-jie">ADB 连接</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#chuan-kou">串口</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#she-zhi-bo-te-lv">设置波特率</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#guan-bi-hui-xian">关闭回显</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fa-song-jie-shou-yuan-shi-shu-ju">发送接收原始数据</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#gong-zuo-mo-shi">工作模式</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#zhong-duan-mo-shi">中断模式</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dma-mo-shi">DMA 模式</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#liu-kong">流控</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#ying-jian-zhi-chi">硬件支持</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#she-bei-shu-wen-jian-pei-zhi">设备树文件配置</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ying-yong-ceng-she-zhi">应用层设置</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#mipi-she-xiang-tou-ov13850">MIPI 摄像头 (OV13850)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">设备树文件配置</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tiao-shi">调试</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ce-shi">测试</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#usb-yi-tai-wang">USB 以太网</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#nei-he-she-zhi">内核设置</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ip-di-zhi-she-zhi">IP 地址设置</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#wang-luo-gong-xiang-shi-xian-pc-ji-shang-wang">网络共享实现 PC 机上网</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#wai-bu-cun-chu-she-bei-rootfs">外部存储设备 rootfs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#zai-sd-ka-shang-jian-li-fen-qu">在 SD 卡上建立分区</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#gua-zai-sd-ka-gen-wen-jian-xi-tong">挂载 SD 卡根文件系统</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#wang-luo-qi-dong">网络启动</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#fu-wu-qi-bu-shu">服务器部署</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#nei-he-de-pei-zhi">内核的配置</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#u-boot-she-zhi">U-Boot设置</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#zai-xian-geng-xin-nei-he-he-u-boot">在线更新内核和 U-Boot</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#zhun-bei-deb-an-zhuang-bao">准备 deb 安装包</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#chuang-jian-ben-di-cang-ku">创建本地仓库</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ke-hu-duan-geng-xin-an-zhuang">客户端更新安装</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#yong-docker-da-jian-fen-bu-shi-bian-yi-huan-jing">用Docker搭建分布式编译环境</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#zhun-bei-gong-zuo">准备工作</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pc-ji-bu-shu-docker">PC 机部署 Docker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kai-fa-ban-bu-shu-docker">开发板部署 Docker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ke-hu-duan-yong-distcc-bian-yi-nei-he">客户端用 distcc 编译内核</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="buildroot_compile.html">编译 Buildroot 固件</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Firefly-RK3399 Manual</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Ubuntu 应用层支持</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/ubuntu_support.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="ubuntu-ying-yong-ceng-zhi-chi">
+<h1>Ubuntu 应用层支持<a class="headerlink" href="#ubuntu-ying-yong-ceng-zhi-chi" title="永久链接至标题">¶</a></h1>
+<div class="section" id="shi-pin-ying-jian-bian-jie-ma-zhi-chi">
+<h2>视频硬件编解码支持<a class="headerlink" href="#shi-pin-ying-jian-bian-jie-ma-zhi-chi" title="永久链接至标题">¶</a></h2>
+<p>Mpp是Rockchip为RK3399提供的一套视频编解码的api, 并且基于mpp,Rockchip提供了一套gstreamer的编解码插件。用户可以根据自己的需求，基于gstreamer来做视频编解码的应用，或者直接调用mpp，来实现硬件的编解码加速。</p>
+<p>Firefly 发布的Ubuntu 系统， 都已经提供了完整的gstremaer 和 mpp支持，并且提供了相应的demo，供用户开发参考。</p>
+<div class="section" id="gstreamer">
+<h3>Gstreamer<a class="headerlink" href="#gstreamer" title="永久链接至标题">¶</a></h3>
+<ul class="simple">
+<li><p>Ubuntu 16.04 下，gstreamer 1.12 已经安装在/opt/目录下。</p></li>
+<li><p>Ubuntu 18.04下， gstreamer 1.12 已经安装到系统中。</p></li>
+</ul>
+<p>/usr/local/bin/h264dec.sh  测试硬件H264解码。</p>
+<p>/usr/local/bin/h264enc.sh  测试硬件H264编码。</p>
+<p>用户可以参照这两个脚本，配置自己的gstreamer应用。</p>
+</div>
+<div class="section" id="mpp">
+<h3>Mpp<a class="headerlink" href="#mpp" title="永久链接至标题">¶</a></h3>
+<ul>
+<li><p>Ubunut 系统下， mpp 相关dev包都已经安装到系统中。</p>
+<p>/opt/mpp/下分别是mpp 编解码的相关demo 和 源文件。</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="opengl-es">
+<h2>OpenGL-ES<a class="headerlink" href="#opengl-es" title="永久链接至标题">¶</a></h2>
+<p>RK3399 支持 OpenGL ES1.1/2.0/3.0/3.1。</p>
+<p>Firefly 发布的Ubuntu 系统， 都已经提供了完整的OpenGL-ES支持。运行<code class="docutils literal notranslate"><span class="pre">glmark2-es2</span></code>可以测试openGL-ES支持。 如果要避免屏幕刷新率对测试结果的影响，可以在串口终端上使用以下命令测试。</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># systemctl stop lightdm</span>
+<span class="c1"># export DISPLAY=:0</span>
+<span class="c1"># Xorg &amp;</span>
+<span class="c1"># glmark2-es2 –off-screen</span>
+</pre></div>
+</div>
+<p>在Chromium浏览器中， 在地址栏输入：<code class="docutils literal notranslate"><span class="pre">chrome://gpu</span></code>可以查看chromium下硬件加速的支持。</p>
+<p>Note:</p>
+<ol>
+<li><p>EGL 是用arm 平台上OpenGL针对x window  system的扩展，功能等效于x86下的glx库。</p></li>
+<li><p>由于Xorg使用的Driver modesettings 默认会加载libglx.so(禁用glx会导致某些通过检测glx环境的应用启动失败)， libglx.so会搜索系统中的dri实现库。但是rk3399 Xorg 2D加速是直接基于DRM实现， 并未实现dri库，所以启动过程中，libglx.so会报告如下的错误 。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">EE</span><span class="p">)</span> <span class="n">AIGLX</span> <span class="n">error</span><span class="p">:</span> <span class="n">dlopen</span> <span class="n">of</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">aarch64</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">gnu</span><span class="o">/</span><span class="n">dri</span><span class="o">/</span><span class="n">rockchip_dri</span><span class="o">.</span><span class="n">so</span> <span class="n">failed</span>
+</pre></div>
+</div>
+<p>这个对系统运行没有任何影响，不需要处理。</p>
+</li>
+<li><p>基于同样的道理，某些应用启动过程中，也会报告如下错误，不用处理，对应用的运行不会造成影响。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">libGL</span> <span class="n">error</span><span class="p">:</span> <span class="n">unable</span> <span class="n">to</span> <span class="n">load</span> <span class="n">driver</span><span class="p">:</span> <span class="n">rockchip_dri</span><span class="o">.</span><span class="n">so</span>
+<span class="n">libGL</span> <span class="n">error</span><span class="p">:</span> <span class="n">driver</span> <span class="n">pointer</span> <span class="n">missing</span>
+<span class="n">libGL</span> <span class="n">error</span><span class="p">:</span> <span class="n">failed</span> <span class="n">to</span> <span class="n">load</span> <span class="n">driver</span><span class="p">:</span> <span class="n">rockchip</span>
+</pre></div>
+</div>
+</li>
+<li><p>Firefly之前发布的某些版本的Ubuntu软件，默认关闭了加载libglx.so，在某些情况下，运行某些应用程序会出现下述错误：</p>
+<p><code class="docutils literal notranslate"><span class="pre">GdkGLExt-WARNING</span> <span class="pre">**:</span> <span class="pre">Window</span> <span class="pre">system</span> <span class="pre">doesn't</span> <span class="pre">support</span> <span class="pre">OpenGL.</span></code></p>
+<p>修正的方法如下：</p>
+<p>删除  <code class="docutils literal notranslate"><span class="pre">/etc/X11/xorg.conf.d/20-modesetting.conf</span></code> 中一下三行配置。</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>Section <span class="s2">&quot;Module&quot;</span>
+     Disable     <span class="s2">&quot;glx&quot;</span>
+EndSection
+</pre></div>
+</div>
+</li>
+</ol>
+</div>
+<div class="section" id="opencl">
+<h2>OpenCL<a class="headerlink" href="#opencl" title="永久链接至标题">¶</a></h2>
+<p>Firefly发布的Ubuntu系统，已经添加了opencl1.2支持，可以运行系统内置的<code class="docutils literal notranslate"><span class="pre">clinfo</span></code>获取平台opencl相关参数。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>firefly@firefly:~$ clinfo
+Platform #0
+ Name:                                  ARM Platform
+ Version:                               OpenCL 1.2 v1.r14p0-01rel0-git(966ed26).f44c85cb3d2ceb87e8be88e7592755c3
+
+ Device #0
+   Name:                                Mali-T860
+   Type:                                GPU
+   Version:                             OpenCL 1.2 v1.r14p0-01rel0-git(966ed26).f44c85cb3d2ceb87e8be88e7592755c3
+   Global memory size:                  1 GB 935 MB 460 kB
+   Local memory size:                   32 kB
+   Max work group size:                 256
+   Max work item sizes:                 (256, 256, 256)
+…
+</pre></div>
+</div>
+</div>
+<div class="section" id="tensorflow-lite">
+<h2>TensorFlow Lite<a class="headerlink" href="#tensorflow-lite" title="永久链接至标题">¶</a></h2>
+<p>RK3399 支持神经网络的GPU加速方案LinuxNN， Firefly发布的Ubuntu系统，已经添加了LinuxNN的支持。</p>
+<p>在opt/tensorflowbin/下，运行test.sh， 即可测试MobileNet 模型图像分类器的 Demo和MobileNet-SSD 模型的目标检测 Demo</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>firefly@firefly:/opt/tensorflowbin$ ./test.sh
+Loaded model mobilenet_ssd.tflite
+resolved reporter
+nn version: 1.0.0
+findAvailableDevices
+filename:libarmnn-driver.so     d_info:40432     d_reclen:40s
+[D][ArmnnDriver]: Register Service: armnn (version: 1.0.0)!
+first invoked time: 1919.17 ms
+invoked
+average time: 108.4 ms
+validCount: 26
+car     @ (546, 501) (661, 586)
+car     @ (1, 549) (51, 618)
+person  @ (56, 501) (239, 854)
+person  @ (332, 530) (368, 627)
+person  @ (391, 541) (434, 652)
+person  @ (418, 477) (538, 767)
+person  @ (456, 487) (602, 764)
+car     @ (589, 523) (858, 687)
+person  @ (826, 463) (1034, 873)
+bicycle @ (698, 644) (1128, 925)
+write out.jpg succ!
+</pre></div>
+</div>
+</div>
+<div class="section" id="ping-mu-xuan-zhuan">
+<h2>屏幕旋转<a class="headerlink" href="#ping-mu-xuan-zhuan" title="永久链接至标题">¶</a></h2>
+<p>Firefly 发布的 Ubuntu 系统，如果需要默认对系统的显示方向做旋转，可以在</p>
+<p>/etc/default/xrandr 中修改对应的显示设备的方向即可。</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>firefly@firefly:~$ cat /etc/default/xrandr
+<span class="c1">#!/bin/sh</span>
+
+<span class="c1"># Rotation can be one of &#39;normal&#39;, &#39;left&#39;, &#39;right&#39; or &#39;inverted&#39;.</span>
+
+<span class="c1"># xrandr --output HDMI-1 --rotate normal</span>
+<span class="c1"># xrandr --output LVDS-1 --rotate normal</span>
+<span class="c1"># xrandr --output EDP-1 --rotate normal</span>
+<span class="c1"># xrandr --output MIPI-1 --rotate normal</span>
+<span class="c1"># xrandr --output VGA-1 --rotate normal</span>
+<span class="c1"># xrandr --output DP-1 --rotate normal</span>
+</pre></div>
+</div>
+<p>对于配有触摸屏的平台，如果需要对触摸屏的方向做旋转，可以在/etc/X11/xorg.conf.d/05-gslX680.conf中修改SwapAxes / InvertX / InvertY三个值。</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>firefly@firefly:~$ cat /etc/X11/xorg.conf.d/05-gslX680.conf
+Section <span class="s2">&quot;InputClass&quot;</span>
+        Identifier <span class="s2">&quot;gslX680&quot;</span>
+        MatchIsTouchscreen <span class="s2">&quot;on&quot;</span>
+        MatchProduct  <span class="s2">&quot;gslX680&quot;</span>
+        Driver <span class="s2">&quot;evdev&quot;</span>
+        Option <span class="s2">&quot;SwapAxes&quot;</span> <span class="s2">&quot;off&quot;</span>
+       <span class="c1"># Invert the respective axis.</span>
+        Option <span class="s2">&quot;InvertX&quot;</span> <span class="s2">&quot;off&quot;</span>
+        Option <span class="s2">&quot;InvertY&quot;</span> <span class="s2">&quot;off&quot;</span>
+EndSection
+</pre></div>
+</div>
+</div>
+<div class="section" id="ping-mu-jian-pan">
+<h2>屏幕键盘<a class="headerlink" href="#ping-mu-jian-pan" title="永久链接至标题">¶</a></h2>
+<p>官方的 Ubuntu 系统中自带屏幕键盘，可以在菜单栏中点击打开：
+<img alt="img/onboard1.png" src="img/onboard1.png" /></p>
+</div>
+<div class="section" id="sheng-yin-pei-zhi">
+<h2>声音配置<a class="headerlink" href="#sheng-yin-pei-zhi" title="永久链接至标题">¶</a></h2>
+<p>开发板一般都有2个或以上的音频设备。常见的是耳机和 HDMI 这两个设备的音频输出。下面是音频设置的例子，供用户参考。</p>
+<div class="section" id="cong-ming-ling-xing-zhi-ding-yin-pin-she-bei">
+<h3>从命令行指定音频设备<a class="headerlink" href="#cong-ming-ling-xing-zhi-ding-yin-pin-she-bei" title="永久链接至标题">¶</a></h3>
+<p>系统自带的音频文件在 <code class="docutils literal notranslate"><span class="pre">/usr/share/sound/alsa/</span></code> 目录中，播放前请先查看声卡设备：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="nd">@firefly</span><span class="p">:</span><span class="o">~</span><span class="c1"># aplay -l</span>
+<span class="o">****</span> <span class="n">List</span> <span class="n">of</span> <span class="n">PLAYBACK</span> <span class="n">Hardware</span> <span class="n">Devices</span> <span class="o">****</span>
+<span class="n">card</span> <span class="mi">0</span><span class="p">:</span> <span class="n">rockchiprt5640c</span> <span class="p">[</span><span class="n">rockchip</span><span class="p">,</span><span class="n">rt5640</span><span class="o">-</span><span class="n">codec</span><span class="p">],</span> <span class="n">device</span> <span class="mi">0</span><span class="p">:</span> <span class="n">ff890000</span><span class="o">.</span><span class="n">i2s</span><span class="o">-</span><span class="n">rt5640</span><span class="o">-</span><span class="n">aif1</span> <span class="n">rt5640</span><span class="o">-</span><span class="n">aif1</span><span class="o">-</span><span class="mi">0</span> <span class="p">[]</span>
+  <span class="n">Subdevices</span><span class="p">:</span> <span class="mi">1</span><span class="o">/</span><span class="mi">1</span>
+  <span class="n">Subdevice</span> <span class="c1">#0: subdevice #0</span>
+<span class="n">card</span> <span class="mi">1</span><span class="p">:</span> <span class="n">rkhdmidpsound</span> <span class="p">[</span><span class="n">rk</span><span class="o">-</span><span class="n">hdmi</span><span class="o">-</span><span class="n">dp</span><span class="o">-</span><span class="n">sound</span><span class="p">],</span> <span class="n">device</span> <span class="mi">0</span><span class="p">:</span> <span class="n">HDMI</span><span class="o">-</span><span class="n">DP</span> <span class="n">multicodec</span><span class="o">-</span><span class="mi">0</span> <span class="p">[]</span>
+  <span class="n">Subdevices</span><span class="p">:</span> <span class="mi">1</span><span class="o">/</span><span class="mi">1</span>
+  <span class="n">Subdevice</span> <span class="c1">#0: subdevice #0</span>
+</pre></div>
+</div>
+<p>然后指定声卡播放音频，其中声卡 card0 的设备0对应的是耳机口，card1 的设备0对应的是 HDMI。一般播放音频命令是 <code class="docutils literal notranslate"><span class="pre">aplay</span> <span class="pre">-Dhw:0,0</span> <span class="pre">Fornt_Center.wav</span></code>，但系统自带的音频文件是单声道的，所以为了防止播放失败，可以按照下面的命令进行播放：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#选择耳机口输出音频文件</span>
+<span class="n">root</span><span class="nd">@firefly</span><span class="p">:</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">share</span><span class="o">/</span><span class="n">sounds</span><span class="o">/</span><span class="n">alsa</span><span class="c1"># aplay -Dplughw:0,0 Front_Center.wav</span>
+<span class="n">Playing</span> <span class="n">WAVE</span> <span class="s1">&#39;Front_Center.wav&#39;</span> <span class="p">:</span> <span class="n">Signed</span> <span class="mi">16</span> <span class="n">bit</span> <span class="n">Little</span> <span class="n">Endian</span><span class="p">,</span> <span class="n">Rate</span> <span class="mi">48000</span> <span class="n">Hz</span><span class="p">,</span> <span class="n">Mono</span>
+
+<span class="c1">#选择 HDMI 输出音频文件</span>
+<span class="n">root</span><span class="nd">@firefly</span><span class="p">:</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">share</span><span class="o">/</span><span class="n">sounds</span><span class="o">/</span><span class="n">alsa</span><span class="c1"># aplay -Dplughw:1,0 Front_Center.wav</span>
+<span class="n">Playing</span> <span class="n">WAVE</span> <span class="s1">&#39;Front_Center.wav&#39;</span> <span class="p">:</span> <span class="n">Signed</span> <span class="mi">16</span> <span class="n">bit</span> <span class="n">Little</span> <span class="n">Endian</span><span class="p">,</span> <span class="n">Rate</span> <span class="mi">48000</span> <span class="n">Hz</span><span class="p">,</span> <span class="n">Mono</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="zai-tu-xing-jie-mian-zhong-xuan-ze-yin-pin-she-bei">
+<h3>在图形界面中选择音频设备<a class="headerlink" href="#zai-tu-xing-jie-mian-zhong-xuan-ze-yin-pin-she-bei" title="永久链接至标题">¶</a></h3>
+<p>在图形界面中，播放准备好的音频文件，然后点击声音图标，打开 <code class="docutils literal notranslate"><span class="pre">Sound</span> <span class="pre">Setting</span></code>，选择到 <code class="docutils literal notranslate"><span class="pre">Configuration</span></code> 。可以看到两个声卡设备，例如设置为 HDMI 输出音频，则把 HDMI 的声卡设备选择为 <code class="docutils literal notranslate"><span class="pre">Output</span></code>，另一个声卡设置为 <code class="docutils literal notranslate"><span class="pre">Off</span></code>。（如果 HDMI 无声或者声音小，可以试试按 HDMI 屏上的物理按键调高音量）</p>
+<p><img alt="img/sound_setting.png" src="img/sound_setting.png" /></p>
+</div>
+</div>
+<div class="section" id="kai-ji-qi-dong-ying-yong-cheng-xu">
+<h2>开机启动应用程序<a class="headerlink" href="#kai-ji-qi-dong-ying-yong-cheng-xu" title="永久链接至标题">¶</a></h2>
+<p>在系统中，可以根据用户需求自行设置应用程序开机自动启动。</p>
+<p>在系统菜单栏中依次选择：<code class="docutils literal notranslate"><span class="pre">Preferences</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">Default</span> <span class="pre">applications</span> <span class="pre">for</span> <span class="pre">LXSession</span></code>，打开设置界面。</p>
+<p>在设置界面的 <code class="docutils literal notranslate"><span class="pre">Launching</span> <span class="pre">applocations</span></code> 一栏中可以设置应用默认的打开方式：</p>
+<p><img alt="img/autostart1.png" src="img/autostart1.png" /></p>
+<p>在 <code class="docutils literal notranslate"><span class="pre">Autostart</span></code> 一栏中就可以选择用户需要开机启动的应用。例如蓝牙默认是开机不启动的，如果需要让它开机自动启动，就把 <code class="docutils literal notranslate"><span class="pre">Blueman</span> <span class="pre">Applet</span></code> 的勾打上，就可以实现开机自动启动蓝牙：</p>
+<p><img alt="img/autostart2.png" src="img/autostart2.png" /></p>
+</div>
+<div class="section" id="abd-tiao-shi">
+<h2>ABD 调试<a class="headerlink" href="#abd-tiao-shi" title="永久链接至标题">¶</a></h2>
+<p>ADB，全称 Android Debug Bridge，是 Android 的命令行调试工具，可以完成多种功能，如跟踪系统日志，上传下载文件，安装应用等。以 Firefly-RK3399 为例，为了在 Ubuntu 系统也能使用 ADB 工具进行调试，我们移植了 ADB 服务。但由于并非 Android 系统，很多 ADB 命令类似 <code class="docutils literal notranslate"><span class="pre">adb</span> <span class="pre">logcat</span></code>、<code class="docutils literal notranslate"><span class="pre">adb</span> <span class="pre">install</span></code> 等不能使用，仅作为普通的调试辅助工具，可以进行 shell 交互、上传下载文件等操作。同样的网络远程 ADB 调试也不能使用。</p>
+<div class="section" id="xia-zai-adb">
+<h3>下载 ADB<a class="headerlink" href="#xia-zai-adb" title="永久链接至标题">¶</a></h3>
+<p>在 Ubuntu 系统中，执行：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">android</span><span class="o">-</span><span class="n">tools</span><span class="o">-</span><span class="n">adb</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="adb-lian-jie">
+<h3>ADB 连接<a class="headerlink" href="#adb-lian-jie" title="永久链接至标题">¶</a></h3>
+<p>安装了 ADB 后，用 Micro USB OTG 线连接开发板和 PC 机。然后通过命令 <code class="docutils literal notranslate"><span class="pre">adb</span> <span class="pre">devices</span></code> 查看是否有设备连接:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>firefly@Desktop:~$ adb devices
+List of devices attached
+0123456789ABCDEF	device
+</pre></div>
+</div>
+<p>从返回的信息可以看到已经查找到了设备，表明设备已经成功连接。</p>
+<p>设备连接成功后，输入命令 <code class="docutils literal notranslate"><span class="pre">adb</span> <span class="pre">shell</span></code> 即可进入命令行模式：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>firefly@Desktop:~$ adb shell
+#
+</pre></div>
+</div>
+<p>此状态下是看不到命令行当前的路径，同时 Tab 键补全功能失效，需要进入一个用户中才可以正常操作。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>firefly@Desktop:~$ adb shell
+# su firefly
+To run a command as administrator (user &quot;root&quot;), use &quot;sudo &lt;command&gt;&quot;.
+See &quot;man sudo_root&quot; for details.
+
+firefly@firefly:/$
+#到这里命令行就可以正常使用了
+</pre></div>
+</div>
+<p>用户也可以使用命令 <code class="docutils literal notranslate"><span class="pre">adb</span> <span class="pre">shell</span> <span class="pre">/bin/bash</span></code>，也可以进入正常的命令行模式。</p>
+<p>可以输入 <code class="docutils literal notranslate"><span class="pre">adb</span> <span class="pre">help</span></code> 查看命令行帮助信息,注意并不是所有命令都可以使用，帮助信息只做参考。</p>
+</div>
+</div>
+<div class="section" id="chuan-kou">
+<h2>串口<a class="headerlink" href="#chuan-kou" title="永久链接至标题">¶</a></h2>
+<p>开发板上的串口分两种，一种是普通串口另外一种是通过转换芯片把SPI转换而成的串口。转换而成的串口和普通串口功能完全一致但是需要注意它们的设备文件名是不一样的。下面是两者的区别:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span><span class="n">普通串口</span>
+<span class="n">root</span><span class="nd">@firefly</span><span class="p">:</span><span class="o">~</span><span class="c1"># ls /dev/ttyS*</span>
+<span class="n">ttyS0</span>  <span class="n">ttyS1</span>  <span class="n">ttyS2</span>  <span class="n">ttyS3</span>
+
+<span class="o">//</span><span class="n">SPI转串口</span>
+<span class="n">root</span><span class="nd">@firefly</span><span class="p">:</span><span class="o">~</span><span class="c1"># ls /dev/ttysWK*</span>
+<span class="n">ttysWK0</span>  <span class="n">ttysWK1</span>  <span class="n">ttysWK2</span>  <span class="n">ttysWK3</span>
+</pre></div>
+</div>
+<div class="section" id="she-zhi-bo-te-lv">
+<h3>设置波特率<a class="headerlink" href="#she-zhi-bo-te-lv" title="永久链接至标题">¶</a></h3>
+<p>以 <code class="docutils literal notranslate"><span class="pre">ttyS4</span></code> 为例，查看串口波特率命令：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="nd">@firefly</span><span class="p">:</span><span class="o">~</span><span class="c1"># stty -F /dev/ttyS4</span>
+<span class="n">speed</span> <span class="mi">9600</span> <span class="n">baud</span><span class="p">;</span> <span class="n">line</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="o">-</span><span class="n">brkint</span> <span class="o">-</span><span class="n">imaxbel</span>
+</pre></div>
+</div>
+<p>设置波特率命令：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span><span class="n">设置波特率为115200</span>
+<span class="n">root</span><span class="nd">@firefly</span><span class="p">:</span><span class="o">~</span><span class="c1"># stty -F /dev/ttyS4 ospeed 115200 ispeed 115200 cs8</span>
+
+<span class="o">//</span><span class="n">查看确认是否已经修改</span>
+<span class="n">root</span><span class="nd">@firefly</span><span class="p">:</span><span class="o">~</span><span class="c1"># stty -F /dev/ttyS4</span>
+<span class="n">speed</span> <span class="mi">115200</span> <span class="n">baud</span><span class="p">;</span> <span class="n">line</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="o">-</span><span class="n">brkint</span> <span class="o">-</span><span class="n">imaxbel</span>
+<span class="n">root</span><span class="nd">@firefly</span><span class="p">:</span><span class="o">~</span><span class="c1"># </span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="guan-bi-hui-xian">
+<h3>关闭回显<a class="headerlink" href="#guan-bi-hui-xian" title="永久链接至标题">¶</a></h3>
+<p>在做环回收发测试的时候回显功能会影响到我们的测试结果，所以在环回测试或者其他特殊情况下需要关闭回显。以下是关闭回显的命令：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>//关闭回显示
+root@firefly:~# stty -F /dev/ttyS4 -echo -echoe -echok
+
+//查看所有功能的配置，检查是否已经关闭。“-”号代表该功能已经关闭
+root@firefly:~# stty -F /dev/ttyS4 -a | grep echo
+isig icanon iexten -echo -echoe -echok -echonl -noflsh -xcase -tostop -echoprt
+echoctl echoke -flusho -extproc
+</pre></div>
+</div>
+</div>
+<div class="section" id="fa-song-jie-shou-yuan-shi-shu-ju">
+<h3>发送接收原始数据<a class="headerlink" href="#fa-song-jie-shou-yuan-shi-shu-ju" title="永久链接至标题">¶</a></h3>
+<p>在实际应用中实际发送数据和我们希望发送的数据可能存在差别，例如多了回车或者其他特殊字符。利用 <code class="docutils literal notranslate"><span class="pre">stty</span></code> 可以把发送接收设置成 <code class="docutils literal notranslate"><span class="pre">raw</span></code> 模式确保发送接收的是原始数据，以下是设置命令：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="nd">@firefly</span><span class="p">:</span><span class="o">~</span><span class="c1"># stty -F /dev/ttyS4 raw</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="gong-zuo-mo-shi">
+<h3>工作模式<a class="headerlink" href="#gong-zuo-mo-shi" title="永久链接至标题">¶</a></h3>
+<p>串口有 2 种工作模式分别是中断模式和 DMA 模式。</p>
+<div class="section" id="zhong-duan-mo-shi">
+<h4>中断模式<a class="headerlink" href="#zhong-duan-mo-shi" title="永久链接至标题">¶</a></h4>
+<p>内核默认把串口配置成中断模式所以不需要做任何修改。中断模式下传输速率比较快但是在传大量数据的时候很容易丢包或者出错，所以当数据量比较大的时候请不要使用中断模式。</p>
+</div>
+<div class="section" id="dma-mo-shi">
+<h4>DMA 模式<a class="headerlink" href="#dma-mo-shi" title="永久链接至标题">¶</a></h4>
+<p>DMA 模式主要是传输大量数据的时候使用。内核会为串口提供一个缓存空间接收数据来尽量降低串口传输的丢包率。</p>
+<p><strong>注意：</strong> 缓存空间限默认大小为 <code class="docutils literal notranslate"><span class="pre">8K</span></code> 如果一次传输超过缓存大小就会丢包，所以使用 DMA 模式的话需要发送端需要分包发送。</p>
+<p>设备树文件配置</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&amp;</span><span class="n">uart4</span> <span class="p">{</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;okay&quot;</span><span class="p">;</span>
+<span class="o">+</span>       <span class="n">dmas</span> <span class="o">=</span> <span class="o">&lt;&amp;</span><span class="n">dmac_peri</span> <span class="mi">8</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;&amp;</span><span class="n">dmac_peri</span> <span class="mi">9</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="o">+</span>       <span class="n">dma</span><span class="o">-</span><span class="n">names</span> <span class="o">=</span> <span class="s2">&quot;tx&quot;</span><span class="p">,</span> <span class="s2">&quot;rx&quot;</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>DMA 模式并不能提高传输速率，相反因为需要缓存，传输速率会有所下降，所以如果不是需要传输大量数据的话不要使用 DMA 模式。</p>
+</div>
+</div>
+<div class="section" id="liu-kong">
+<h3>流控<a class="headerlink" href="#liu-kong" title="永久链接至标题">¶</a></h3>
+<p>不管是中断模式还有 DMA 模式都无法保证数据传输万无一失，因为长时间传输大量数据的时候 DDR、CPU 变频或者占用率过高都可能导致上层处理数据不及时导致丢包，这个时候就需要是用流控了。流控分两种，一种是软件流控另一种为硬件流控，下面只介绍硬件流控的使用。</p>
+<div class="section" id="ying-jian-zhi-chi">
+<h4>硬件支持<a class="headerlink" href="#ying-jian-zhi-chi" title="永久链接至标题">¶</a></h4>
+<p>硬件流控需要有硬件支持，开发板的串口 <code class="docutils literal notranslate"><span class="pre">CTX</span></code> 和 <code class="docutils literal notranslate"><span class="pre">RTX</span></code> 脚需要和设备相连。</p>
+<p><strong>注意：</strong> 开发板不是所有串口都支持硬件流控，请先从原理图上确认硬件是否支持</p>
+</div>
+<div class="section" id="she-bei-shu-wen-jian-pei-zhi">
+<h4>设备树文件配置<a class="headerlink" href="#she-bei-shu-wen-jian-pei-zhi" title="永久链接至标题">¶</a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">uart3</span><span class="p">:</span> <span class="n">serial</span><span class="nd">@ff1b0000</span> <span class="p">{</span>
+        <span class="n">compatible</span> <span class="o">=</span> <span class="s2">&quot;rockchip,rk3399-uart&quot;</span><span class="p">,</span> <span class="s2">&quot;snps,dw-apb-uart&quot;</span><span class="p">;</span>
+        <span class="n">reg</span> <span class="o">=</span> <span class="o">&lt;</span><span class="mh">0x0</span> <span class="mh">0xff1b0000</span> <span class="mh">0x0</span> <span class="mh">0x100</span><span class="o">&gt;</span><span class="p">;</span>
+        <span class="n">clocks</span> <span class="o">=</span> <span class="o">&lt;&amp;</span><span class="n">cru</span> <span class="n">SCLK_UART3</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;&amp;</span><span class="n">cru</span> <span class="n">PCLK_UART3</span><span class="o">&gt;</span><span class="p">;</span>
+        <span class="n">clock</span><span class="o">-</span><span class="n">names</span> <span class="o">=</span> <span class="s2">&quot;baudclk&quot;</span><span class="p">,</span> <span class="s2">&quot;apb_pclk&quot;</span><span class="p">;</span>
+        <span class="n">interrupts</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">GIC_SPI</span> <span class="mi">101</span> <span class="n">IRQ_TYPE_LEVEL_HIGH</span> <span class="mi">0</span><span class="o">&gt;</span><span class="p">;</span>
+        <span class="n">reg</span><span class="o">-</span><span class="n">shift</span> <span class="o">=</span> <span class="o">&lt;</span><span class="mi">2</span><span class="o">&gt;</span><span class="p">;</span>
+        <span class="n">reg</span><span class="o">-</span><span class="n">io</span><span class="o">-</span><span class="n">width</span> <span class="o">=</span> <span class="o">&lt;</span><span class="mi">4</span><span class="o">&gt;</span><span class="p">;</span>
+        <span class="n">pinctrl</span><span class="o">-</span><span class="n">names</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span><span class="p">;</span>
+<span class="o">+</span>       <span class="n">pinctrl</span><span class="o">-</span><span class="mi">0</span> <span class="o">=</span> <span class="o">&lt;&amp;</span><span class="n">uart3_xfer</span> <span class="o">&amp;</span><span class="n">uart3_cts</span> <span class="o">&amp;</span><span class="n">uart3_rts</span><span class="o">&gt;</span><span class="p">;</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;disabled&quot;</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="ying-yong-ceng-she-zhi">
+<h4>应用层设置<a class="headerlink" href="#ying-yong-ceng-she-zhi" title="永久链接至标题">¶</a></h4>
+<p>上层也需要打开流控的设置，这里介绍 stty 如何打开流控如果你使用的是其他应用程序请从应用中打开流控。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>//打开流控
+root@firefly:~# stty -F /dev/ttyS4 crtscts
+
+//检测流控是否打开,“-”号代表该功能已经关闭
+root@firefly:~# stty -F /dev/ttyS4 -a | grep crtscts
+-parenb -parodd -cmspar cs8 hupcl -cstopb cread clocal crtscts
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="mipi-she-xiang-tou-ov13850">
+<h2>MIPI 摄像头 (OV13850)<a class="headerlink" href="#mipi-she-xiang-tou-ov13850" title="永久链接至标题">¶</a></h2>
+<p>带有 <code class="docutils literal notranslate"><span class="pre">MIPI</span> <span class="pre">CSI</span></code> 接口的 RK3399 板子都添加了双 MIPI 摄像头 <code class="docutils literal notranslate"><span class="pre">OV13850</span></code> 的支持，应用中也添加了摄像头的例子。下面介绍一下相关配置。</p>
+<div class="section" id="id1">
+<h3>设备树文件配置<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h3>
+<p>以 <code class="docutils literal notranslate"><span class="pre">rk3399-firefly-aiojd4.dts</span></code> 为例，这些都是摄像头需要打开的配置。由于内核已经添加了双 MIPI 摄像头的支持，所以这里配置了两个摄像头，如果只使用一个摄像只需要打开其中一个摄像头就可以了。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span><span class="n">电源管理</span>
+<span class="o">&amp;</span><span class="n">vcc_mipi</span> <span class="p">{</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;okay&quot;</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="o">&amp;</span><span class="n">dvdd_1v2</span> <span class="p">{</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;okay&quot;</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="o">//</span><span class="n">MIPI</span> <span class="n">摄像头1</span>
+<span class="o">&amp;</span><span class="n">ov13850</span> <span class="p">{</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;okay&quot;</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="o">&amp;</span><span class="n">rkisp1_0</span> <span class="p">{</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;okay&quot;</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="o">&amp;</span><span class="n">mipi_dphy_rx0</span> <span class="p">{</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;okay&quot;</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="o">&amp;</span><span class="n">isp0_mmu</span> <span class="p">{</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;okay&quot;</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="o">//</span><span class="n">MIPI</span> <span class="n">摄像头2</span>
+<span class="o">&amp;</span><span class="n">ov13850_1</span> <span class="p">{</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;okay&quot;</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="o">&amp;</span><span class="n">rkisp1_1</span> <span class="p">{</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;okay&quot;</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="o">&amp;</span><span class="n">mipi_dphy_tx1rx1</span> <span class="p">{</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;okay&quot;</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="o">&amp;</span><span class="n">isp1_mmu</span> <span class="p">{</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;okay&quot;</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p><strong>注意：</strong> 如果使用的是 <code class="docutils literal notranslate"><span class="pre">core-3399</span></code> 核心板加上 DIY 底板，可能需要修改相应的 GPIO 属性。</p>
+</div>
+<div class="section" id="tiao-shi">
+<h3>调试<a class="headerlink" href="#tiao-shi" title="永久链接至标题">¶</a></h3>
+<p>在运行脚本之前先确认一下 <code class="docutils literal notranslate"><span class="pre">OV13850</span></code> 设备是否注册成功，下面是成功的内核日志：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="nd">@firefly</span><span class="p">:</span><span class="o">~</span><span class="c1"># dmesg | grep ov13850</span>
+<span class="o">//</span><span class="n">MIPI</span> <span class="n">摄像头1</span>
+<span class="p">[</span>    <span class="mf">1.276762</span><span class="p">]</span> <span class="n">ov13850</span> <span class="mi">1</span><span class="o">-</span><span class="mi">0036</span><span class="p">:</span> <span class="n">GPIO</span> <span class="n">lookup</span> <span class="k">for</span> <span class="n">consumer</span> <span class="n">reset</span>
+<span class="p">[</span>    <span class="mf">1.276771</span><span class="p">]</span> <span class="n">ov13850</span> <span class="mi">1</span><span class="o">-</span><span class="mi">0036</span><span class="p">:</span> <span class="n">using</span> <span class="n">device</span> <span class="n">tree</span> <span class="k">for</span> <span class="n">GPIO</span> <span class="n">lookup</span>
+<span class="p">[</span>    <span class="mf">1.276803</span><span class="p">]</span> <span class="n">of_get_named_gpiod_flags</span><span class="p">:</span> <span class="n">parsed</span> <span class="s1">&#39;reset-gpios&#39;</span> <span class="nb">property</span> <span class="n">of</span> <span class="n">node</span> <span class="s1">&#39;/i2c@ff110000/ov13850@36[0]&#39;</span> <span class="o">-</span> <span class="n">status</span> <span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="p">[</span>    <span class="mf">1.276855</span><span class="p">]</span> <span class="n">ov13850</span> <span class="mi">1</span><span class="o">-</span><span class="mi">0036</span><span class="p">:</span> <span class="n">Looking</span> <span class="n">up</span> <span class="n">avdd</span><span class="o">-</span><span class="n">supply</span> <span class="kn">from</span> <span class="nn">device</span> <span class="n">tree</span>
+<span class="p">[</span>    <span class="mf">1.277034</span><span class="p">]</span> <span class="n">ov13850</span> <span class="mi">1</span><span class="o">-</span><span class="mi">0036</span><span class="p">:</span> <span class="n">Looking</span> <span class="n">up</span> <span class="n">dovdd</span><span class="o">-</span><span class="n">supply</span> <span class="kn">from</span> <span class="nn">device</span> <span class="n">tree</span>
+<span class="p">[</span>    <span class="mf">1.277170</span><span class="p">]</span> <span class="n">ov13850</span> <span class="mi">1</span><span class="o">-</span><span class="mi">0036</span><span class="p">:</span> <span class="n">Looking</span> <span class="n">up</span> <span class="n">dvdd</span><span class="o">-</span><span class="n">supply</span> <span class="kn">from</span> <span class="nn">device</span> <span class="n">tree</span>
+<span class="p">[</span>    <span class="mf">1.277535</span><span class="p">]</span> <span class="n">ov13850</span> <span class="mi">1</span><span class="o">-</span><span class="mi">0036</span><span class="p">:</span> <span class="n">GPIO</span> <span class="n">lookup</span> <span class="k">for</span> <span class="n">consumer</span> <span class="n">pwdn</span>
+<span class="p">[</span>    <span class="mf">1.277544</span><span class="p">]</span> <span class="n">ov13850</span> <span class="mi">1</span><span class="o">-</span><span class="mi">0036</span><span class="p">:</span> <span class="n">using</span> <span class="n">device</span> <span class="n">tree</span> <span class="k">for</span> <span class="n">GPIO</span> <span class="n">lookup</span>
+<span class="p">[</span>    <span class="mf">1.277575</span><span class="p">]</span> <span class="n">of_get_named_gpiod_flags</span><span class="p">:</span> <span class="n">parsed</span> <span class="s1">&#39;pwdn-gpios&#39;</span> <span class="nb">property</span> <span class="n">of</span> <span class="n">node</span> <span class="s1">&#39;/i2c@ff110000/ov13850@36[0]&#39;</span> <span class="o">-</span> <span class="n">status</span> <span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="p">[</span>    <span class="mf">1.281862</span><span class="p">]</span> <span class="n">ov13850</span> <span class="mi">1</span><span class="o">-</span><span class="mi">0036</span><span class="p">:</span> <span class="n">Detected</span> <span class="n">OV00d850</span> <span class="n">sensor</span><span class="p">,</span> <span class="n">REVISION</span> <span class="mh">0xb2</span>
+<span class="o">//</span><span class="n">MIPI</span> <span class="n">摄像头2</span>
+<span class="p">[</span>    <span class="mf">1.284442</span><span class="p">]</span> <span class="n">ov13850</span> <span class="mi">1</span><span class="o">-</span><span class="mi">0046</span><span class="p">:</span> <span class="n">GPIO</span> <span class="n">lookup</span> <span class="k">for</span> <span class="n">consumer</span> <span class="n">pwdn</span>
+<span class="p">[</span>    <span class="mf">1.284461</span><span class="p">]</span> <span class="n">ov13850</span> <span class="mi">1</span><span class="o">-</span><span class="mi">0046</span><span class="p">:</span> <span class="n">using</span> <span class="n">device</span> <span class="n">tree</span> <span class="k">for</span> <span class="n">GPIO</span> <span class="n">lookup</span>
+<span class="p">[</span>    <span class="mf">1.284523</span><span class="p">]</span> <span class="n">of_get_named_gpiod_flags</span><span class="p">:</span> <span class="n">parsed</span> <span class="s1">&#39;pwdn-gpios&#39;</span> <span class="nb">property</span> <span class="n">of</span> <span class="n">node</span> <span class="s1">&#39;/i2c@ff110000/ov13850@46[0]&#39;</span> <span class="o">-</span> <span class="n">status</span> <span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="p">[</span>    <span class="mf">1.288235</span><span class="p">]</span> <span class="n">ov13850</span> <span class="mi">1</span><span class="o">-</span><span class="mi">0046</span><span class="p">:</span> <span class="n">Detected</span> <span class="n">OV00d850</span> <span class="n">sensor</span><span class="p">,</span> <span class="n">REVISION</span> <span class="mh">0xb2</span>
+</pre></div>
+</div>
+<p>在 <code class="docutils literal notranslate"><span class="pre">/dev</span></code> 下应该生成相关设备文件：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="nd">@firefly</span><span class="p">:</span><span class="o">~</span><span class="c1"># ls /dev/video</span>
+<span class="o">//</span><span class="n">MIPI</span> <span class="n">摄像头1</span>
+<span class="n">video0</span>  <span class="n">video1</span>  <span class="n">video2</span>  <span class="n">video3</span>
+<span class="o">//</span><span class="n">MIPI</span> <span class="n">摄像头2</span>
+<span class="n">video4</span>  <span class="n">video5</span>  <span class="n">video6</span>  <span class="n">video7</span>
+</pre></div>
+</div>
+<p><strong>注意：</strong> 同理，如果只使用一个摄像头，只需要注册一个摄像头设备就可以了。</p>
+</div>
+<div class="section" id="ce-shi">
+<h3>测试<a class="headerlink" href="#ce-shi" title="永久链接至标题">¶</a></h3>
+<p>在官方提供的 Ubuntu 系统中已经添加了摄像头测试脚本 <code class="docutils literal notranslate"><span class="pre">/usr/local/bin/dual-camera-rkisp.sh</span></code>，其内容为：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>#!/bin/bash
+
+export DISPLAY=:0
+export XAUTHORITY=/home/firefly/.Xauthority
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+export LD_LIBRARY_PATH=/usr/lib/gstreamer-1.0
+
+WIDTH=640
+HEIGHT=480
+SINK=gtksink
+
+/etc/init.d/S50set_pipeline start
+
+# camera closed to the border of the board
+gst-launch-1.0 rkisp device=/dev/video0 io-mode=1 analyzer=1 enable-3a=1 path-iqf=/etc/cam_iq.xml ! video/x-raw,format=NV12,width=${WIDTH},hei
+ght=${HEIGHT}, framerate=30/1 ! videoconvert ! $SINK &amp;
+
+# the other camera
+gst-launch-1.0 rkisp device=/dev/video4 io-mode=1 analyzer=1 enable-3a=1 path-iqf=/etc/cam_iq.xml ! video/x-raw,format=NV12,width=${WIDTH},hei
+ght=${HEIGHT}, framerate=30/1 ! videoconvert ! $SINK &amp;
+
+wait
+</pre></div>
+</div>
+<p>运行脚本即可，结果如图所示：</p>
+<p><img alt="img/mipi_csi.png" src="img/mipi_csi.png" /></p>
+</div>
+</div>
+<div class="section" id="usb-yi-tai-wang">
+<h2>USB 以太网<a class="headerlink" href="#usb-yi-tai-wang" title="永久链接至标题">¶</a></h2>
+<p>USB 以太网，主要实现的是将开发板的 OTG 接口做外设模式，模拟成一个网络接口，然后主机通过 USB 连接开发板并通过开发板访问互联网。以下是基于 Firefly-RK3399 开发板进行的具体操作。</p>
+<p>操作环境：</p>
+<ul class="simple">
+<li><p>Ubuntu 系统的 PC 机</p></li>
+<li><p>Firefly-RK3399 开发板</p></li>
+</ul>
+<div class="section" id="nei-he-she-zhi">
+<h3>内核设置<a class="headerlink" href="#nei-he-she-zhi" title="永久链接至标题">¶</a></h3>
+<p>在内核目录下，打开内核配置选项菜单：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">firefly_linux_defconfig</span>
+<span class="n">make</span> <span class="n">menuconfig</span>
+</pre></div>
+</div>
+<p>进入内核配置菜单后依次选择：<code class="docutils literal notranslate"><span class="pre">Device</span> <span class="pre">Drivers</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">USB</span> <span class="pre">Support</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">USB</span> <span class="pre">Gadget</span> <span class="pre">Support</span></code></p>
+<p>在 <code class="docutils literal notranslate"><span class="pre">USB</span> <span class="pre">Gadget</span> <span class="pre">Driver</span></code> 选项中选择到 <code class="docutils literal notranslate"><span class="pre">Ethernet</span> <span class="pre">Gadget</span> <span class="pre">(with</span> <span class="pre">CDC</span> <span class="pre">Ethernet</span> <span class="pre">support)</span></code></p>
+<p>同时再选择上 <code class="docutils literal notranslate"><span class="pre">RNDIS</span> <span class="pre">support</span></code> 。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;*&gt;</span>   <span class="n">USB</span> <span class="n">Gadget</span> <span class="n">Drivers</span> <span class="p">(</span><span class="n">Ethernet</span> <span class="n">Gadget</span> <span class="p">(</span><span class="k">with</span> <span class="n">CDC</span> <span class="n">Ethernet</span> <span class="n">support</span><span class="p">))</span>  <span class="o">---&gt;</span>
+        <span class="n">Ethernet</span> <span class="n">Gadget</span> <span class="p">(</span><span class="k">with</span> <span class="n">CDC</span> <span class="n">Ethernet</span> <span class="n">support</span><span class="p">)</span>
+<span class="p">[</span><span class="o">*</span><span class="p">]</span>       <span class="n">RNDIS</span> <span class="n">support</span> <span class="p">(</span><span class="n">NEW</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>接着在 <code class="docutils literal notranslate"><span class="pre">kernel</span></code> 目录下编译内核：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">rk3399</span><span class="o">-</span><span class="n">firefly</span><span class="o">.</span><span class="n">img</span> <span class="o">-</span><span class="n">j12</span>
+</pre></div>
+</div>
+<p>编译完成后将内核烧录到开发板中,烧录过程请参考维基教程：<a class="reference internal" href="upgrade_firmware.html"><span class="doc">升级固件</span></a>中的分区镜像烧写部分。</p>
+</div>
+<div class="section" id="ip-di-zhi-she-zhi">
+<h3>IP 地址设置<a class="headerlink" href="#ip-di-zhi-she-zhi" title="永久链接至标题">¶</a></h3>
+<p>用数据线连接 PC 机和开发板的 OTG 接口，在 PC 机中执行 <code class="docutils literal notranslate"><span class="pre">lsusb</span></code> 命令可以查看到 USB 以太网设备，即说明连接成功。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>firefly@Desktop:~$ lsusb
+Bus 002 Device 003: ID 09da:5814 A4Tech Co., Ltd.
+Bus 002 Device 002: ID 8087:0024 Intel Corp. Integrated Rate Matching Hub
+Bus 002 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 001 Device 005: ID 04f2:b2ea Chicony Electronics Co., Ltd Integrated Camera [ThinkPad]
+Bus 001 Device 004: ID 0a5c:21e6 Broadcom Corp. BCM20702 Bluetooth 4.0 [ThinkPad]
+Bus 001 Device 003: ID 147e:1002 Upek Biometric Touchchip/Touchstrip Fingerprint Sensor
+Bus 001 Device 002: ID 8087:0024 Intel Corp. Integrated Rate Matching Hub
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 003 Device 003: ID 0525:a4a2 Netchip Technology, Inc. Linux-USB Ethernet/RNDIS Gadget
+Bus 003 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+</pre></div>
+</div>
+<p>输出信息中 ID 0525:a4a2 Netchip Technology, Inc. Linux-USB Ethernet/RNDIS Gadget 即为 USB 网卡设备。</p>
+<p>开发板插入网线，使开发板可以连接外网。</p>
+<ul class="simple">
+<li><p>在开发板中 IP 的设置：</p></li>
+</ul>
+<p>输入执行 <code class="docutils literal notranslate"><span class="pre">ifconfig</span> <span class="pre">-a</span></code> 命令，可以查看到以下信息：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="nd">@firefly</span><span class="p">:</span><span class="o">~</span><span class="c1"># ifconfig -a</span>
+
+<span class="c1"># eth0 是有线网卡</span>
+<span class="n">eth0</span><span class="p">:</span> <span class="n">flags</span><span class="o">=</span><span class="mi">4163</span><span class="o">&lt;</span><span class="n">UP</span><span class="p">,</span><span class="n">BROADCAST</span><span class="p">,</span><span class="n">RUNNING</span><span class="p">,</span><span class="n">MULTICAST</span><span class="o">&gt;</span>  <span class="n">mtu</span> <span class="mi">1500</span>
+        <span class="n">inet</span> <span class="mf">168.168</span><span class="o">.</span><span class="mf">100.48</span>  <span class="n">netmask</span> <span class="mf">255.255</span><span class="o">.</span><span class="mf">0.0</span>  <span class="n">broadcast</span> <span class="mf">168.168</span><span class="o">.</span><span class="mf">255.255</span>
+        <span class="n">inet6</span> <span class="n">fe80</span><span class="p">::</span><span class="mi">1351</span><span class="p">:</span><span class="n">ae2f</span><span class="p">:</span><span class="mi">442</span><span class="n">e</span><span class="p">:</span><span class="n">e436</span>  <span class="n">prefixlen</span> <span class="mi">64</span>  <span class="n">scopeid</span> <span class="mh">0x20</span><span class="o">&lt;</span><span class="n">link</span><span class="o">&gt;</span>
+        <span class="n">ether</span> <span class="mi">8</span><span class="n">a</span><span class="p">:</span><span class="mi">4</span><span class="n">f</span><span class="p">:</span><span class="n">c3</span><span class="p">:</span><span class="mi">77</span><span class="p">:</span><span class="mi">94</span><span class="p">:</span><span class="n">ac</span>  <span class="n">txqueuelen</span> <span class="mi">1000</span>  <span class="p">(</span><span class="n">Ethernet</span><span class="p">)</span>
+        <span class="n">RX</span> <span class="n">packets</span> <span class="mi">9759</span>  <span class="nb">bytes</span> <span class="mi">897943</span> <span class="p">(</span><span class="mf">897.9</span> <span class="n">KB</span><span class="p">)</span>
+        <span class="n">RX</span> <span class="n">errors</span> <span class="mi">0</span>  <span class="n">dropped</span> <span class="mi">0</span>  <span class="n">overruns</span> <span class="mi">0</span>  <span class="n">frame</span> <span class="mi">0</span>
+        <span class="n">TX</span> <span class="n">packets</span> <span class="mi">236</span>  <span class="nb">bytes</span> <span class="mi">35172</span> <span class="p">(</span><span class="mf">35.1</span> <span class="n">KB</span><span class="p">)</span>
+        <span class="n">TX</span> <span class="n">errors</span> <span class="mi">0</span>  <span class="n">dropped</span> <span class="mi">0</span> <span class="n">overruns</span> <span class="mi">0</span>  <span class="n">carrier</span> <span class="mi">0</span>  <span class="n">collisions</span> <span class="mi">0</span>
+        <span class="n">device</span> <span class="n">interrupt</span> <span class="mi">42</span>  <span class="n">base</span> <span class="mh">0x8000</span>
+
+        <span class="o">...</span>
+
+<span class="c1"># usb0 是虚拟的 usb 网卡</span>
+<span class="n">usb0</span><span class="p">:</span> <span class="n">flags</span><span class="o">=</span><span class="mi">4098</span><span class="o">&lt;</span><span class="n">BROADCAST</span><span class="p">,</span><span class="n">MULTICAST</span><span class="o">&gt;</span>  <span class="n">mtu</span> <span class="mi">1500</span>
+        <span class="n">ether</span> <span class="mi">4</span><span class="n">a</span><span class="p">:</span><span class="mi">81</span><span class="p">:</span><span class="n">b1</span><span class="p">:</span><span class="mi">34</span><span class="p">:</span><span class="n">d2</span><span class="p">:</span><span class="n">ad</span>  <span class="n">txqueuelen</span> <span class="mi">1000</span>  <span class="p">(</span><span class="n">Ethernet</span><span class="p">)</span>
+        <span class="n">RX</span> <span class="n">packets</span> <span class="mi">0</span>  <span class="nb">bytes</span> <span class="mi">0</span> <span class="p">(</span><span class="mf">0.0</span> <span class="n">B</span><span class="p">)</span>
+        <span class="n">RX</span> <span class="n">errors</span> <span class="mi">0</span>  <span class="n">dropped</span> <span class="mi">0</span>  <span class="n">overruns</span> <span class="mi">0</span>  <span class="n">frame</span> <span class="mi">0</span>
+        <span class="n">TX</span> <span class="n">packets</span> <span class="mi">0</span>  <span class="nb">bytes</span> <span class="mi">0</span> <span class="p">(</span><span class="mf">0.0</span> <span class="n">B</span><span class="p">)</span>
+        <span class="n">TX</span> <span class="n">errors</span> <span class="mi">0</span>  <span class="n">dropped</span> <span class="mi">0</span> <span class="n">overruns</span> <span class="mi">0</span>  <span class="n">carrier</span> <span class="mi">0</span>  <span class="n">collisions</span> <span class="mi">0</span>
+</pre></div>
+</div>
+<p>然后给 usb0 网卡自定义一个适当的 IP：</p>
+<p>注意要设置 usb0 的 IP 和有线网卡 eth0 的 IP 不在同一网段！！</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ifconfig</span> <span class="n">usb0</span> <span class="mf">192.168</span><span class="o">.</span><span class="mf">1.101</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>在 PC 机中 IP 的设置：</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span># 先查看 USB 虚拟网卡
+firefly@Desktop:~$ ifconfig
+enp0s20u2i1: flags=4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1500
+        inet 192.168.2.90  netmask 255.255.255.0  broadcast 192.168.2.255
+        inet6 fe80::871c:b87e:1327:7fd4  prefixlen 64  scopeid 0x20&lt;link&gt;
+        ether 46:fe:6e:97:ee:a6  txqueuelen 1000  (以太网)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 1  bytes 54 (54.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+...
+
+
+# 设置 USB 网卡的 IP 地址和开发板的 usb0 的 IP 地址在同一网段
+firefly@Desktop:~$ sudo ifconfig enp0s20u2i1 192.168.1.100
+
+#设置默认网关：要设置为开发板 usb0 的 ip 地址，因为后面要通过 usb0 来进行流量的转发
+firefly@Desktop:~$ sudo route add default gw 192.168.1.101
+</pre></div>
+</div>
+<p>设置完开发板和 PC 机的 IP 后，互相是可以 ping 通的，PC 机也可以用 <code class="docutils literal notranslate"><span class="pre">ssh</span></code> 命令登录到开发板。</p>
+</div>
+<div class="section" id="wang-luo-gong-xiang-shi-xian-pc-ji-shang-wang">
+<h3>网络共享实现 PC 机上网<a class="headerlink" href="#wang-luo-gong-xiang-shi-xian-pc-ji-shang-wang" title="永久链接至标题">¶</a></h3>
+<p>在开发板上：首先打开 IPv4 的转发功能：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">echo</span> <span class="mi">1</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">proc</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">net</span><span class="o">/</span><span class="n">ipv4</span><span class="o">/</span><span class="n">ip_forward</span>
+</pre></div>
+</div>
+<p>如果希望每次重启开发板后都自动打开转发功能，请直接修改 <code class="docutils literal notranslate"><span class="pre">/etc/sysctl.conf</span></code> 文件的 <code class="docutils literal notranslate"><span class="pre">net.ipv4.ip_forward</span></code> 值为1。修改文件参数后要执行 <code class="docutils literal notranslate"><span class="pre">sysctl</span> <span class="pre">-p</span></code> 命令重新载入 <code class="docutils literal notranslate"><span class="pre">/etc/sysctl.conf</span></code> 文件，使 IPv4 转发功能生效。</p>
+<p>然后清空 iptables 默认规则,并添加规则进行流量转发：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#清空默认规则</span>
+<span class="n">iptables</span> <span class="o">-</span><span class="n">F</span>
+<span class="n">iptables</span> <span class="o">-</span><span class="n">X</span>
+<span class="n">iptables</span> <span class="o">-</span><span class="n">Z</span>
+
+<span class="c1">#流量转发规则设置</span>
+<span class="n">iptables</span> <span class="o">-</span><span class="n">t</span> <span class="n">nat</span> <span class="o">-</span><span class="n">A</span> <span class="n">POSTROUTING</span> <span class="o">-</span><span class="n">s</span> <span class="mf">192.168</span><span class="o">.</span><span class="mf">1.0</span><span class="o">/</span><span class="mi">24</span> <span class="o">-</span><span class="n">o</span> <span class="n">eth0</span> <span class="o">-</span><span class="n">j</span> <span class="n">SNAT</span> <span class="o">--</span><span class="n">to</span><span class="o">-</span><span class="n">source</span> <span class="mf">168.168</span><span class="o">.</span><span class="mf">100.48</span>
+</pre></div>
+</div>
+<p>现在 PC 主机就可以访问网络了，配置过程中要注意以下几点：</p>
+<ul class="simple">
+<li><p>对应好上述步骤中自己设备上的各个 IP 地址,注意开发板上的 USB 虚拟网卡 IP 和有线网络 IP 不在同一网段;</p></li>
+<li><p>PC 机虚拟 USB 网卡的网关要设置为开发板虚拟 USB 网卡的 IP 地址;</p></li>
+<li><p>开发板上的虚拟网卡 IP 地址、IP 转发功能、流量转发规则等设置会在设备重启后恢复，用户可以自行查找资料如何开机自动设置这些配置。</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="wai-bu-cun-chu-she-bei-rootfs">
+<h2>外部存储设备 rootfs<a class="headerlink" href="#wai-bu-cun-chu-she-bei-rootfs" title="永久链接至标题">¶</a></h2>
+<p>根文件系统除了可以使用在内部的 eMMC 中的，还可以使用外部存储设备的根文件系统，如 SD 卡，U 盘等。以下是以 SD 卡为例，在 Firefly-RK3399 开发板上实现挂载外部存储设备的根文件系统。</p>
+<div class="section" id="zai-sd-ka-shang-jian-li-fen-qu">
+<h3>在 SD 卡上建立分区<a class="headerlink" href="#zai-sd-ka-shang-jian-li-fen-qu" title="永久链接至标题">¶</a></h3>
+<p>在 PC 机上插入 SD 卡，用 <code class="docutils literal notranslate"><span class="pre">gdisk</span></code> 工具分出一个装载根文件系统的分区：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>#用户请用 `fdisk -l` 查询 SD 卡设备名是什么，在用 gdisk 命令进入对应的设备
+sudo gdisk /dev/sdb
+
+GPT fdisk (gdisk) version 1.0.3
+
+Partition table scan:
+  MBR: protective
+  BSD: not present
+  APM: not present
+  GPT: present
+
+Found valid GPT with protective MBR; using GPT.
+
+Command (? for help):
+
+-------------------------------------------------------------------
+
+#输入 ? 查看帮助信息
+# 按 p 显示 SD 卡当前已有分区，由于使用的 SD 卡暂未创建分区，所以没有查询到分区信息
+
+Command (? for help): p
+Disk /dev/sdb: 15278080 sectors, 7.3 GiB
+Model: CARD-READER
+Sector size (logical/physical): 512/512 bytes
+Disk identifier (GUID): 5801AE61-92ED-42FB-A144-E522E8E15827
+Partition table holds up to 128 entries
+Main partition table begins at sector 2 and ends at sector 33
+First usable sector is 34, last usable sector is 15278046
+Partitions will be aligned on 2048-sector boundaries
+Total free space is 15278013 sectors (7.3 GiB)
+
+Number  Start (sector)    End (sector)  Size       Code  Name
+
+-------------------------------------------------------------------
+
+#创建新的分区，请用户根据自身实际情况创建合适的分区大小给根文件系统
+
+Command (? for help): n     #输入 n 创建新分区
+Partition number (1-128, default 1): 1      #输入1创建第一个分区
+First sector (34-15278046, default = 2048) or {+-}size{KMGTP}:   #直接按回车，使用默认值
+Last sector (2048-15278046, default = 15278046) or {+-}size{KMGTP}: +3G     #创建分区大小为3G
+Current type is &#39;Linux filesystem&#39;
+Hex code or GUID (L to show codes, Enter = 8300):       #按回车使用默认值
+Changed type of partition to &#39;Linux filesystem&#39;
+
+-------------------------------------------------------------------
+
+#创建完成后，输入 i，可以查看分区的 unique GUID
+
+Command (? for help): i
+Using 1
+Partition GUID code: 0FC63DAF-8483-4772-8E79-3D69D8477DE4 (Linux filesystem)
+Partition unique GUID: 6278AF5D-BC6B-4213-BBF6-47D333B5CB53   #使用的是该分区的 unique GUID，记下前12位即可
+First sector: 2048 (at 1024.0 KiB)
+Last sector: 6293503 (at 3.0 GiB)
+Partition size: 6291456 sectors (3.0 GiB)
+Attribute flags: 0000000000000000
+Partition name: &#39;Linux filesystem&#39;
+
+-------------------------------------------------------------------
+
+#输入 wq 保存修改并退出
+
+Command (? for help): wq
+
+Final checks complete. About to write GPT data. THIS WILL OVERWRITE EXISTING
+PARTITIONS!!
+
+Do you want to proceed? (Y/N): y
+OK; writing new GUID partition table (GPT) to /dev/sdb.
+Warning: The kernel is still using the old partition table.
+The new table will be used at the next reboot or after you
+run partprobe(8) or kpartx(8)
+The operation has completed successfully.
+</pre></div>
+</div>
+<p>把新创建的分区进行格式化。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># 注意 sdb1 表示 SD 卡对应分区设备名，请用户根据实际情况填入</span>
+<span class="n">sudo</span> <span class="n">mkfs</span><span class="o">.</span><span class="n">ext4</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">sdb1</span>
+</pre></div>
+</div>
+<p>格式化完成后，使用 <code class="docutils literal notranslate"><span class="pre">dd</span></code> 命令，将制作好的根文件系统烧写到 SD 卡刚新建的分区中。（根文件系统的制作可以参考<a class="reference internal" href="linux_build_ubuntu_rootfs.html"><span class="doc">Ubuntu 根文件系统的制作</span></a>）</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># 用户请根据实际情况填写根文件系统镜像的路径和 SD 卡对应分区设备名</span>
+<span class="n">dd</span> <span class="k">if</span><span class="o">=/</span><span class="n">rootfs_path</span><span class="o">/</span><span class="n">rootfs</span><span class="o">.</span><span class="n">img</span> <span class="n">of</span><span class="o">=/</span><span class="n">dev</span><span class="o">/</span><span class="n">sdb1</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="gua-zai-sd-ka-gen-wen-jian-xi-tong">
+<h3>挂载 SD 卡根文件系统<a class="headerlink" href="#gua-zai-sd-ka-gen-wen-jian-xi-tong" title="永久链接至标题">¶</a></h3>
+<p>首先要修改设备树文件，打开对应的 dts 文件，在根节点下重写 <code class="docutils literal notranslate"><span class="pre">chosen</span></code> 节点下的 <code class="docutils literal notranslate"><span class="pre">bootargs</span></code> 参数的 <code class="docutils literal notranslate"><span class="pre">root</span></code> 值为写入了根文件系统的 SD 卡分区的 unique GUID：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#将 root 的值改为获取到的 unique GUID 值的前12位</span>
+<span class="n">chosen</span> <span class="p">{</span>
+    <span class="n">bootargs</span> <span class="o">=</span> <span class="s2">&quot;earlycon=uart8250,mmio32,0xff1a0000 swiotlb=1 console=ttyFIQ0 rw root=PARTUUID=6278AF5D-BC6B  rootfstype=ext4 rootwait&quot;</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>修改完成后编译并烧录至开发板中。</p>
+<p>SD 卡的根文件系统烧录完成后，插入开发板的 TF 卡槽中，开机即可进入到 SD 的根文件系统中。</p>
+<p>注意事项：</p>
+<ul class="simple">
+<li><p>在操作前请注意备份 U 盘或者 SD 卡内的重要文件，避免丢失；</p></li>
+<li><p>操作时请确认自己的 SD 卡对应的设备名；</p></li>
+<li><p>dts 文件中 <code class="docutils literal notranslate"><span class="pre">root</span></code> 参数的值使用的是 unique GUID，记下前12位即可。用户也可以根据 <code class="docutils literal notranslate"><span class="pre">gdisk</span></code> 的帮助信息自行修改这个值。</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="wang-luo-qi-dong">
+<h2>网络启动<a class="headerlink" href="#wang-luo-qi-dong" title="永久链接至标题">¶</a></h2>
+<p>网络启动，是用 TFTP 在服务器下载内核、dtb 文件到目标机的内存中，同时可以用 NFS 挂载网络根文件系统到目标机上，实现目标机的无盘启动。以下基于 Firefly-RK3399 作出一个示例，提供用户参考。</p>
+<p>准备工作：</p>
+<ul class="simple">
+<li><p>Firefly-RK3399 开发板；</p></li>
+<li><p>路由器、网线；</p></li>
+<li><p>安装有 NFS 和 TFTP 的服务器；</p></li>
+<li><p>一份制作好的根文件系统。</p></li>
+</ul>
+<p>注：示例中使用的是 Ubuntu 系统的 PC 机作为服务器，通过路由器和网线实现与开发板的连接。用户可以根据自己的实际情况作调整，但如果是 PC 机直连开发板，请使用交叉网线。请确保服务器和目标机在同一局域网内。</p>
+<div class="section" id="fu-wu-qi-bu-shu">
+<h3>服务器部署<a class="headerlink" href="#fu-wu-qi-bu-shu" title="永久链接至标题">¶</a></h3>
+<p>1、在服务器上部署 TFTP 服务：</p>
+<p>安装 TFTP 服务：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span>  <span class="n">install</span>  <span class="n">tftpd</span><span class="o">-</span><span class="n">hpa</span>
+</pre></div>
+</div>
+<p>创建 <code class="docutils literal notranslate"><span class="pre">/tftpboot</span></code> 目录并赋予权限：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="o">/</span><span class="n">tftpboot</span>
+<span class="n">sudo</span> <span class="n">chmod</span> <span class="mi">777</span> <span class="o">/</span><span class="n">tftpboot</span>
+</pre></div>
+</div>
+<p>然后修改 TFTP 服务器的配置文件 <code class="docutils literal notranslate"><span class="pre">/etc/default/tftpd-hpa</span></code>，修改内容为：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># /etc/default/tftpd-hpa</span>
+
+<span class="n">TFTP_USERNAME</span><span class="o">=</span><span class="s2">&quot;tftp&quot;</span>
+<span class="n">TFTP_DIRECTORY</span><span class="o">=</span><span class="s2">&quot;/tftpboot&quot;</span>   <span class="c1">#这个根据用户实际的 tftp 目录设置</span>
+<span class="n">TFTP_ADDRESS</span><span class="o">=</span><span class="s2">&quot;0.0.0.0:69&quot;</span>
+<span class="n">TDTP_OPTIONS</span><span class="o">=</span><span class="s2">&quot;-c -s -l&quot;</span>
+</pre></div>
+</div>
+<p>退出修改后重启 TFTP 服务器：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">service</span> <span class="n">tftpd</span><span class="o">-</span><span class="n">hpa</span> <span class="n">restart</span>
+</pre></div>
+</div>
+<p>在 <code class="docutils literal notranslate"><span class="pre">/tftpboot</span></code> 目录中创建一个文件，测试 TFTP 服务是否可用：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>firefly@Desktop:~$ cd /tftpboot/
+firefly@Desktop:/tftpboot$ touch test
+firefly@Desktop:/tftpboot$ cd /tmp
+firefly@Desktop:/tmp$ tftp 127.0.0.1
+tftp&gt; get test
+tftp&gt; q
+</pre></div>
+</div>
+<p>查看 <code class="docutils literal notranslate"><span class="pre">/tmp</span></code> 目录中的文件，如果看到了 <code class="docutils literal notranslate"><span class="pre">test</span></code> 文件表示 TFTP 服务器是可用的。</p>
+<p>2、在服务器上部署 NFS 服务：</p>
+<p>安装 NFS 服务器：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">nfs</span><span class="o">-</span><span class="n">kernel</span><span class="o">-</span><span class="n">server</span>
+</pre></div>
+</div>
+<p>创建共享目录：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">mkdir</span> <span class="o">/</span><span class="n">nfs</span>
+<span class="n">sudo</span> <span class="n">chmod</span> <span class="mi">777</span> <span class="o">/</span><span class="n">nfs</span>
+<span class="n">cd</span> <span class="o">/</span><span class="n">nfs</span>
+<span class="n">sudo</span> <span class="n">mkdir</span> <span class="n">rootfs</span>
+<span class="n">sudo</span> <span class="n">chmod</span> <span class="mi">777</span> <span class="n">rootfs</span>
+</pre></div>
+</div>
+<p>然后将制作好的根文件系统复制到 <code class="docutils literal notranslate"><span class="pre">/nfs/rootfs</span></code> 目录中。（根文件系统的制作可以参考：<a class="reference internal" href="linux_build_ubuntu_rootfs.html"><span class="doc">Ubuntu 根文件系统的制作</span></a>）</p>
+<p>接着配置 NFS，在 <code class="docutils literal notranslate"><span class="pre">/etc/exports</span></code> 中添加共享目录位置：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">nfs</span><span class="o">/</span><span class="n">rootfs</span> <span class="o">*</span><span class="p">(</span><span class="n">rw</span><span class="p">,</span><span class="n">sync</span><span class="p">,</span><span class="n">no_root_squash</span><span class="p">,</span><span class="n">no_subtree_check</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>共享的目录根据用户实际情况设置，其中的”*”代表的是所有用户可访问。</p>
+<p>重启 NFS 服务器：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">init</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">nfs</span><span class="o">-</span><span class="n">kernel</span><span class="o">-</span><span class="n">server</span> <span class="n">restart</span>
+</pre></div>
+</div>
+<p>本地挂载共享目录，测试 NFS 服务器是否可用：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">mount</span> <span class="o">-</span><span class="n">t</span> <span class="n">nfs</span> <span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="o">/</span><span class="n">nfs</span><span class="o">/</span><span class="n">rootfs</span><span class="o">/</span> <span class="o">/</span><span class="n">mnt</span>
+</pre></div>
+</div>
+<p>在 <code class="docutils literal notranslate"><span class="pre">/mnt</span></code> 目录下查看到了与 <code class="docutils literal notranslate"><span class="pre">/nfs/rootfs</span></code> 一致的内容，则说明 NFS 服务器部署成功。然后可以解除挂载：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">umount</span> <span class="o">/</span><span class="n">mnt</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="nei-he-de-pei-zhi">
+<h3>内核的配置<a class="headerlink" href="#nei-he-de-pei-zhi" title="永久链接至标题">¶</a></h3>
+<p>如果要做到挂载网络根文件系统，需要在内核中做相关配置，并在 dts 中修改相关挂载根文件系统的配置。</p>
+<p>首先进行内核配置，在内核目录中执行 <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">menuconfig</span></code>，选择相关配置：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="o">*</span><span class="p">]</span> <span class="n">Networking</span> <span class="n">support</span>  <span class="o">---&gt;</span>
+         <span class="n">Networking</span> <span class="n">options</span>  <span class="o">---&gt;</span>
+                <span class="p">[</span><span class="o">*</span><span class="p">]</span>   <span class="n">IP</span><span class="p">:</span> <span class="n">kernel</span> <span class="n">level</span> <span class="n">autoconfiguration</span>
+                <span class="p">[</span><span class="o">*</span><span class="p">]</span>     <span class="n">IP</span><span class="p">:</span> <span class="n">DHCP</span> <span class="n">support</span>
+                <span class="p">[</span><span class="o">*</span><span class="p">]</span>     <span class="n">IP</span><span class="p">:</span> <span class="n">BOOTP</span> <span class="n">support</span>
+                <span class="p">[</span><span class="o">*</span><span class="p">]</span>     <span class="n">IP</span><span class="p">:</span> <span class="n">RARP</span> <span class="n">support</span>
+
+
+<span class="n">File</span> <span class="n">systems</span>  <span class="o">---&gt;</span>
+        <span class="p">[</span><span class="o">*</span><span class="p">]</span> <span class="n">Network</span> <span class="n">File</span> <span class="n">Systems</span>  <span class="o">---&gt;</span>
+                <span class="p">[</span><span class="o">*</span><span class="p">]</span>   <span class="n">Root</span> <span class="n">file</span> <span class="n">system</span> <span class="n">on</span> <span class="n">NFS</span>
+</pre></div>
+</div>
+<p>修改 <code class="docutils literal notranslate"><span class="pre">rk3399-firefly.dts</span></code> 配置，在 dts 文件中修改 <code class="docutils literal notranslate"><span class="pre">chosen</span></code> 节点下的 <code class="docutils literal notranslate"><span class="pre">bootargs</span></code> 参数，选择使用 NFS 挂载远程根文件系统，内容如下。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">chosen</span> <span class="p">{</span>
+    <span class="n">bootargs</span> <span class="o">=</span> <span class="s2">&quot;earlycon=uart8250,mmio32,0xff1a0000 swiotlb=1 console=ttyFIQ0 root=/dev/nfs rootfstype=ext4 rootwait&quot;</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="c1">#主要是修改 root 的值，root=/dev/nfs 表示通过 NFS 挂载网络根文件系统</span>
+</pre></div>
+</div>
+<p>编译内核：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">ARCH</span><span class="o">=</span><span class="n">arm64</span> <span class="n">rk3399</span><span class="o">-</span><span class="n">firefly</span><span class="o">.</span><span class="n">img</span> <span class="o">-</span><span class="n">j12</span>
+</pre></div>
+</div>
+<p>编译完成后，将编译好的内核文件 <code class="docutils literal notranslate"><span class="pre">boot.img</span></code> 和 <code class="docutils literal notranslate"><span class="pre">rk3399-firefly.dtb</span></code> 文件复制到 <code class="docutils literal notranslate"><span class="pre">/tftpboot</span></code> 目录中：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cp</span> <span class="n">boot</span><span class="o">.</span><span class="n">img</span> <span class="o">/</span><span class="n">tftpboot</span>
+<span class="n">cp</span> <span class="n">arch</span><span class="o">/</span><span class="n">arm64</span><span class="o">/</span><span class="n">boot</span><span class="o">/</span><span class="n">dts</span><span class="o">/</span><span class="n">rockchip</span><span class="o">/</span><span class="n">rk3399</span><span class="o">-</span><span class="n">firefly</span><span class="o">.</span><span class="n">dtb</span> <span class="o">/</span><span class="n">tftpboot</span>
+</pre></div>
+</div>
+<p>详细说明可以参考内核目录中的 <code class="docutils literal notranslate"><span class="pre">kernel/Documentation/filesystems/nfs/nfsroot.txt</span></code></p>
+</div>
+<div class="section" id="u-boot-she-zhi">
+<h3>U-Boot设置<a class="headerlink" href="#u-boot-she-zhi" title="永久链接至标题">¶</a></h3>
+<p>请先确保目标机网线已插入，接入到服务器的局域网内。</p>
+<p>目标机启动进入 U-Boot 命令行模式，设置以下参数：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">=&gt;</span> <span class="n">setenv</span> <span class="n">ipaddr</span> <span class="mf">192.168</span><span class="o">.</span><span class="mf">31.101</span>     <span class="c1">#设置目标机 IP 地址</span>
+<span class="o">=&gt;</span> <span class="n">setenv</span> <span class="n">serverip</span> <span class="mf">192.168</span><span class="o">.</span><span class="mf">31.106</span>   <span class="c1">#设置 serverip 为服务器 IP 地址</span>
+
+<span class="c1">#设置从 TFTP 下载内核和 dtb 文件到相应地址，用户请根据自己实际的目标机修改相应地址</span>
+<span class="o">=&gt;</span> <span class="n">setenv</span> <span class="n">bootcmd</span> <span class="n">tftpboot</span> <span class="mh">0x0027f800</span> <span class="n">boot</span><span class="o">.</span><span class="n">img</span> \<span class="p">;</span> <span class="n">tftpboot</span> <span class="mh">0x08300000</span> <span class="n">rk3399</span><span class="o">-</span><span class="n">firefly</span><span class="o">.</span><span class="n">dtb</span> \<span class="p">;</span> <span class="n">bootm</span> <span class="mh">0x0027f800</span> <span class="o">-</span> <span class="mh">0x08300000</span>
+
+<span class="c1">#设置挂载网络根文件系统，IP 参数依次为：目标机 IP:服务器 IP:网关:网络掩码:设备名:off，可以更简单的设置 ip=dhcp，通过 DHXP 自动分配 IP</span>
+<span class="o">=&gt;</span> <span class="n">setenv</span> <span class="n">bootargs</span> <span class="n">root</span><span class="o">=/</span><span class="n">dev</span><span class="o">/</span><span class="n">nfs</span> <span class="n">rw</span> <span class="n">nfsroot</span><span class="o">=</span><span class="mf">192.168</span><span class="o">.</span><span class="mf">31.106</span><span class="p">:</span><span class="o">/</span><span class="n">nfs</span><span class="o">/</span><span class="n">rootfs</span><span class="p">,</span><span class="n">v3</span> <span class="n">ip</span><span class="o">=</span><span class="mf">192.168</span><span class="o">.</span><span class="mf">31.101</span><span class="p">:</span><span class="mf">192.168</span><span class="o">.</span><span class="mf">31.106</span><span class="p">:</span><span class="mf">192.168</span><span class="o">.</span><span class="mf">31.1</span><span class="p">:</span><span class="mf">255.255</span><span class="o">.</span><span class="mf">255.0</span><span class="p">::</span><span class="n">eth0</span><span class="p">:</span><span class="n">off</span>
+
+<span class="c1">#如果不想每次开机都设置一遍，可以保存上面配置的变量</span>
+<span class="o">=&gt;</span> <span class="n">saveenv</span>
+<span class="n">Saving</span> <span class="n">Environment</span> <span class="n">to</span> <span class="n">MMC</span><span class="o">...</span>
+<span class="n">Writing</span> <span class="n">to</span> <span class="n">MMC</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">...</span> <span class="n">done</span>
+
+<span class="c1">#启动目标机</span>
+<span class="o">=&gt;</span> <span class="n">boot</span>
+<span class="n">ethernet</span><span class="nd">@fe300000</span> <span class="n">Waiting</span> <span class="k">for</span> <span class="n">PHY</span> <span class="n">auto</span> <span class="n">negotiation</span> <span class="n">to</span> <span class="n">complete</span><span class="o">.</span> <span class="n">done</span>
+<span class="n">Speed</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span> <span class="n">full</span> <span class="n">duplex</span>
+<span class="n">Using</span> <span class="n">ethernet</span><span class="nd">@fe300000</span> <span class="n">device</span>
+<span class="n">TFTP</span> <span class="kn">from</span> <span class="nn">server</span> <span class="mf">192.168</span><span class="o">.</span><span class="mf">31.106</span><span class="p">;</span> <span class="n">our</span> <span class="n">IP</span> <span class="n">address</span> <span class="ow">is</span> <span class="mf">192.168</span><span class="o">.</span><span class="mf">31.101</span>
+<span class="n">Filename</span> <span class="s1">&#39;boot.img&#39;</span><span class="o">.</span>
+<span class="n">Load</span> <span class="n">address</span><span class="p">:</span> <span class="mh">0x27f800</span>
+<span class="n">Loading</span><span class="p">:</span> <span class="c1">#################################################################</span>
+         <span class="c1">#################################################################</span>
+         <span class="c1">#################################################################</span>
+         <span class="c1">#################################################################</span>
+         <span class="c1">#################################################################</span>
+         <span class="c1">##################################################</span>
+         <span class="mf">475.6</span> <span class="n">KiB</span><span class="o">/</span><span class="n">s</span>
+<span class="n">done</span>
+<span class="n">Bytes</span> <span class="n">transferred</span> <span class="o">=</span> <span class="mi">20072448</span> <span class="p">(</span><span class="mi">1324800</span> <span class="nb">hex</span><span class="p">)</span>
+<span class="n">Speed</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span> <span class="n">full</span> <span class="n">duplex</span>
+<span class="n">Using</span> <span class="n">ethernet</span><span class="nd">@fe300000</span> <span class="n">device</span>
+<span class="n">TFTP</span> <span class="kn">from</span> <span class="nn">server</span> <span class="mf">192.168</span><span class="o">.</span><span class="mf">31.106</span><span class="p">;</span> <span class="n">our</span> <span class="n">IP</span> <span class="n">address</span> <span class="ow">is</span> <span class="mf">192.168</span><span class="o">.</span><span class="mf">31.101</span>
+<span class="n">Filename</span> <span class="s1">&#39;rk3399-firefly.dtb&#39;</span><span class="o">.</span>
+<span class="n">Load</span> <span class="n">address</span><span class="p">:</span> <span class="mh">0x8300000</span>
+<span class="n">Loading</span><span class="p">:</span> <span class="c1">#######</span>
+         <span class="mf">645.5</span> <span class="n">KiB</span><span class="o">/</span><span class="n">s</span>
+<span class="n">done</span>
+<span class="n">Bytes</span> <span class="n">transferred</span> <span class="o">=</span> <span class="mi">97212</span> <span class="p">(</span><span class="mi">17</span><span class="n">bbc</span> <span class="nb">hex</span><span class="p">)</span>
+<span class="c1">## Booting Android Image at 0x0027f800 ...</span>
+<span class="n">Kernel</span> <span class="n">load</span> <span class="n">addr</span> <span class="mh">0x00280000</span> <span class="n">size</span> <span class="mi">19377</span> <span class="n">KiB</span>
+<span class="c1">## Flattened Device Tree blob at 08300000</span>
+   <span class="n">Booting</span> <span class="n">using</span> <span class="n">the</span> <span class="n">fdt</span> <span class="n">blob</span> <span class="n">at</span> <span class="mh">0x8300000</span>
+   <span class="n">XIP</span> <span class="n">Kernel</span> <span class="n">Image</span> <span class="o">...</span> <span class="n">OK</span>
+   <span class="n">Loading</span> <span class="n">Device</span> <span class="n">Tree</span> <span class="n">to</span> <span class="mi">0000000073</span><span class="n">edc000</span><span class="p">,</span> <span class="n">end</span> <span class="mi">0000000073</span><span class="n">ef6bbb</span> <span class="o">...</span> <span class="n">OK</span>
+<span class="n">Adding</span> <span class="n">bank</span><span class="p">:</span> <span class="mh">0x00200000</span> <span class="o">-</span> <span class="mh">0x08400000</span> <span class="p">(</span><span class="n">size</span><span class="p">:</span> <span class="mh">0x08200000</span><span class="p">)</span>
+<span class="n">Adding</span> <span class="n">bank</span><span class="p">:</span> <span class="mh">0x0a200000</span> <span class="o">-</span> <span class="mh">0x80000000</span> <span class="p">(</span><span class="n">size</span><span class="p">:</span> <span class="mh">0x75e00000</span><span class="p">)</span>
+<span class="n">Total</span><span class="p">:</span> <span class="mf">912260.463</span> <span class="n">ms</span>
+
+<span class="n">Starting</span> <span class="n">kernel</span> <span class="o">...</span>
+
+<span class="o">...</span>
+</pre></div>
+</div>
+<p>在开机内核日志中可见：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>   <span class="mf">12.146297</span><span class="p">]</span> <span class="n">VFS</span><span class="p">:</span> <span class="n">Mounted</span> <span class="n">root</span> <span class="p">(</span><span class="n">nfs</span> <span class="n">filesystem</span><span class="p">)</span> <span class="n">on</span> <span class="n">device</span> <span class="mi">0</span><span class="p">:</span><span class="mf">16.</span>
+</pre></div>
+</div>
+<p>说明已经挂载上了网络根文件系统。</p>
+<p>注意事项</p>
+<ul class="simple">
+<li><p>确保 TFTP 服务器、NFS 服务器可用;</p></li>
+<li><p>确保目标机先插入网线后在开机，且和服务器在同一局域网内，如果是直连目标机和服务器，请使用交叉网线;</p></li>
+<li><p>内核配置中，<code class="docutils literal notranslate"><span class="pre">Root</span> <span class="pre">file</span> <span class="pre">system</span> <span class="pre">on</span> <span class="pre">NFS</span></code> 依赖于 <code class="docutils literal notranslate"><span class="pre">IP:</span> <span class="pre">kernel</span> <span class="pre">level</span> <span class="pre">autoconfiguration</span></code> 选项，请先选择 <code class="docutils literal notranslate"><span class="pre">IP:</span> <span class="pre">kernel</span> <span class="pre">level</span> <span class="pre">autoconfiguration</span></code>，之后才可以找到 <code class="docutils literal notranslate"><span class="pre">Root</span> <span class="pre">file</span> <span class="pre">system</span> <span class="pre">on</span> <span class="pre">NFS</span></code> 选项;</p></li>
+<li><p>在 U-Boot 命令行中，请确认 <code class="docutils literal notranslate"><span class="pre">boot.img</span></code> 烧录地址和 dtb 文件烧录地址。（提示：<code class="docutils literal notranslate"><span class="pre">boot.img</span></code> 的文件结构中，开头有2k的头文件，然后才是 kernel。所以在 TFTP 下载内核到目标机时，要下载到对应 kernel 地址减去0x0800的地址上）;</p></li>
+<li><p>在设置挂载远程根文件系统时，<code class="docutils literal notranslate"><span class="pre">nfsroot=192.168.31.106:/nfs/rootfs,v3</span></code> 中的 <code class="docutils literal notranslate"><span class="pre">v3</span></code> 代表 NFS 版本信息，请添加上以避免出现挂载不成功的问题。</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="zai-xian-geng-xin-nei-he-he-u-boot">
+<h2>在线更新内核和 U-Boot<a class="headerlink" href="#zai-xian-geng-xin-nei-he-he-u-boot" title="永久链接至标题">¶</a></h2>
+<p>本小节介绍了在线更新的一个简单的流程。将内核、U-Boot 或者其他需要更新的文件打包成 deb 安装包，然后导入到本地包仓库，实现在开发板上下载并自动更新。仅供用户参考。</p>
+<div class="section" id="zhun-bei-deb-an-zhuang-bao">
+<h3>准备 deb 安装包<a class="headerlink" href="#zhun-bei-deb-an-zhuang-bao" title="永久链接至标题">¶</a></h3>
+<p>操作中需要升级内核和 U-Boot，事先已经准备好了修改好的相关文件：<code class="docutils literal notranslate"><span class="pre">uboot.img</span></code> 、<code class="docutils literal notranslate"><span class="pre">trust.img</span></code> 、<code class="docutils literal notranslate"><span class="pre">boot.img</span></code> 。</p>
+<p>deb 是 Debian Linux 的软件包格式，打包最关键的是在 <code class="docutils literal notranslate"><span class="pre">DEBIAN</span></code> 目录下创建一个 <code class="docutils literal notranslate"><span class="pre">control</span></code> 文件。首先创建 deb 工作目录，然后在 deb 目录中创建相应的目录和文件：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="n">deb</span>
+<span class="n">cd</span> <span class="n">deb</span>
+<span class="n">mkdir</span> <span class="n">firefly</span><span class="o">-</span><span class="n">firmware</span>    <span class="c1">#创建 firefly-firmware 目录</span>
+<span class="n">cd</span> <span class="n">firefly</span><span class="o">-</span><span class="n">firmware</span>
+<span class="n">mkdir</span> <span class="n">DEBIAN</span>    <span class="c1">#创建 DEBIAN 目录，这个目录是必须要有的。</span>
+<span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="n">usr</span><span class="o">/</span><span class="n">share</span><span class="o">/</span><span class="p">{</span><span class="n">kernel</span><span class="p">,</span><span class="n">uboot</span><span class="p">}</span>
+<span class="n">mv</span> <span class="o">~/</span><span class="n">boot</span><span class="o">.</span><span class="n">img</span> <span class="o">~/</span><span class="n">deb</span><span class="o">/</span><span class="n">firefly</span><span class="o">-</span><span class="n">firmware</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">share</span><span class="o">/</span><span class="n">kernel</span>  <span class="c1">#将相应文件放到相应的目录</span>
+<span class="n">mv</span> <span class="o">~/</span><span class="n">uboot</span><span class="o">.</span><span class="n">img</span> <span class="o">~/</span><span class="n">deb</span><span class="o">/</span><span class="n">firefly</span><span class="o">-</span><span class="n">firmware</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">share</span><span class="o">/</span><span class="n">uboot</span>
+<span class="n">mv</span> <span class="o">~/</span><span class="n">trust</span><span class="o">.</span><span class="n">img</span> <span class="o">~/</span><span class="n">deb</span><span class="o">/</span><span class="n">firefly</span><span class="o">-</span><span class="n">firmware</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">share</span><span class="o">/</span><span class="n">uboot</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">DEBIAN</span></code> 目录下存放的文件是 deb 包安装的控制文件以及相应的脚本文件。</p>
+<p>在 <code class="docutils literal notranslate"><span class="pre">DEBIAN</span></code> 目录下创建控制文件 <code class="docutils literal notranslate"><span class="pre">control</span></code> 和脚本文件 <code class="docutils literal notranslate"><span class="pre">postinst</span></code>。</p>
+<p><code class="docutils literal notranslate"><span class="pre">control</span></code> 文件内容如下,用于记录软件标识，版本号，平台，依赖信息等数据。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Package</span><span class="p">:</span> <span class="n">firefly</span><span class="o">-</span><span class="n">firmware</span> <span class="c1">#文件目录名</span>
+<span class="n">Version</span><span class="p">:</span> <span class="mf">1.0</span>    <span class="c1">#版本号</span>
+<span class="n">Architecture</span><span class="p">:</span> <span class="n">arm64</span> <span class="c1">#架构</span>
+<span class="n">Maintainer</span><span class="p">:</span> <span class="n">neg</span>   <span class="c1">#维护人员，自定义即可</span>
+<span class="n">Installed</span><span class="o">-</span><span class="n">Size</span><span class="p">:</span> <span class="mi">1</span>
+<span class="n">Section</span><span class="p">:</span> <span class="n">test</span>
+<span class="n">Priority</span><span class="p">:</span> <span class="n">optional</span>
+<span class="n">Descriptionon</span><span class="p">:</span> <span class="n">This</span> <span class="ow">is</span> <span class="n">a</span> <span class="n">deb</span> <span class="n">test</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">postinst</span></code> 文件内容如下,就是将需要更新的内核和 U-Boot 文件用 <code class="docutils literal notranslate"><span class="pre">dd</span></code> 命令写进对应分区的脚本：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">echo</span> <span class="s2">&quot;-----------uboot updating------------&quot;</span>
+<span class="n">dd</span> <span class="k">if</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="n">share</span><span class="o">/</span><span class="n">uboot</span><span class="o">/</span><span class="n">uboot</span><span class="o">.</span><span class="n">img</span> <span class="n">of</span><span class="o">=/</span><span class="n">dev</span><span class="o">/</span><span class="n">disk</span><span class="o">/</span><span class="n">by</span><span class="o">-</span><span class="n">partlabel</span><span class="o">/</span><span class="n">uboot</span>
+
+<span class="n">echo</span> <span class="s2">&quot;-----------trust updating------------&quot;</span>
+<span class="n">dd</span> <span class="k">if</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="n">share</span><span class="o">/</span><span class="n">uboot</span><span class="o">/</span><span class="n">trust</span><span class="o">.</span><span class="n">img</span> <span class="n">of</span><span class="o">=/</span><span class="n">dev</span><span class="o">/</span><span class="n">disk</span><span class="o">/</span><span class="n">by</span><span class="o">-</span><span class="n">partlabel</span><span class="o">/</span><span class="n">trust</span>
+
+<span class="n">echo</span> <span class="s2">&quot;-----------kernel updating------------&quot;</span>
+<span class="n">dd</span> <span class="k">if</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="n">share</span><span class="o">/</span><span class="n">kernel</span><span class="o">/</span><span class="n">boot</span><span class="o">.</span><span class="n">img</span> <span class="n">of</span><span class="o">=/</span><span class="n">dev</span><span class="o">/</span><span class="n">disk</span><span class="o">/</span><span class="n">by</span><span class="o">-</span><span class="n">partlabel</span><span class="o">/</span><span class="n">boot</span>
+</pre></div>
+</div>
+<p>说明：<code class="docutils literal notranslate"><span class="pre">postinst</span></code> 脚本，是在解包数据后运行的脚本，对应的还有:</p>
+<ul class="simple">
+<li><p>preinst：在解包数据前运行的脚本;</p></li>
+<li><p>prerm：卸载时，在删除文件之前运行的脚本;</p></li>
+<li><p>postrm：在删除文件之后运行的脚本;</p></li>
+</ul>
+<p>其他相关知识点用户可以自行了解。这里只用到了 <code class="docutils literal notranslate"><span class="pre">preinst</span></code> 脚本。</p>
+<p>以下是创建好的目录树：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>deb
+└── firefly-firmware
+    ├── DEBIAN
+    │   ├── control
+    │   └── postinst
+    └── usr
+        └── share
+            ├── kernel
+            │   └── boot.img
+            └── uboot
+                ├── trust.img
+                └── uboot.img
+</pre></div>
+</div>
+<p>进入 deb 目录，用 <code class="docutils literal notranslate"><span class="pre">dpkg</span></code> 命令生成 deb 包：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dpkg</span> <span class="o">-</span><span class="n">b</span> <span class="n">firefly</span><span class="o">-</span><span class="n">firmware</span> <span class="n">firefly</span><span class="o">-</span><span class="n">firmware_1</span><span class="o">.</span><span class="mi">0</span><span class="n">_arm64</span><span class="o">.</span><span class="n">deb</span>
+</pre></div>
+</div>
+<p>生成 deb 包时，一般按照这种规范进行命名：<code class="docutils literal notranslate"><span class="pre">package_version-reversion_arch.deb</span></code> 。</p>
+</div>
+<div class="section" id="chuang-jian-ben-di-cang-ku">
+<h3>创建本地仓库<a class="headerlink" href="#chuang-jian-ben-di-cang-ku" title="永久链接至标题">¶</a></h3>
+<p>首先安装需要的包：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">reprepro</span> <span class="n">gnupg</span>
+</pre></div>
+</div>
+<p>然后用 GnuPG 工具生成一个 GPG 密匙，执行命令后请根据提示操作：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gpg</span> <span class="o">--</span><span class="n">gen</span><span class="o">-</span><span class="n">key</span>
+</pre></div>
+</div>
+<p>执行 <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">gpg</span> <span class="pre">--list-keys</span></code> 可以查看刚刚生成的密匙信息:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>sudo gpg --list-keys
+
+gpg: WARNING: unsafe ownership on homedir &#39;/home/firefly/.gnupg&#39;
+gpg: 正在检查信任度数据库
+gpg: marginals needed: 3  completes needed: 1  trust model: pgp
+gpg: 深度：0 有效性：  4 已签名：  0 信任度：0-，0q，0n，0m，0f，4u
+gpg: 下次信任度数据库检查将于 2021-05-29 进行
+/home/firefly/.gnupg/pubring.kbx
+--------------------------------
+pub   rsa3072 2019-05-31 [SC] [有效至：2021-05-30]
+      BCB65788541D632C057E696B8CBC526C05417B76
+uid           [ 绝对 ] firefly &lt;firefly@t-chip.com&gt;
+sub   rsa3072 2019-05-31 [E] [有效至：2021-05-30]
+</pre></div>
+</div>
+<p>接下来创建包仓库，首先创建目录:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">www</span>
+<span class="n">mkdir</span> <span class="n">apt</span>   <span class="c1">#包仓库目录</span>
+<span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="o">./</span><span class="n">apt</span><span class="o">/</span><span class="n">incoming</span>
+<span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="o">./</span><span class="n">apt</span><span class="o">/</span><span class="n">conf</span>
+<span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="o">./</span><span class="n">apt</span><span class="o">/</span><span class="n">key</span>
+</pre></div>
+</div>
+<p>把前面生成的密匙导出到仓库文件夹，请用户对应好自己创建的用户名和邮箱地址。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gpg</span> <span class="o">--</span><span class="n">armor</span> <span class="o">--</span><span class="n">export</span> <span class="n">firefly</span> <span class="n">firefly</span><span class="nd">@t</span><span class="o">-</span><span class="n">chip</span><span class="o">.</span><span class="n">com</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">www</span><span class="o">/</span><span class="n">apt</span><span class="o">/</span><span class="n">key</span><span class="o">/</span><span class="n">deb</span><span class="o">.</span><span class="n">gpg</span><span class="o">.</span><span class="n">key</span>
+</pre></div>
+</div>
+<p>在 <code class="docutils literal notranslate"><span class="pre">conf</span></code> 目录下创建 <code class="docutils literal notranslate"><span class="pre">distributions</span></code> 文件，其内容如下：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Origin</span><span class="p">:</span> <span class="n">Neg</span>   <span class="c1">#你的名字</span>
+<span class="n">Label</span><span class="p">:</span> <span class="n">Mian</span>     <span class="c1">#库的名字</span>
+<span class="n">Suite</span><span class="p">:</span> <span class="n">stable</span>   <span class="c1">#(stable 或 unstable)</span>
+<span class="n">Codename</span><span class="p">:</span> <span class="n">bionic</span>    <span class="c1">#发布代码名，可自定义</span>
+<span class="n">Version</span><span class="p">:</span> <span class="mf">1.0</span>    <span class="c1">#发布版本</span>
+<span class="n">Architectures</span><span class="p">:</span> <span class="n">arm64</span>    <span class="c1">#架构</span>
+<span class="n">Components</span><span class="p">:</span> <span class="n">main</span>    <span class="c1">#组件名，如main，universe等</span>
+<span class="n">Description</span><span class="p">:</span> <span class="n">Deb</span> <span class="n">source</span> <span class="n">test</span>        <span class="c1">#相关描述</span>
+<span class="n">SignWith</span><span class="p">:</span> <span class="n">BCB65788541D632C057E696B8CBC526C05417B76</span>  <span class="c1">#上面步骤中生成的 GPG 密匙</span>
+</pre></div>
+</div>
+<p>建立仓库树：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">reprepro</span> <span class="o">--</span><span class="n">ask</span><span class="o">-</span><span class="n">passphrase</span> <span class="o">-</span><span class="n">Vb</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">www</span><span class="o">/</span><span class="n">apt</span> <span class="n">export</span>
+</pre></div>
+</div>
+<p>将第2步做好的 deb 包加入到仓库中：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">reprepro</span> <span class="o">--</span><span class="n">ask</span><span class="o">-</span><span class="n">passphrase</span> <span class="o">-</span><span class="n">Vb</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">www</span><span class="o">/</span><span class="n">apt</span> <span class="n">includedeb</span> <span class="n">bionic</span> <span class="o">~/</span><span class="n">deb</span><span class="o">/</span><span class="n">firefly</span><span class="o">-</span><span class="n">firmware_1</span><span class="o">.</span><span class="mi">0</span><span class="n">_arm64</span><span class="o">.</span><span class="n">deb</span>
+</pre></div>
+</div>
+<p>可以查看库中添加的文件：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="nd">@Desktop</span><span class="p">:</span><span class="o">~</span><span class="c1"># reprepro -b /var/www/apt/ list bionic</span>
+<span class="n">bionic</span><span class="o">|</span><span class="n">main</span><span class="o">|</span><span class="n">arm64</span><span class="p">:</span> <span class="n">firefly</span><span class="o">-</span><span class="n">firmware</span> <span class="mf">1.0</span>
+</pre></div>
+</div>
+<p>你的包已经加入了仓库，如果要移除它的话采用如下命令:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">reprepro</span> <span class="o">--</span><span class="n">ask</span><span class="o">-</span><span class="n">passphrase</span> <span class="o">-</span><span class="n">Vb</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">www</span><span class="o">/</span><span class="n">apt</span> <span class="n">remove</span> <span class="n">bionic</span> <span class="n">firefly</span><span class="o">-</span><span class="n">firmware</span>
+</pre></div>
+</div>
+<p>安装 nginx 服务器：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">nginx</span>
+</pre></div>
+</div>
+<p>修改nginx的配置文件 <code class="docutils literal notranslate"><span class="pre">/etc/nginx/sites-available/default</span></code> 为：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">server</span> <span class="p">{</span>
+    <span class="n">listen</span> <span class="mi">80</span> <span class="n">default_server</span><span class="p">;</span>
+    <span class="n">listen</span> <span class="p">[::]:</span><span class="mi">80</span> <span class="n">default_server</span><span class="p">;</span>
+
+    <span class="n">root</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">www</span><span class="o">/</span><span class="n">apt</span><span class="p">;</span>      <span class="o">//</span><span class="n">本地包仓库的路径</span>
+
+    <span class="n">access_log</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">log</span><span class="o">/</span><span class="n">nginx</span><span class="o">/</span><span class="n">repo</span><span class="o">.</span><span class="n">access</span><span class="o">.</span><span class="n">log</span><span class="p">;</span>
+    <span class="n">error_log</span>   <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">log</span><span class="o">/</span><span class="n">nginx</span><span class="o">/</span><span class="n">repo</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">log</span><span class="p">;</span>
+
+    <span class="n">location</span> <span class="o">~</span> <span class="o">/</span><span class="p">(</span><span class="n">db</span><span class="o">|</span><span class="n">conf</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">deny</span> <span class="nb">all</span><span class="p">;</span>
+        <span class="k">return</span> <span class="mi">404</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>重启 nginx 服务器：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">service</span> <span class="n">nginx</span> <span class="n">restart</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="ke-hu-duan-geng-xin-an-zhuang">
+<h3>客户端更新安装<a class="headerlink" href="#ke-hu-duan-geng-xin-an-zhuang" title="永久链接至标题">¶</a></h3>
+<p>在客户端开发板中，首先要添加本地包仓库的源，在目录 <code class="docutils literal notranslate"><span class="pre">/etc/apt/sources.list.d</span></code> 下添加一个新的配置文件 <code class="docutils literal notranslate"><span class="pre">bionic.list</span></code>，内容如下：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">deb</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="mf">192.168</span><span class="o">.</span><span class="mf">31.106</span> <span class="n">bionic</span> <span class="n">main</span>
+</pre></div>
+</div>
+<p>IP 地址是服务器地址, <code class="docutils literal notranslate"><span class="pre">bionic</span></code> 是仓库发布代码名， <code class="docutils literal notranslate"><span class="pre">main</span></code> 是组件名。</p>
+<p>从服务器中获取并添加 GPG 密匙：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wget</span> <span class="o">-</span><span class="n">O</span> <span class="o">-</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="mf">192.168</span><span class="o">.</span><span class="mf">31.106</span><span class="o">/</span><span class="n">key</span><span class="o">/</span><span class="n">deb</span><span class="o">.</span><span class="n">gpg</span><span class="o">.</span><span class="n">key</span> <span class="o">|</span> <span class="n">apt</span><span class="o">-</span><span class="n">key</span> <span class="n">add</span> <span class="o">-</span>
+</pre></div>
+</div>
+<p>更新后即可安装自定义软件源里的 <code class="docutils literal notranslate"><span class="pre">firefly-firmware_1.0_arm64</span></code> 包：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="nd">@firefly</span><span class="p">:</span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">firefly</span><span class="c1"># apt-get update</span>
+<span class="n">Hit</span><span class="p">:</span><span class="mi">1</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="mf">192.168</span><span class="o">.</span><span class="mf">31.106</span> <span class="n">bionic</span> <span class="n">InRelease</span>
+<span class="n">Hit</span><span class="p">:</span><span class="mi">2</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">wiki</span><span class="o">.</span><span class="n">t</span><span class="o">-</span><span class="n">firefly</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">firefly</span><span class="o">-</span><span class="n">rk3399</span><span class="o">-</span><span class="n">repo</span> <span class="n">bionic</span> <span class="n">InRelease</span>
+<span class="n">Hit</span><span class="p">:</span><span class="mi">3</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">ports</span><span class="o">.</span><span class="n">ubuntu</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">ubuntu</span><span class="o">-</span><span class="n">ports</span> <span class="n">bionic</span> <span class="n">InRelease</span>
+<span class="n">Hit</span><span class="p">:</span><span class="mi">4</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">archive</span><span class="o">.</span><span class="n">canonical</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">ubuntu</span> <span class="n">bionic</span> <span class="n">InRelease</span>
+<span class="n">Hit</span><span class="p">:</span><span class="mi">5</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">ports</span><span class="o">.</span><span class="n">ubuntu</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">ubuntu</span><span class="o">-</span><span class="n">ports</span> <span class="n">bionic</span><span class="o">-</span><span class="n">updates</span> <span class="n">InRelease</span>
+<span class="n">Hit</span><span class="p">:</span><span class="mi">6</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">ports</span><span class="o">.</span><span class="n">ubuntu</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">ubuntu</span><span class="o">-</span><span class="n">ports</span> <span class="n">bionic</span><span class="o">-</span><span class="n">backports</span> <span class="n">InRelease</span>
+<span class="n">Hit</span><span class="p">:</span><span class="mi">7</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">ports</span><span class="o">.</span><span class="n">ubuntu</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">ubuntu</span><span class="o">-</span><span class="n">ports</span> <span class="n">bionic</span><span class="o">-</span><span class="n">security</span> <span class="n">InRelease</span>
+<span class="n">Reading</span> <span class="n">package</span> <span class="n">lists</span><span class="o">...</span> <span class="n">Done</span>
+
+<span class="n">root</span><span class="nd">@firefly</span><span class="p">:</span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">firefly</span><span class="c1"># apt-get install firefly-firmware</span>
+<span class="n">Reading</span> <span class="n">package</span> <span class="n">lists</span><span class="o">...</span> <span class="n">Done</span>
+<span class="n">Building</span> <span class="n">dependency</span> <span class="n">tree</span>
+<span class="n">Reading</span> <span class="n">state</span> <span class="n">information</span><span class="o">...</span> <span class="n">Done</span>
+<span class="n">The</span> <span class="n">following</span> <span class="n">package</span> <span class="n">was</span> <span class="n">automatically</span> <span class="n">installed</span> <span class="ow">and</span> <span class="ow">is</span> <span class="n">no</span> <span class="n">longer</span> <span class="n">required</span><span class="p">:</span>
+  <span class="n">libllvm6</span><span class="o">.</span><span class="mi">0</span>
+<span class="n">Use</span> <span class="s1">&#39;apt autoremove&#39;</span> <span class="n">to</span> <span class="n">remove</span> <span class="n">it</span><span class="o">.</span>
+<span class="n">The</span> <span class="n">following</span> <span class="n">NEW</span> <span class="n">packages</span> <span class="n">will</span> <span class="n">be</span> <span class="n">installed</span><span class="p">:</span>
+  <span class="n">firefly</span><span class="o">-</span><span class="n">firmware</span>
+<span class="mi">0</span> <span class="n">upgraded</span><span class="p">,</span> <span class="mi">1</span> <span class="n">newly</span> <span class="n">installed</span><span class="p">,</span> <span class="mi">0</span> <span class="n">to</span> <span class="n">remove</span> <span class="ow">and</span> <span class="mi">3</span> <span class="ow">not</span> <span class="n">upgraded</span><span class="o">.</span>
+<span class="n">Need</span> <span class="n">to</span> <span class="n">get</span> <span class="mi">0</span> <span class="n">B</span><span class="o">/</span><span class="mi">6982</span> <span class="n">kB</span> <span class="n">of</span> <span class="n">archives</span><span class="o">.</span>
+<span class="n">After</span> <span class="n">this</span> <span class="n">operation</span><span class="p">,</span> <span class="mi">1024</span> <span class="n">B</span> <span class="n">of</span> <span class="n">additional</span> <span class="n">disk</span> <span class="n">space</span> <span class="n">will</span> <span class="n">be</span> <span class="n">used</span><span class="o">.</span>
+<span class="n">Selecting</span> <span class="n">previously</span> <span class="n">unselected</span> <span class="n">package</span> <span class="n">firefly</span><span class="o">-</span><span class="n">firmware</span><span class="o">.</span>
+<span class="p">(</span><span class="n">Reading</span> <span class="n">database</span> <span class="o">...</span> <span class="mi">117088</span> <span class="n">files</span> <span class="ow">and</span> <span class="n">directories</span> <span class="n">currently</span> <span class="n">installed</span><span class="o">.</span><span class="p">)</span>
+<span class="n">Preparing</span> <span class="n">to</span> <span class="n">unpack</span> <span class="o">.../</span><span class="n">firefly</span><span class="o">-</span><span class="n">firmware_1</span><span class="o">.</span><span class="mi">0</span><span class="n">_arm64</span><span class="o">.</span><span class="n">deb</span> <span class="o">...</span>
+<span class="n">Unpacking</span> <span class="n">firefly</span><span class="o">-</span><span class="n">firmware</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">)</span> <span class="o">...</span>
+<span class="n">Setting</span> <span class="n">up</span> <span class="n">firefly</span><span class="o">-</span><span class="n">firmware</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">)</span> <span class="o">...</span>
+<span class="o">-----------</span><span class="n">uboot</span> <span class="n">updating</span><span class="o">------------</span>
+<span class="mi">8192</span><span class="o">+</span><span class="mi">0</span> <span class="n">records</span> <span class="ow">in</span>
+<span class="mi">8192</span><span class="o">+</span><span class="mi">0</span> <span class="n">records</span> <span class="n">out</span>
+<span class="mi">4194304</span> <span class="nb">bytes</span> <span class="p">(</span><span class="mf">4.2</span> <span class="n">MB</span><span class="p">,</span> <span class="mf">4.0</span> <span class="n">MiB</span><span class="p">)</span> <span class="n">copied</span><span class="p">,</span> <span class="mf">0.437281</span> <span class="n">s</span><span class="p">,</span> <span class="mf">9.6</span> <span class="n">MB</span><span class="o">/</span><span class="n">s</span>
+<span class="o">-----------</span><span class="n">trust</span> <span class="n">updating</span><span class="o">------------</span>
+<span class="mi">8192</span><span class="o">+</span><span class="mi">0</span> <span class="n">records</span> <span class="ow">in</span>
+<span class="mi">8192</span><span class="o">+</span><span class="mi">0</span> <span class="n">records</span> <span class="n">out</span>
+<span class="mi">4194304</span> <span class="nb">bytes</span> <span class="p">(</span><span class="mf">4.2</span> <span class="n">MB</span><span class="p">,</span> <span class="mf">4.0</span> <span class="n">MiB</span><span class="p">)</span> <span class="n">copied</span><span class="p">,</span> <span class="mf">0.565762</span> <span class="n">s</span><span class="p">,</span> <span class="mf">7.4</span> <span class="n">MB</span><span class="o">/</span><span class="n">s</span>
+<span class="o">-----------</span><span class="n">kernel</span> <span class="n">updating</span><span class="o">------------</span>
+<span class="mi">39752</span><span class="o">+</span><span class="mi">0</span> <span class="n">records</span> <span class="ow">in</span>
+<span class="mi">39752</span><span class="o">+</span><span class="mi">0</span> <span class="n">records</span> <span class="n">out</span>
+<span class="mi">20353024</span> <span class="nb">bytes</span> <span class="p">(</span><span class="mi">20</span> <span class="n">MB</span><span class="p">,</span> <span class="mi">19</span> <span class="n">MiB</span><span class="p">)</span> <span class="n">copied</span><span class="p">,</span> <span class="mf">0.1702</span> <span class="n">s</span><span class="p">,</span> <span class="mi">120</span> <span class="n">MB</span><span class="o">/</span><span class="n">s</span>
+</pre></div>
+</div>
+<p>可以看到安装过程中执行了 deb 包中的 <code class="docutils literal notranslate"><span class="pre">poinst</span></code> 脚本。安装完成后，重启开发板，更新完成。</p>
+<p>在 <code class="docutils literal notranslate"><span class="pre">/usr/share</span></code> 目录中还可以看到 <code class="docutils literal notranslate"><span class="pre">kernel</span></code> 和 <code class="docutils literal notranslate"><span class="pre">uboot</span></code> 目录，分别存放了 <code class="docutils literal notranslate"><span class="pre">boot.img</span></code>，<code class="docutils literal notranslate"><span class="pre">uboot.img</span></code> 和 <code class="docutils literal notranslate"><span class="pre">trust.img</span></code> 。</p>
+<p>注意事项</p>
+<ul class="simple">
+<li><p>在制作 deb 包中，与 <code class="docutils literal notranslate"><span class="pre">DEBIAN</span></code> 同级的目录视为根目录，即放在与 <code class="docutils literal notranslate"><span class="pre">DEBIAN</span></code> 同目录下的文件，在客户端安装 deb 包后，可以在客户端的根目录下找到；</p></li>
+<li><p>deb 包中的文件和脚本，用户要根据自己的实际情况做调整；</p></li>
+<li><p>每次在仓库中修改了配置文件后，都要重新导入仓库目录树 ；</p></li>
+<li><p>nginx 服务器配置中，<code class="docutils literal notranslate"><span class="pre">root</span></code> 参数配置的是仓库的地址，请用户根据自己的实际情况修改；</p></li>
+<li><p>客户端添加的新下载源的文件时，注意核对正确的服务器地址，包仓库代码名和组件名。注意客户端要连通服务器；</p></li>
+<li><p>客户端要用 <code class="docutils literal notranslate"><span class="pre">apt-key</span> <span class="pre">add</span></code> 命令添加 GPG 密匙之后，才可以获取本地的仓库的信息。</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="yong-docker-da-jian-fen-bu-shi-bian-yi-huan-jing">
+<h2>用Docker搭建分布式编译环境<a class="headerlink" href="#yong-docker-da-jian-fen-bu-shi-bian-yi-huan-jing" title="永久链接至标题">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">distcc</span></code> 是个通过网络上的若干台机器用来分布式编译 C、C++、Objective-C 或 Objective-C++ 代码的程序。<code class="docutils literal notranslate"><span class="pre">distcc</span></code> 不要求所有的机器共享文件系统，有同步的时钟，或者安装有同样的库和头文件，只要作为服务器的机器有合适的编译工具即可进行编译。本例在两块 Firefly-RK3399 开发板 (arm64) 和一台 PC 机 (x86_64) 上利用 Docker 技术来布署 distcc 分布式编译服务，进而实现在其中一块 Firefly-RK3399 开发板上利用 distcc 的分布式编译特性来加速内核的编译过程。</p>
+<div class="section" id="zhun-bei-gong-zuo">
+<h3>准备工作<a class="headerlink" href="#zhun-bei-gong-zuo" title="永久链接至标题">¶</a></h3>
+<ul class="simple">
+<li><p>两块 Firefly-RK3399 开发板；</p></li>
+<li><p>路由器、网线；</p></li>
+<li><p>PC 机。</p></li>
+</ul>
+<p>将两块开发板和 PC 机都连接到同一个局域网内。连接好后对应的 IP 地址别是：</p>
+<ul class="simple">
+<li><p>PC 机：192.168.1.100</p></li>
+<li><p>开发板 A：192.168.1.101</p></li>
+<li><p>开发板 B：192.168.1.102</p></li>
+</ul>
+</div>
+<div class="section" id="pc-ji-bu-shu-docker">
+<h3>PC 机部署 Docker<a class="headerlink" href="#pc-ji-bu-shu-docker" title="永久链接至标题">¶</a></h3>
+<p>使用脚本安装 Docker ：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wget</span> <span class="o">-</span><span class="n">qO</span><span class="o">-</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">get</span><span class="o">.</span><span class="n">docker</span><span class="o">.</span><span class="n">com</span><span class="o">/</span> <span class="o">|</span> <span class="n">sh</span>
+</pre></div>
+</div>
+<p>为了可以使当前普通用户可以执行 docker 相关命令，需要将当前用户添加到 dokcer 用户组中：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>sudo groupadd docker            #添加 docker 用户组
+sudo gpasswd -a $USER docker    #将当前用户添加到 docker 用户组中
+newgrp docker                   #更新 docker 用户组
+</pre></div>
+</div>
+<p>启动 Docker 后台服务：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">service</span> <span class="n">docker</span> <span class="n">start</span>
+</pre></div>
+</div>
+<p>新建一个 <code class="docutils literal notranslate"><span class="pre">Dockerfile_distcc.x86_64</span></code> 文件。其文件内容如下：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">FROM</span> <span class="n">ubuntu</span><span class="p">:</span><span class="n">bionic</span>
+<span class="n">MAINTAINER</span> <span class="n">Firefly</span> <span class="o">&lt;</span><span class="n">service</span><span class="nd">@t</span><span class="o">-</span><span class="n">firefly</span><span class="o">.</span><span class="n">com</span><span class="o">&gt;</span>
+
+<span class="n">ARG</span> <span class="n">DEBIAN_FRONTEND</span><span class="o">=</span><span class="n">noninteractive</span>
+
+<span class="n">RUN</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">update</span> \
+	<span class="o">&amp;&amp;</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="o">-</span><span class="n">y</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">install</span><span class="o">-</span><span class="n">recommends</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">install</span><span class="o">-</span><span class="n">suggests</span>\
+	<span class="n">gcc</span><span class="o">-</span><span class="n">aarch64</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">gnu</span> <span class="n">distcc</span>\
+    <span class="o">&amp;&amp;</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">clean</span> \
+    <span class="o">&amp;&amp;</span> <span class="n">rm</span> <span class="o">-</span><span class="n">rf</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">apt</span><span class="o">/</span><span class="n">lists</span>
+
+<span class="n">RUN</span> <span class="n">ln</span> <span class="o">-</span><span class="n">s</span> <span class="n">aarch64</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">gnu</span><span class="o">-</span><span class="n">gcc</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">gcc</span> <span class="o">&amp;&amp;</span>\
+<span class="n">ln</span> <span class="o">-</span><span class="n">s</span> <span class="n">aarch64</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">gnu</span><span class="o">-</span><span class="n">gcc</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">cc</span>
+
+<span class="n">EXPOSE</span> <span class="mi">3632</span>
+
+<span class="n">ENTRYPOINT</span> <span class="p">[</span><span class="s2">&quot;/usr/bin/distccd&quot;</span><span class="p">]</span>
+<span class="n">CMD</span> <span class="p">[</span><span class="s2">&quot;--no-detach&quot;</span> <span class="p">,</span> <span class="s2">&quot;--log-stderr&quot;</span> <span class="p">,</span> <span class="s2">&quot;--log-level&quot;</span><span class="p">,</span> <span class="s2">&quot;debug&quot;</span><span class="p">,</span> <span class="s2">&quot;--allow&quot;</span> <span class="p">,</span> <span class="s2">&quot;0.0.0.0/0&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>生成 Docker 镜像：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">build</span> <span class="o">-</span><span class="n">t</span> <span class="n">distcc_server</span><span class="p">:</span><span class="n">x86_64</span> <span class="o">-</span><span class="n">f</span> <span class="n">Dockerfile_distcc</span><span class="o">.</span><span class="n">x86_64</span> <span class="o">.</span>
+</pre></div>
+</div>
+<p>可以用命令 <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">images</span></code> 查看生成的 Docker 镜像：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">images</span>
+<span class="n">REPOSITORY</span>          <span class="n">TAG</span>                 <span class="n">IMAGE</span> <span class="n">ID</span>            <span class="n">CREATED</span>             <span class="n">SIZE</span>
+<span class="n">distcc_server</span>       <span class="n">x86_64</span>              <span class="mi">138</span><span class="n">c0b7e3801</span>        <span class="mi">9</span> <span class="n">minutes</span> <span class="n">ago</span>       <span class="mf">66.1</span><span class="n">MB</span>
+</pre></div>
+</div>
+<p>用新建的镜像启动 Docker 容器，在主机网络的 3632 TCP 端口提供 distcc 服务：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="o">-</span><span class="n">d</span> <span class="o">-</span><span class="n">p</span> <span class="mi">3632</span><span class="p">:</span><span class="mi">3632</span> <span class="n">distcc_server</span><span class="p">:</span><span class="n">x86_64</span>
+</pre></div>
+</div>
+<p>用命令 <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">ps</span></code> 可以查看正在运行中的容器：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">ps</span>
+<span class="n">CONTAINER</span> <span class="n">ID</span>    <span class="n">IMAGE</span>                  <span class="n">COMMAND</span>                  <span class="n">CREATED</span>         <span class="n">STATUS</span>          <span class="n">PORTS</span>                    <span class="n">NAMES</span>
+<span class="n">fa468d068185</span>    <span class="n">distcc_server</span><span class="p">:</span><span class="n">x86_64</span>   <span class="s2">&quot;/usr/bin/distccd --…&quot;</span>   <span class="mi">9</span> <span class="n">minutes</span> <span class="n">ago</span>   <span class="n">Up</span> <span class="mi">9</span> <span class="n">minutes</span>    <span class="mf">0.0</span><span class="o">.</span><span class="mf">0.0</span><span class="p">:</span><span class="mi">3632</span><span class="o">-&gt;</span><span class="mi">3632</span><span class="o">/</span><span class="n">tcp</span>   <span class="n">epic_chatterjee</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="kai-fa-ban-bu-shu-docker">
+<h3>开发板部署 Docker<a class="headerlink" href="#kai-fa-ban-bu-shu-docker" title="永久链接至标题">¶</a></h3>
+<p>Firefly-RK3399 内核默认是不支持 Docker 的，需要进行相关内核的配置。可以在 <a class="reference external" href="https://gist.github.com/T-Firefly/e655d884b5af624a928e07afbf0cdb89">Firefly Github</a> 中查看修改后的 <code class="docutils literal notranslate"><span class="pre">/kernel/arch/arm64/configs/firefly_linux_defconfig</span></code> 文件。</p>
+<p>修改好后编译内核并更新到所有用到的开发板。</p>
+<p>内核更新完成后，在开发板上使用脚本安装 Docker ：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">update</span>
+<span class="n">wget</span> <span class="o">-</span><span class="n">qO</span><span class="o">-</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">get</span><span class="o">.</span><span class="n">docker</span><span class="o">.</span><span class="n">com</span><span class="o">/</span> <span class="o">|</span> <span class="n">sh</span>
+</pre></div>
+</div>
+<p>将当前用户添加到 dokcer 用户组中：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>sudo groupadd docker
+sudo gpasswd -a $USER docker
+newgrp docker	#更新 docker
+</pre></div>
+</div>
+<p>启动 Docker 后台服务：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">service</span> <span class="n">docker</span> <span class="n">start</span>
+</pre></div>
+</div>
+<p>新建 <code class="docutils literal notranslate"><span class="pre">Dockerfile_distcc.arm64</span></code> 文件，内容如下：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">FROM</span> <span class="n">ubuntu</span><span class="p">:</span><span class="n">bionic</span>
+<span class="n">MAINTAINER</span> <span class="n">Firefly</span> <span class="o">&lt;</span><span class="n">service</span><span class="nd">@t</span><span class="o">-</span><span class="n">firefly</span><span class="o">.</span><span class="n">com</span><span class="o">&gt;</span>
+
+<span class="n">ARG</span> <span class="n">DEBIAN_FRONTEND</span><span class="o">=</span><span class="n">noninteractive</span>
+
+<span class="n">RUN</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">update</span> \
+	<span class="o">&amp;&amp;</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="o">-</span><span class="n">y</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">install</span><span class="o">-</span><span class="n">recommends</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">install</span><span class="o">-</span><span class="n">suggests</span> \
+	<span class="n">gcc</span> <span class="n">distcc</span>\
+    <span class="o">&amp;&amp;</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">clean</span> \
+    <span class="o">&amp;&amp;</span> <span class="n">rm</span> <span class="o">-</span><span class="n">rf</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">apt</span><span class="o">/</span><span class="n">lists</span>
+
+<span class="n">EXPOSE</span> <span class="mi">3632</span>
+
+<span class="n">ENTRYPOINT</span> <span class="p">[</span><span class="s2">&quot;/usr/bin/distccd&quot;</span><span class="p">]</span>
+<span class="n">CMD</span> <span class="p">[</span><span class="s2">&quot;--no-detach&quot;</span> <span class="p">,</span> <span class="s2">&quot;--log-stderr&quot;</span> <span class="p">,</span> <span class="s2">&quot;--log-level&quot;</span><span class="p">,</span> <span class="s2">&quot;debug&quot;</span><span class="p">,</span> <span class="s2">&quot;--allow&quot;</span> <span class="p">,</span> <span class="s2">&quot;0.0.0.0/0&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>生成 Docker 镜像：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">build</span> <span class="o">-</span><span class="n">t</span> <span class="n">distcc_server</span><span class="p">:</span><span class="n">arm64</span> <span class="o">-</span><span class="n">f</span> <span class="n">Dockerfile_distcc</span><span class="o">.</span><span class="n">arm64</span> <span class="o">.</span>
+</pre></div>
+</div>
+<p>用新建的镜像启动 Docker 容器，在主机网络的 3632 TCP 端口提供 distcc 服务：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="o">-</span><span class="n">d</span> <span class="o">-</span><span class="n">p</span> <span class="mi">3632</span><span class="p">:</span><span class="mi">3632</span> <span class="n">distcc_server</span><span class="p">:</span><span class="n">arm64</span>
+</pre></div>
+</div>
+<p>用 <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">save</span></code> 命令导出新建的镜像：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">save</span> <span class="o">-</span><span class="n">o</span> <span class="n">distcc_server</span><span class="o">.</span><span class="n">tar</span> <span class="n">distcc_server</span><span class="p">:</span><span class="n">arm64</span>
+</pre></div>
+</div>
+<p>将生成的 <code class="docutils literal notranslate"><span class="pre">distcc_server.tar</span></code> 文件复制到另一块开发板上，然后导入镜像：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">load</span> <span class="o">-</span><span class="n">i</span> <span class="n">distcc_server</span><span class="o">.</span><span class="n">tar</span>
+</pre></div>
+</div>
+<p>导入镜像后，在这个开发板上也有了 <code class="docutils literal notranslate"><span class="pre">distcc_server:arm64</span></code> 镜像，然后可以运行一个容器：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="o">-</span><span class="n">d</span> <span class="o">-</span><span class="n">p</span> <span class="mi">3632</span><span class="p">:</span><span class="mi">3632</span> <span class="n">distcc_server</span><span class="p">:</span><span class="n">arm64</span>
+</pre></div>
+</div>
+<p><strong>提示：</strong> 用户如果注册了 Docker Hub 帐号，可以用 <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">push</span></code> 推送镜像到远程仓库，在另一开发板上用 <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">pull</span></code> 拉取远程仓库的镜像。用户可以自行了解相关操作。</p>
+</div>
+<div class="section" id="ke-hu-duan-yong-distcc-bian-yi-nei-he">
+<h3>客户端用 distcc 编译内核<a class="headerlink" href="#ke-hu-duan-yong-distcc-bian-yi-nei-he" title="永久链接至标题">¶</a></h3>
+<p>到这里，三个机器都部署了分布式编译环境。可以选择任意一台机器作为客户端，剩下两个机器作为服务器。这里选择其中一个开发板作为客户端。</p>
+<p>在客户端中创建 <code class="docutils literal notranslate"><span class="pre">Dockerfile_compile.arm64</span></code> 文件，生成一个编译内核的 Docker 镜像，文件内容如下：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">FROM</span> <span class="n">ubuntu</span><span class="p">:</span><span class="n">bionic</span>
+<span class="n">MAINTAINER</span> <span class="n">Firefly</span> <span class="o">&lt;</span><span class="n">service</span><span class="nd">@t</span><span class="o">-</span><span class="n">firefly</span><span class="o">.</span><span class="n">com</span><span class="o">&gt;</span>
+
+<span class="n">ARG</span> <span class="n">DEBIAN_FRONTEND</span><span class="o">=</span><span class="n">noninteractive</span>
+
+<span class="n">RUN</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">update</span> \
+    <span class="o">&amp;&amp;</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="o">-</span><span class="n">y</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">install</span><span class="o">-</span><span class="n">recommends</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">install</span><span class="o">-</span><span class="n">suggests</span> \
+	<span class="n">bc</span> <span class="n">make</span> <span class="n">python</span> <span class="n">sed</span> <span class="n">libssl</span><span class="o">-</span><span class="n">dev</span> <span class="n">binutils</span> <span class="n">build</span><span class="o">-</span><span class="n">essential</span> <span class="n">distcc</span>\
+    <span class="n">liblz4</span><span class="o">-</span><span class="n">tool</span> <span class="n">gcc</span> \
+    <span class="o">&amp;&amp;</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">clean</span> \
+    <span class="o">&amp;&amp;</span> <span class="n">rm</span> <span class="o">-</span><span class="n">rf</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">apt</span><span class="o">/</span><span class="n">lists</span>
+</pre></div>
+</div>
+<p>然后生成镜像：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">build</span> <span class="o">-</span><span class="n">t</span> <span class="nb">compile</span><span class="p">:</span><span class="n">arm64</span> <span class="o">-</span><span class="n">f</span> <span class="n">Dockerfile_compile</span><span class="o">.</span><span class="n">arm64</span> <span class="o">.</span>
+</pre></div>
+</div>
+<p>在启动容器前先将内核文件拉到客户端中。然后创建 <code class="docutils literal notranslate"><span class="pre">/etc/distcc/hosts</span></code> 文件，其内容是列举出所有提供 distcc 服务的机器的 IP 地址。内容如下：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># As described in the distcc manpage, this file can be used for a global</span>
+<span class="c1"># list of available distcc hosts.</span>
+<span class="c1">#</span>
+<span class="c1"># The list from this file will only be used, if neither the</span>
+<span class="c1"># environment variable DISTCC_HOSTS, nor the file $HOME/.distcc/hosts</span>
+<span class="c1"># contains a valid list of hosts.</span>
+<span class="c1">#</span>
+<span class="c1"># Add a list of hostnames in one line, seperated by spaces, here.</span>
+<span class="mf">192.168</span><span class="o">.</span><span class="mf">1.100</span>
+<span class="mf">192.168</span><span class="o">.</span><span class="mf">1.101</span>
+<span class="mf">193.168</span><span class="o">.</span><span class="mf">1.102</span>
+</pre></div>
+</div>
+<p>为了测试结果更准确，先清除客户端开发板上的缓存：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">echo</span> <span class="mi">3</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">proc</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">vm</span><span class="o">/</span><span class="n">drop_caches</span>
+</pre></div>
+</div>
+<p>用 <code class="docutils literal notranslate"><span class="pre">compile:arm64</span></code> 镜像启动一个 Docker 容器，同时将主机当前内核目录挂载到容器中的 <code class="docutils literal notranslate"><span class="pre">/mnt</span></code> 目录，将主机的 <code class="docutils literal notranslate"><span class="pre">/etc/distcc/hosts</span></code> 文件挂载到容器的 <code class="docutils literal notranslate"><span class="pre">/etc/distcc/hosts</span></code> 中，并用参数 <code class="docutils literal notranslate"><span class="pre">-it</span></code> 以交互模式启动容器：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>docker run -it -rm -v $(pwd):/mnt -v /etc/distcc/hosts:/etc/distcc/hosts compile:arm64 /bin/bash
+root@f4415264351b:/# ls
+bin  boot  dev  etc  home  lib  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
+root@f4415264351b:/# cd mnt/
+</pre></div>
+</div>
+<p>进入到容器中的 <code class="docutils literal notranslate"><span class="pre">/mnt</span></code> 目录，然后开始用 distcc 编译内核，加入 <code class="docutils literal notranslate"><span class="pre">time</span></code> 命令可以查看编译命令执行耗时，<code class="docutils literal notranslate"><span class="pre">CC</span></code> 参数指明用 <code class="docutils literal notranslate"><span class="pre">distcc</span></code> 进行编译：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">time</span> <span class="n">make</span> <span class="n">ARCH</span><span class="o">=</span><span class="n">arm64</span> <span class="n">rk3399</span><span class="o">-</span><span class="n">firefly</span><span class="o">.</span><span class="n">img</span> <span class="o">-</span><span class="n">j32</span> <span class="n">CC</span><span class="o">=</span><span class="s2">&quot;distcc&quot;</span>
+</pre></div>
+</div>
+<p><strong>注意：</strong> 如果用 PC 机作为客户端，则需要用以下命令进行编译：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">time</span> <span class="n">make</span> <span class="n">ARCH</span><span class="o">=</span><span class="n">arm64</span> <span class="n">CROSS_COMPILE</span><span class="o">=</span><span class="n">aarch64</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">gnu</span><span class="o">-</span> <span class="n">rk3399</span><span class="o">-</span><span class="n">firefly</span><span class="o">.</span><span class="n">img</span> <span class="o">-</span><span class="n">j32</span> <span class="n">CC</span><span class="o">=</span><span class="s2">&quot;distcc aarch64-linux-gnu-gcc&quot;</span>
+</pre></div>
+</div>
+<p>编译过程中，可以在用于编译的容器内新的窗口中用命令 <code class="docutils literal notranslate"><span class="pre">distccmon-text</span> <span class="pre">1</span></code> 查看编译情况：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">distccmon</span><span class="o">-</span><span class="n">text</span> <span class="mi">1</span>
+                    <span class="o">...</span>
+<span class="mi">15713</span>  <span class="n">Compile</span>     <span class="n">perf_regs</span><span class="o">.</span><span class="n">c</span>                              <span class="mf">192.168</span><span class="o">.</span><span class="mf">1.101</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="mi">15327</span>  <span class="n">Compile</span>     <span class="n">fork</span><span class="o">.</span><span class="n">c</span>                                   <span class="mf">192.168</span><span class="o">.</span><span class="mf">1.101</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+<span class="mi">15119</span>  <span class="n">Compile</span>     <span class="n">dma</span><span class="o">-</span><span class="n">mapping</span><span class="o">.</span><span class="n">c</span>                            <span class="mf">192.168</span><span class="o">.</span><span class="mf">1.101</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+<span class="mi">15552</span>  <span class="n">Compile</span>     <span class="n">signal32</span><span class="o">.</span><span class="n">c</span>                               <span class="mf">192.168</span><span class="o">.</span><span class="mf">1.100</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="mi">15644</span>  <span class="n">Compile</span>     <span class="nb">open</span><span class="o">.</span><span class="n">c</span>                                   <span class="mf">192.168</span><span class="o">.</span><span class="mf">1.100</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+<span class="mi">15112</span>  <span class="n">Compile</span>     <span class="n">traps</span><span class="o">.</span><span class="n">c</span>                                  <span class="mf">192.168</span><span class="o">.</span><span class="mf">1.100</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+<span class="mi">15670</span>  <span class="n">Compile</span>     <span class="n">arm64ksyms</span><span class="o">.</span><span class="n">c</span>                             <span class="mf">192.168</span><span class="o">.</span><span class="mf">1.102</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="mi">15629</span>  <span class="n">Compile</span>     <span class="n">mempool</span><span class="o">.</span><span class="n">c</span>                                <span class="mf">192.168</span><span class="o">.</span><span class="mf">1.102</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+<span class="mi">15606</span>  <span class="n">Compile</span>     <span class="n">filemap</span><span class="o">.</span><span class="n">c</span>                                <span class="mf">192.168</span><span class="o">.</span><span class="mf">1.102</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+<span class="mi">15771</span>  <span class="n">Preprocess</span>                                                <span class="n">localhost</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="mi">15573</span>  <span class="n">Preprocess</span>                                                <span class="n">localhost</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="mi">15485</span>  <span class="n">Preprocess</span>                                                <span class="n">localhost</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                    <span class="o">...</span>
+</pre></div>
+</div>
+<p>最后编译命令完成后可以看到编译所用时间：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">real</span>    <span class="mi">15</span><span class="n">m44</span><span class="o">.</span><span class="mi">809</span><span class="n">s</span>
+<span class="n">user</span>    <span class="mi">16</span><span class="n">m0</span><span class="o">.</span><span class="mi">029</span><span class="n">s</span>
+<span class="n">sys</span>     <span class="mi">6</span><span class="n">m22</span><span class="o">.</span><span class="mi">317</span><span class="n">s</span>
+</pre></div>
+</div>
+<p>下边是单独使用一块开发板进行内核编译所耗费的时间:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">real</span>    <span class="mi">23</span><span class="n">m33</span><span class="o">.</span><span class="mi">002</span><span class="n">s</span>
+<span class="n">user</span>    <span class="mi">113</span><span class="n">m2</span><span class="o">.</span><span class="mi">615</span><span class="n">s</span>
+<span class="n">sys</span>     <span class="mi">9</span><span class="n">m29</span><span class="o">.</span><span class="mi">348</span><span class="n">s</span>
+</pre></div>
+</div>
+<p>对比可见，用采用 distcc 实现的分布式编译可以有效提高编译速度。</p>
+<p><strong>注意：</strong></p>
+<ul class="simple">
+<li><p>平台不同，所需的编译器也不同。如在 x86_64 平台上，需要安装对应的交叉编译工具 <code class="docutils literal notranslate"><span class="pre">gcc-aarch64-linux-gnu</span></code>。在 arm64 平台则只需要安装 <code class="docutils literal notranslate"><span class="pre">gcc</span></code> 编译工具即可。用户需要根据实际情况在对应的 <code class="docutils literal notranslate"><span class="pre">Dockerfile</span></code> 文件里指定安装正确的工具。</p></li>
+<li><p>如果用 PC 机做客户端，则在用于编译的容器中编译内核的时候，要用参数 <code class="docutils literal notranslate"><span class="pre">CC=&quot;distcc</span> <span class="pre">aarch64-linux-gnu-gcc&quot;</span></code> 指明用 <code class="docutils literal notranslate"><span class="pre">aarch64-linux-gnu-gcc</span></code> 交叉编译工具编译。</p></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="buildroot_compile.html" class="btn btn-neutral float-right" title="编译 Buildroot 固件" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="linux_compile_gpt.html" class="btn btn-neutral float-left" title="编译 Ubuntu 固件 ( GPT )" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Firefly Team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

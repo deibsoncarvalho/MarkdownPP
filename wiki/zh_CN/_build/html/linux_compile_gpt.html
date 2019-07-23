@@ -1,0 +1,657 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="zh-CN" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="zh-CN" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>编译 Ubuntu 固件 ( GPT ) &mdash; Firefly Wiki</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script type="text/javascript" src="_static/translations.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="搜索" href="search.html" />
+    <link rel="next" title="Ubuntu 应用层支持" href="ubuntu_support.html" />
+    <link rel="prev" title="创建 Ubuntu 根文件系统" href="linux_build_ubuntu_rootfs.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Firefly-RK3399 Manual
+          
+
+          
+            
+            <img src="_static/Logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">上手教程</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="started.html">入手指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="debug.html">串口调试</a></li>
+</ul>
+<p class="caption"><span class="caption-text">烧写固件</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="bootmode.html">启动模式说明</a></li>
+<li class="toctree-l1"><a class="reference internal" href="upgrade_table.html">烧写须知(重要)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="upgrade_firmware.html">升级固件</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maskrom_mode.html">MaskRom模式</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Linux开发</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="linux_build_ubuntu_rootfs.html">创建 Ubuntu 根文件系统</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">编译 Ubuntu 固件 ( GPT )</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#zhun-bei-gong-zuo">准备工作</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#xia-zai-yuan-ma">下载源码</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#xia-zai-wan-zheng-sdk">下载完整 SDK</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#xia-zai-cai-jian-ban-sdk">下载裁剪版 SDK</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#linux-sdk-mu-lu-jie-shao">Linux_SDK 目录介绍</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#da-jian-sdk-bian-yi-huan-jing">搭建SDK编译环境</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#bian-yi-sdk">编译SDK</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#bian-yi-qian-pei-zhi">编译前配置</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#quan-zi-dong-bian-yi">全自动编译</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bu-fen-bian-yi">部分编译</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#kernel">kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#u-boot">u-boot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#recovery">recovery</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rootfs">rootfs</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#gu-jian-da-bao">固件打包</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#tong-bu-geng-xin-ge-bu-fen-jing-xiang">同步更新各部分镜像</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#da-bao-tong-yi-gu-jian">打包统一固件</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#fen-qu-jie-shao">分区介绍</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#parameter">parameter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#package-file">package-file</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#chang-jian-wen-ti">常见问题</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ru-he-jin-ru-sheng-ji-mo-shi">如何进入升级模式</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ubuntu_support.html">Ubuntu 应用层支持</a></li>
+<li class="toctree-l1"><a class="reference internal" href="buildroot_compile.html">编译 Buildroot 固件</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Firefly-RK3399 Manual</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>编译 Ubuntu 固件 ( GPT )</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/linux_compile_gpt.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="bian-yi-ubuntu-gu-jian-gpt">
+<h1>编译 Ubuntu 固件 ( GPT )<a class="headerlink" href="#bian-yi-ubuntu-gu-jian-gpt" title="永久链接至标题">¶</a></h1>
+<p>为了方便用户的使用与开发，官方提供了 Linux 开发的整套 SDK，本章详细的说明 SDK 的具体用法。</p>
+<div class="section" id="zhun-bei-gong-zuo">
+<h2>准备工作<a class="headerlink" href="#zhun-bei-gong-zuo" title="永久链接至标题">¶</a></h2>
+<div class="section" id="xia-zai-yuan-ma">
+<h3>下载源码<a class="headerlink" href="#xia-zai-yuan-ma" title="永久链接至标题">¶</a></h3>
+<p>下载 repo 工具：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="n">linux</span>
+<span class="n">cd</span> <span class="n">linux</span>
+<span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">FireflyTeam</span><span class="o">/</span><span class="n">repo</span><span class="o">.</span><span class="n">git</span>
+</pre></div>
+</div>
+<div class="section" id="xia-zai-wan-zheng-sdk">
+<h4>下载完整 SDK<a class="headerlink" href="#xia-zai-wan-zheng-sdk" title="永久链接至标题">¶</a></h4>
+<ul class="simple">
+<li><p>方法一</p></li>
+</ul>
+<p>初始化 repo 仓库：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="n">linux</span><span class="o">-</span><span class="n">sdk</span>
+<span class="n">cd</span> <span class="n">linux</span><span class="o">-</span><span class="n">sdk</span>
+<span class="o">../</span><span class="n">repo</span><span class="o">/</span><span class="n">repo</span> <span class="n">init</span> <span class="o">--</span><span class="n">repo</span><span class="o">-</span><span class="n">url</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">FireflyTeam</span><span class="o">/</span><span class="n">repo</span><span class="o">.</span><span class="n">git</span> <span class="o">-</span><span class="n">u</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">FireflyTeam</span><span class="o">/</span><span class="n">manifests</span><span class="o">.</span><span class="n">git</span> <span class="o">-</span><span class="n">b</span> <span class="n">linux</span><span class="o">-</span><span class="n">sdk</span> <span class="o">-</span><span class="n">m</span> <span class="n">rk3399</span><span class="o">/</span><span class="n">rk3399_linux_release</span><span class="o">.</span><span class="n">xml</span>
+
+</pre></div>
+</div>
+<p>同步源码:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">../</span><span class="n">repo</span><span class="o">/</span><span class="n">repo</span> <span class="n">sync</span> <span class="o">-</span><span class="n">c</span>
+</pre></div>
+</div>
+<p>同步过程中,网络波动会导致下载速度过低中断同步,可以使用下面脚本同步代码:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>#! /bin/bash
+
+../repo/repo sync -c
+
+while [ $? -ne 0 ] ;
+do
+        ../repo/repo sync -c; 
+done
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>方法二(国内用户推荐使用)</p></li>
+</ul>
+<p>因为国内用户可能 git 拉代码会比较慢，所以官方提供了基础得源码包 <code class="docutils literal notranslate"><span class="pre">Linux_SDK.7z</span></code>.</p>
+<p>下载 <a class="reference external" href="http://www.t-firefly.com/doc/download/page/id/31.html">Linux_SDK.7z</a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#1.把压缩包放在上一步下载repo工具的目录下</span>
+<span class="mi">7</span><span class="n">z</span> <span class="n">x</span> <span class="n">Linux_SDK</span><span class="o">.</span><span class="mi">7</span><span class="n">z</span>
+
+<span class="c1">#2.更新代码</span>
+<span class="n">repo</span> <span class="n">sync</span> <span class="o">-</span><span class="n">c</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="xia-zai-cai-jian-ban-sdk">
+<h4>下载裁剪版 SDK<a class="headerlink" href="#xia-zai-cai-jian-ban-sdk" title="永久链接至标题">¶</a></h4>
+<p>初始化 repo 仓库：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="n">linux</span><span class="o">-</span><span class="n">sdk</span>
+<span class="n">cd</span> <span class="n">linux</span><span class="o">-</span><span class="n">sdk</span>
+<span class="o">../</span><span class="n">repo</span><span class="o">/</span><span class="n">repo</span> <span class="n">init</span> <span class="o">--</span><span class="n">repo</span><span class="o">-</span><span class="n">url</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">FireflyTeam</span><span class="o">/</span><span class="n">repo</span><span class="o">.</span><span class="n">git</span> <span class="o">-</span><span class="n">u</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">FireflyTeam</span><span class="o">/</span><span class="n">manifests</span><span class="o">.</span><span class="n">git</span> <span class="o">-</span><span class="n">b</span> <span class="n">linux</span><span class="o">-</span><span class="n">sdk</span> <span class="o">-</span><span class="n">m</span> <span class="n">rk3399</span><span class="o">/</span><span class="n">rk3399_linux_ubuntu_release</span><span class="o">.</span><span class="n">xml</span>
+</pre></div>
+</div>
+<p>同步源码:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">../</span><span class="n">repo</span><span class="o">/</span><span class="n">repo</span> <span class="n">sync</span> <span class="o">-</span><span class="n">c</span>
+</pre></div>
+</div>
+<p><strong>注意</strong>: 裁剪版 SDK 主要删掉了编译 Buildroot 和 Debian 的源码，方便不需要编译根文件系统的用户获取。</p>
+</div>
+</div>
+<div class="section" id="linux-sdk-mu-lu-jie-shao">
+<h3>Linux_SDK 目录介绍<a class="headerlink" href="#linux-sdk-mu-lu-jie-shao" title="永久链接至标题">¶</a></h3>
+<p>目录：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>├── linux_sdk
+│   ├── app
+│   ├── buildroot buildroot                                      根文件系统的编译目录
+│   ├── build.sh -&gt; device/rockchip/common/build.sh              全自动编译脚本
+│   ├── device                                                   编译相关配置文件
+│   ├── distro debian                                            根文件系统生成目录
+│   ├── docs                                                     文档
+│   ├── envsetup.sh -&gt; buildroot/build/envsetup.sh
+│   ├── external
+│   ├── kernel                                                   内核
+│   ├── Makefile -&gt; buildroot/build/Makefile
+│   ├── mkfirmware.sh -&gt; device/rockchip/common/mkfirmware.sh    rockdev链接更新脚本
+│   ├── prebuilts
+│   ├── rkbin
+│   ├── rkflash.sh -&gt; device/rockchip/common/rkflash.sh          烧写脚本
+│   ├── rootfs                                                   debian根文件系统编译目录
+│   ├── tools                                                    烧写、打包工具
+│   └── u-boot
+</pre></div>
+</div>
+<p><a id="mkconfig"></a></p>
+</div>
+<div class="section" id="da-jian-sdk-bian-yi-huan-jing">
+<h3>搭建SDK编译环境<a class="headerlink" href="#da-jian-sdk-bian-yi-huan-jing" title="永久链接至标题">¶</a></h3>
+<p>编译 Buildroot 固件:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">repo</span> <span class="n">git</span><span class="o">-</span><span class="n">core</span> <span class="n">gitk</span> <span class="n">git</span><span class="o">-</span><span class="n">gui</span> <span class="n">gcc</span><span class="o">-</span><span class="n">arm</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">gnueabihf</span> <span class="n">u</span><span class="o">-</span><span class="n">boot</span><span class="o">-</span><span class="n">tools</span> <span class="n">device</span><span class="o">-</span><span class="n">tree</span><span class="o">-</span><span class="n">compiler</span> \
+<span class="n">gcc</span><span class="o">-</span><span class="n">aarch64</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">gnu</span> <span class="n">mtools</span> <span class="n">parted</span> <span class="n">libudev</span><span class="o">-</span><span class="n">dev</span> <span class="n">libusb</span><span class="o">-</span><span class="mf">1.0</span><span class="o">-</span><span class="mi">0</span><span class="o">-</span><span class="n">dev</span> <span class="n">python</span><span class="o">-</span><span class="n">linaro</span><span class="o">-</span><span class="n">image</span><span class="o">-</span><span class="n">tools</span> \
+<span class="n">linaro</span><span class="o">-</span><span class="n">image</span><span class="o">-</span><span class="n">tools</span> <span class="n">autoconf</span> <span class="n">autotools</span><span class="o">-</span><span class="n">dev</span> <span class="n">libsigsegv2</span> <span class="n">m4</span> <span class="n">intltool</span> <span class="n">libdrm</span><span class="o">-</span><span class="n">dev</span> <span class="n">curl</span> <span class="n">sed</span> <span class="n">make</span> \
+<span class="n">binutils</span> <span class="n">build</span><span class="o">-</span><span class="n">essential</span> <span class="n">gcc</span> <span class="n">g</span><span class="o">++</span> <span class="n">bash</span> <span class="n">patch</span> <span class="n">gzip</span> <span class="n">bzip2</span> <span class="n">perl</span> <span class="n">tar</span> <span class="n">cpio</span> <span class="n">python</span> <span class="n">unzip</span> <span class="n">rsync</span> <span class="n">file</span> <span class="n">bc</span> <span class="n">wget</span> \
+<span class="n">libncurses5</span> <span class="n">libqt4</span><span class="o">-</span><span class="n">dev</span> <span class="n">libglib2</span><span class="o">.</span><span class="mi">0</span><span class="o">-</span><span class="n">dev</span> <span class="n">libgtk2</span><span class="o">.</span><span class="mi">0</span><span class="o">-</span><span class="n">dev</span> <span class="n">libglade2</span><span class="o">-</span><span class="n">dev</span> <span class="n">cvs</span> <span class="n">git</span> <span class="n">mercurial</span> <span class="n">rsync</span> <span class="n">openssh</span><span class="o">-</span><span class="n">client</span> \
+<span class="n">subversion</span> <span class="n">asciidoc</span> <span class="n">w3m</span> <span class="n">dblatex</span> <span class="n">graphviz</span> <span class="n">python</span><span class="o">-</span><span class="n">matplotlib</span> <span class="n">libc6</span><span class="p">:</span><span class="n">i386</span> <span class="n">libssl</span><span class="o">-</span><span class="n">dev</span> <span class="n">texinfo</span> \
+<span class="n">liblz4</span><span class="o">-</span><span class="n">tool</span> <span class="n">genext2fs</span> <span class="n">lib32stdc</span><span class="o">++</span><span class="mi">6</span>
+</pre></div>
+</div>
+<p>编译 Debian 固件:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">repo</span> <span class="n">git</span><span class="o">-</span><span class="n">core</span> <span class="n">gitk</span> <span class="n">git</span><span class="o">-</span><span class="n">gui</span> <span class="n">gcc</span><span class="o">-</span><span class="n">arm</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">gnueabihf</span> <span class="n">u</span><span class="o">-</span><span class="n">boot</span><span class="o">-</span><span class="n">tools</span> <span class="n">device</span><span class="o">-</span><span class="n">tree</span><span class="o">-</span><span class="n">compiler</span> \
+<span class="n">gcc</span><span class="o">-</span><span class="n">aarch64</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">gnu</span> <span class="n">mtools</span> <span class="n">parted</span> <span class="n">libudev</span><span class="o">-</span><span class="n">dev</span> <span class="n">libusb</span><span class="o">-</span><span class="mf">1.0</span><span class="o">-</span><span class="mi">0</span><span class="o">-</span><span class="n">dev</span> <span class="n">python</span><span class="o">-</span><span class="n">linaro</span><span class="o">-</span><span class="n">image</span><span class="o">-</span><span class="n">tools</span> \
+<span class="n">linaro</span><span class="o">-</span><span class="n">image</span><span class="o">-</span><span class="n">tools</span> <span class="n">gcc</span><span class="o">-</span><span class="mf">4.8</span><span class="o">-</span><span class="n">multilib</span><span class="o">-</span><span class="n">arm</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">gnueabihf</span> <span class="n">gcc</span><span class="o">-</span><span class="n">arm</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">gnueabihf</span> <span class="n">libssl</span><span class="o">-</span><span class="n">dev</span> \
+<span class="n">gcc</span><span class="o">-</span><span class="n">aarch64</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">gnu</span> <span class="n">g</span><span class="o">+</span><span class="n">conf</span> <span class="n">autotools</span><span class="o">-</span><span class="n">dev</span> <span class="n">libsigsegv2</span> <span class="n">m4</span> <span class="n">intltool</span> <span class="n">libdrm</span><span class="o">-</span><span class="n">dev</span> <span class="n">curl</span> <span class="n">sed</span> <span class="n">make</span> \
+<span class="n">binutils</span> <span class="n">build</span><span class="o">-</span><span class="n">essential</span> <span class="n">gcc</span> <span class="n">g</span><span class="o">++</span> <span class="n">bash</span> <span class="n">patch</span> <span class="n">gzip</span> <span class="n">bzip2</span> <span class="n">perl</span> <span class="n">tar</span> <span class="n">cpio</span> <span class="n">python</span> <span class="n">unzip</span> <span class="n">rsync</span> <span class="n">file</span> <span class="n">bc</span> <span class="n">wget</span> \
+<span class="n">libncurses5</span> <span class="n">libqt4</span><span class="o">-</span><span class="n">dev</span> <span class="n">libglib2</span><span class="o">.</span><span class="mi">0</span><span class="o">-</span><span class="n">dev</span> <span class="n">libgtk2</span><span class="o">.</span><span class="mi">0</span><span class="o">-</span><span class="n">dev</span> <span class="n">libglade2</span><span class="o">-</span><span class="n">dev</span> <span class="n">cvs</span> <span class="n">git</span> <span class="n">mercurial</span> <span class="n">rsync</span> <span class="n">openssh</span><span class="o">-</span><span class="n">client</span> \
+<span class="n">subversion</span> <span class="n">asciidoc</span> <span class="n">w3m</span> <span class="n">dblatex</span> <span class="n">graphviz</span> <span class="n">python</span><span class="o">-</span><span class="n">matplotlib</span> <span class="n">libc6</span><span class="p">:</span><span class="n">i386</span> <span class="n">libssl</span><span class="o">-</span><span class="n">dev</span> <span class="n">texinfo</span> \
+<span class="n">liblz4</span><span class="o">-</span><span class="n">tool</span> <span class="n">genext2fs</span> <span class="n">lib32stdc</span><span class="o">++</span><span class="mi">6</span>
+</pre></div>
+</div>
+<p>Ubuntu 固件:(根文件系统请使用官方提供的根文件系统镜像）</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">repo</span> <span class="n">git</span><span class="o">-</span><span class="n">core</span> <span class="n">gitk</span> <span class="n">git</span><span class="o">-</span><span class="n">gui</span> <span class="n">gcc</span><span class="o">-</span><span class="n">arm</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">gnueabihf</span> <span class="n">u</span><span class="o">-</span><span class="n">boot</span><span class="o">-</span><span class="n">tools</span> <span class="n">device</span><span class="o">-</span><span class="n">tree</span><span class="o">-</span><span class="n">compiler</span> \
+<span class="n">gcc</span><span class="o">-</span><span class="n">aarch64</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">gnu</span> <span class="n">mtools</span> <span class="n">parted</span> <span class="n">libudev</span><span class="o">-</span><span class="n">dev</span> <span class="n">libusb</span><span class="o">-</span><span class="mf">1.0</span><span class="o">-</span><span class="mi">0</span><span class="o">-</span><span class="n">dev</span> <span class="n">python</span><span class="o">-</span><span class="n">linaro</span><span class="o">-</span><span class="n">image</span><span class="o">-</span><span class="n">tools</span> \
+<span class="n">linaro</span><span class="o">-</span><span class="n">image</span><span class="o">-</span><span class="n">tools</span> <span class="n">gcc</span><span class="o">-</span><span class="mf">4.8</span><span class="o">-</span><span class="n">multilib</span><span class="o">-</span><span class="n">arm</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">gnueabihf</span> <span class="n">gcc</span><span class="o">-</span><span class="n">arm</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">gnueabihf</span> <span class="n">libssl</span><span class="o">-</span><span class="n">dev</span> \
+<span class="n">gcc</span><span class="o">-</span><span class="n">aarch64</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">gnu</span> <span class="n">g</span><span class="o">+</span><span class="n">conf</span> <span class="n">autotools</span><span class="o">-</span><span class="n">dev</span> <span class="n">libsigsegv2</span> <span class="n">m4</span> <span class="n">intltool</span> <span class="n">libdrm</span><span class="o">-</span><span class="n">dev</span> <span class="n">curl</span> <span class="n">sed</span> <span class="n">make</span> \
+<span class="n">binutils</span> <span class="n">build</span><span class="o">-</span><span class="n">essential</span> <span class="n">gcc</span> <span class="n">g</span><span class="o">++</span> <span class="n">bash</span> <span class="n">patch</span> <span class="n">gzip</span> <span class="n">bzip2</span> <span class="n">perl</span> <span class="n">tar</span> <span class="n">cpio</span> <span class="n">python</span> <span class="n">unzip</span> <span class="n">rsync</span> <span class="n">file</span> <span class="n">bc</span> <span class="n">wget</span> \
+<span class="n">libncurses5</span> <span class="n">libqt4</span><span class="o">-</span><span class="n">dev</span> <span class="n">libglib2</span><span class="o">.</span><span class="mi">0</span><span class="o">-</span><span class="n">dev</span> <span class="n">libgtk2</span><span class="o">.</span><span class="mi">0</span><span class="o">-</span><span class="n">dev</span> <span class="n">libglade2</span><span class="o">-</span><span class="n">dev</span> <span class="n">cvs</span> <span class="n">git</span> <span class="n">mercurial</span> <span class="n">rsync</span> <span class="n">openssh</span><span class="o">-</span><span class="n">client</span> \
+<span class="n">subversion</span> <span class="n">asciidoc</span> <span class="n">w3m</span> <span class="n">dblatex</span> <span class="n">graphviz</span> <span class="n">python</span><span class="o">-</span><span class="n">matplotlib</span> <span class="n">libc6</span><span class="p">:</span><span class="n">i386</span> <span class="n">libssl</span><span class="o">-</span><span class="n">dev</span> <span class="n">texinfo</span> \
+<span class="n">liblz4</span><span class="o">-</span><span class="n">tool</span> <span class="n">genext2fs</span> <span class="n">lib32stdc</span><span class="o">++</span><span class="mi">6</span>
+</pre></div>
+</div>
+<p><strong>注意：</strong> Ubuntu17.04 或者更高的系统还需要如下依赖包</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">lib32gcc</span><span class="o">-</span><span class="mi">7</span><span class="o">-</span><span class="n">dev</span> <span class="n">g</span><span class="o">++-</span><span class="mi">7</span> <span class="n">libstdc</span><span class="o">++-</span><span class="mi">7</span><span class="o">-</span><span class="n">dev</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="bian-yi-sdk">
+<h2>编译SDK<a class="headerlink" href="#bian-yi-sdk" title="永久链接至标题">¶</a></h2>
+<div class="section" id="bian-yi-qian-pei-zhi">
+<h3>编译前配置<a class="headerlink" href="#bian-yi-qian-pei-zhi" title="永久链接至标题">¶</a></h3>
+<p>配置文件 aio-3399j.mk:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">build</span><span class="o">.</span><span class="n">sh</span> <span class="n">aio</span><span class="o">-</span><span class="mi">3399</span><span class="n">j</span><span class="o">.</span><span class="n">mk</span>
+
+<span class="c1">#文件路径在`device/rockchip/rk3399/aio-3399j.mk`</span>
+</pre></div>
+</div>
+<p>如果配置文件生效会连接到 <code class="docutils literal notranslate"><span class="pre">device/rockchip/.BoardConfig.mk</span></code> ,检查该文件可以验证是否配置成功</p>
+<p><strong>注意</strong>: <code class="docutils literal notranslate"><span class="pre">aio-3399j.mk</span></code> 为编译生成 Buildroot 固件的配置文件。同时用户也可以通过参考该配置生成新的配置文件来适配自己所需要的固件。</p>
+<p>重要配置介绍：(如果需要自己制作固件，可能需要修改下列配置信息)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># uboot defconfig</span>
+<span class="n">export</span> <span class="n">rk_uboot_defconfig</span><span class="o">=</span><span class="n">firefly</span><span class="o">-</span><span class="n">rk3399</span>             <span class="n">编译uboot配置文件</span>
+
+<span class="c1"># kernel defconfig</span>
+<span class="n">export</span> <span class="n">rk_kernel_defconfig</span><span class="o">=</span><span class="n">firefly_linux_defconfig</span>   <span class="n">编译kernel配置文件</span>
+
+<span class="c1"># kernel dts</span>
+<span class="n">export</span> <span class="n">rk_kernel_dts</span><span class="o">=</span><span class="n">rk3399</span><span class="o">-</span><span class="n">firefly</span><span class="o">-</span><span class="n">aio</span>              <span class="n">编译kernel用到的dts</span>
+
+<span class="c1"># parameter for gpt table</span>
+<span class="n">export</span> <span class="n">rk_parameter</span><span class="o">=</span><span class="n">parameter</span><span class="o">-</span><span class="n">ubuntu</span><span class="o">.</span><span class="n">txt</span>             <span class="n">分区信息</span><span class="p">(</span><span class="n">十分重要</span><span class="p">)</span>
+
+<span class="c1"># packagefile for make update image </span>
+<span class="n">export</span> <span class="n">rk_package_file</span><span class="o">=</span><span class="n">rk3399</span><span class="o">-</span><span class="n">ubuntu</span><span class="o">-</span><span class="n">package</span><span class="o">-</span><span class="n">file</span>    <span class="n">打包配置文件</span>
+
+<span class="c1"># rootfs image path</span>
+<span class="n">export</span> <span class="n">rk_rootfs_img</span><span class="o">=</span><span class="n">xxxx</span><span class="o">/</span><span class="n">xxxx</span><span class="o">.</span><span class="n">img</span>                   <span class="n">根文件系统镜像路径</span>
+</pre></div>
+</div>
+<p><strong><font color=#ff0000 >注意,十分重要！！</font></strong></p>
+<p>默认配置编译 Buildroot 固件，如果想编译其他固件（如 Ubuntu 固件）请执行一下操作:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://pan.baidu.com/s/1DuCzTGARDi7APxyKs9Nl1A#list/path=%2F">下载 Ubuntu 根文件系统镜像</a></p></li>
+<li><p>把得到的镜像放到 SDK 的指定目录:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#解压</span>
+<span class="n">tar</span> <span class="o">-</span><span class="n">xvf</span> <span class="n">rk3399_ubuntu18</span><span class="o">.</span><span class="mi">04</span><span class="n">_LXDE</span><span class="o">.</span><span class="n">img</span><span class="o">.</span><span class="n">tgz</span>
+
+<span class="c1">#sdk根目录下</span>
+<span class="n">mkdir</span> <span class="n">ubunturootfs</span>
+<span class="n">mv</span> <span class="n">rk3399_ubuntu18</span><span class="o">.</span><span class="mi">04</span><span class="n">_LXDE</span><span class="o">.</span><span class="n">img</span> <span class="n">ubunturootfs</span><span class="o">/</span>
+
+<span class="c1">#修改aio-3399j.mk文件</span>
+<span class="n">vim</span> <span class="n">device</span><span class="o">/</span><span class="n">rockchip</span><span class="o">/</span><span class="n">rk3399</span><span class="o">/</span><span class="n">aio</span><span class="o">-</span><span class="mi">3399</span><span class="n">j</span><span class="o">.</span><span class="n">mk</span>
+
+<span class="c1">#把RK_ROOTFS_IMG属性改成ubuntu文件系统镜像得路径(也就是rk3399_ubuntu18.04_LXDE.img)</span>
+<span class="n">RK_ROOTFS_IMG</span><span class="o">=</span><span class="n">ubunturootfs</span><span class="o">/</span><span class="n">rk3399_ubuntu18</span><span class="o">.</span><span class="mi">04</span><span class="n">_LXDE</span><span class="o">.</span><span class="n">img</span>
+</pre></div>
+</div>
+<p><strong><font color=#ff0000 >注意：</font></strong> Ubuntu 根文件系统镜像存放路径不能错</p>
+</div>
+<div class="section" id="quan-zi-dong-bian-yi">
+<h3>全自动编译<a class="headerlink" href="#quan-zi-dong-bian-yi" title="永久链接至标题">¶</a></h3>
+<p>在配置和搭建环境的工作都做好的前提下:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">build</span><span class="o">.</span><span class="n">sh</span>
+</pre></div>
+</div>
+<p>全自动编译的固件默认会编译一遍 <code class="docutils literal notranslate"><span class="pre">buildroot</span></code> 根文件系统。生成固件目录 <code class="docutils literal notranslate"><span class="pre">rockdev/</span></code> ,同时会在 IMAGE 中备份。</p>
+</div>
+<div class="section" id="bu-fen-bian-yi">
+<h3>部分编译<a class="headerlink" href="#bu-fen-bian-yi" title="永久链接至标题">¶</a></h3>
+<div class="section" id="kernel">
+<h4>kernel<a class="headerlink" href="#kernel" title="永久链接至标题">¶</a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">build</span><span class="o">.</span><span class="n">sh</span> <span class="n">kernel</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="u-boot">
+<h4>u-boot<a class="headerlink" href="#u-boot" title="永久链接至标题">¶</a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">build</span><span class="o">.</span><span class="n">sh</span> <span class="n">uboot</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="recovery">
+<h4>recovery<a class="headerlink" href="#recovery" title="永久链接至标题">¶</a></h4>
+<p>recovery分区可省略，若有需要，编译recovery:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">build</span><span class="o">.</span><span class="n">sh</span> <span class="n">recovery</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="rootfs">
+<h4>rootfs<a class="headerlink" href="#rootfs" title="永久链接至标题">¶</a></h4>
+<ul class="simple">
+<li><p>buildroot:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">build</span><span class="o">.</span><span class="n">sh</span> <span class="n">rootfs</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>debian:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">rootfs</span><span class="o">/</span>
+
+<span class="mi">1</span><span class="p">:</span>
+<span class="c1">#Building base debian system by ubuntu-build-service from linaro</span>
+<span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">binfmt</span><span class="o">-</span><span class="n">support</span> <span class="n">qemu</span><span class="o">-</span><span class="n">user</span><span class="o">-</span><span class="n">static</span> <span class="n">live</span><span class="o">-</span><span class="n">build</span>
+<span class="n">sudo</span> <span class="n">dpkg</span> <span class="o">-</span><span class="n">i</span> <span class="n">ubuntu</span><span class="o">-</span><span class="n">build</span><span class="o">-</span><span class="n">service</span><span class="o">/</span><span class="n">packages</span><span class="o">/*</span>
+<span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="o">-</span><span class="n">f</span>
+
+<span class="mi">2</span><span class="p">:</span>
+<span class="c1">#编译 32 位的 debian:</span>
+<span class="n">RELEASE</span><span class="o">=</span><span class="n">stretch</span> <span class="n">TARGET</span><span class="o">=</span><span class="n">desktop</span> <span class="n">ARCH</span><span class="o">=</span><span class="n">armhf</span> <span class="o">./</span><span class="n">mk</span><span class="o">-</span><span class="n">base</span><span class="o">-</span><span class="n">debian</span><span class="o">.</span><span class="n">sh</span>
+<span class="c1">#或编译 64 位的 debian:</span>
+<span class="n">RELEASE</span><span class="o">=</span><span class="n">stretch</span> <span class="n">TARGET</span><span class="o">=</span><span class="n">desktop</span> <span class="n">ARCH</span><span class="o">=</span><span class="n">arm64</span> <span class="o">./</span><span class="n">mk</span><span class="o">-</span><span class="n">base</span><span class="o">-</span><span class="n">debian</span><span class="o">.</span><span class="n">sh</span>
+
+
+<span class="c1">#上面编译如果遇到如下问题情况:</span>
+<span class="n">noexec</span> <span class="ow">or</span> <span class="n">nodev</span> <span class="n">issue</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">share</span><span class="o">/</span><span class="n">debootstrap</span><span class="o">/</span><span class="n">functions</span><span class="p">:</span> <span class="n">line</span> <span class="mi">1450</span><span class="p">:</span> <span class="o">..../</span><span class="n">rootfs</span><span class="o">/</span><span class="n">ubuntu</span><span class="o">-</span><span class="n">build</span><span class="o">-</span>
+<span class="n">service</span><span class="o">/</span><span class="n">stretch</span><span class="o">-</span><span class="n">desktop</span><span class="o">-</span><span class="n">armhf</span><span class="o">/</span><span class="n">chroot</span><span class="o">/</span><span class="n">test</span><span class="o">-</span><span class="n">dev</span><span class="o">-</span><span class="n">null</span><span class="p">:</span> <span class="n">Permission</span> <span class="n">denied</span> <span class="n">E</span><span class="p">:</span> <span class="n">Cannot</span> <span class="n">install</span> <span class="n">into</span> <span class="n">target</span>
+<span class="s1">&#39;/home/foxluo/work3/rockchip/rk_linux/rk3399_linux/rootfs/ubuntu-build-service/stretch-</span>
+<span class="n">desktop</span><span class="o">-</span><span class="n">armhf</span><span class="o">/</span><span class="n">chroot</span><span class="s1">&#39; mounted with noexec or nodev</span>
+<span class="c1"># 解决办法: </span>
+<span class="n">mount</span> <span class="o">-</span><span class="n">o</span> <span class="n">remount</span><span class="p">,</span><span class="n">exec</span><span class="p">,</span><span class="n">dev</span> <span class="n">xxx</span> <span class="p">(</span><span class="n">xxx</span> <span class="ow">is</span> <span class="n">the</span> <span class="n">mount</span> <span class="n">place</span><span class="p">),</span> <span class="n">then</span> <span class="n">rebuild</span> <span class="n">it</span><span class="o">.</span>
+
+<span class="mi">3</span><span class="p">:</span>
+<span class="c1"># 编译 32 位的 debian:</span>
+<span class="n">VERSION</span><span class="o">=</span><span class="n">debug</span> <span class="n">ARCH</span><span class="o">=</span><span class="n">armhf</span> <span class="o">./</span><span class="n">mk</span><span class="o">-</span><span class="n">rootfs</span><span class="o">-</span><span class="n">stretch</span><span class="o">.</span><span class="n">sh</span>
+<span class="c1"># 开发阶段推荐使用后面带 debug</span>
+<span class="c1"># 编译 64 位的 debian:</span>
+<span class="n">VERSION</span><span class="o">=</span><span class="n">debug</span> <span class="n">ARCH</span><span class="o">=</span><span class="n">arm64</span> <span class="o">./</span><span class="n">mk</span><span class="o">-</span><span class="n">rootfs</span><span class="o">-</span><span class="n">stretch</span><span class="o">-</span><span class="n">arm64</span><span class="o">.</span><span class="n">sh</span>
+
+<span class="mi">4</span><span class="p">:</span>
+<span class="o">./</span><span class="n">mk</span><span class="o">-</span><span class="n">image</span><span class="o">.</span><span class="n">sh</span>
+<span class="n">mv</span> <span class="n">linaro</span><span class="o">-</span><span class="n">rootfs</span><span class="o">.</span><span class="n">img</span> <span class="o">../</span><span class="n">distro</span><span class="o">/</span>
+
+<span class="mi">5</span><span class="p">:</span>
+<span class="c1">#修改aio-3399j.mk文件</span>
+<span class="n">vim</span> <span class="n">device</span><span class="o">/</span><span class="n">rockchip</span><span class="o">/</span><span class="n">rk3399</span><span class="o">/</span><span class="n">aio</span><span class="o">-</span><span class="mi">3399</span><span class="n">j</span><span class="o">.</span><span class="n">mk</span>
+
+<span class="c1">#把RK_ROOTFS_IMG属性改成ubuntu文件系统镜像得路径(也就是linaro-rootfs.img)</span>
+<span class="n">RK_ROOTFS_IMG</span><span class="o">=</span><span class="n">distro</span><span class="o">/</span><span class="n">linaro</span><span class="o">-</span><span class="n">rootfs</span><span class="o">.</span><span class="n">img</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Ubuntu18.04,可以通过云盘下载:</p></li>
+</ul>
+<p><a class="reference external" href="https://pan.baidu.com/s/1DuCzTGARDi7APxyKs9Nl1A#list/path=%2F">下载链接</a></p>
+<p>把得到的镜像放到 SDK 的根目录处：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#解压</span>
+<span class="n">tar</span> <span class="o">-</span><span class="n">xvf</span> <span class="n">rk3399_ubuntu18</span><span class="o">.</span><span class="mi">04</span><span class="n">_LXDE</span><span class="o">.</span><span class="n">img</span><span class="o">.</span><span class="n">tgz</span>
+
+<span class="c1">#sdk根目录下</span>
+<span class="n">mkdir</span> <span class="n">ubunturootfs</span>
+<span class="n">mv</span> <span class="n">rk3399_ubuntu18</span><span class="o">.</span><span class="mi">04</span><span class="n">_LXDE</span><span class="o">.</span><span class="n">img</span> <span class="n">ubunturootfs</span><span class="o">/</span>
+
+<span class="c1">#修改aio-3399j.mk文件</span>
+<span class="n">vim</span> <span class="n">device</span><span class="o">/</span><span class="n">rockchip</span><span class="o">/</span><span class="n">rk3399</span><span class="o">/</span><span class="n">aio</span><span class="o">-</span><span class="mi">3399</span><span class="n">j</span><span class="o">.</span><span class="n">mk</span>
+
+<span class="c1">#把RK_ROOTFS_IMG属性改成ubuntu文件系统镜像得路径(也就是rk3399_ubuntu18.04_LXDE.img)</span>
+<span class="n">RK_ROOTFS_IMG</span><span class="o">=</span><span class="n">ubunturootfs</span><span class="o">/</span><span class="n">rk3399_ubuntu18</span><span class="o">.</span><span class="mi">04</span><span class="n">_LXDE</span><span class="o">.</span><span class="n">img</span>
+</pre></div>
+</div>
+<p><strong>注意：</strong> Ubuntu 根文件系统镜像存放路径不能错</p>
+<p>运行 <code class="docutils literal notranslate"><span class="pre">./mkfirmware.sh</span></code> 会自动更新 <code class="docutils literal notranslate"><span class="pre">rockdev/rootfs.img</span></code> 的链接</p>
+</div>
+</div>
+</div>
+<div class="section" id="gu-jian-da-bao">
+<h2>固件打包<a class="headerlink" href="#gu-jian-da-bao" title="永久链接至标题">¶</a></h2>
+<div class="section" id="tong-bu-geng-xin-ge-bu-fen-jing-xiang">
+<h3>同步更新各部分镜像<a class="headerlink" href="#tong-bu-geng-xin-ge-bu-fen-jing-xiang" title="永久链接至标题">¶</a></h3>
+<p>每次打包固件前先确保 <code class="docutils literal notranslate"><span class="pre">rockdev/</span></code> 目录下文件链接是否正确:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>ls -l
+
+├── boot.img -&gt; ~/project/linux_sdk/kernel/boot.img
+├── idbloader.img -&gt; ~/project/linux_sdk/u-boot/idbloader.img
+├── linaro-rootfs.img
+├── MiniLoaderAll.bin -&gt; ~/project/linux_sdk/u-boot/rk3399_loader_v1.14.115.bin
+├── misc.img -&gt; ~/project/linux_sdk/device/rockchip/rockimg/wipe_all-misc.img
+├── oem.img
+├── parameter.txt -&gt; ~/project/linux_sdk/device/rockchip/rk3399/parameter-ubuntu.txt
+├── recovery.img -&gt; ~/project/linux_sdk/buildroot/output/rockchip_rk3399_recovery/images/recovery.img
+├── rootfs.img -&gt; ~/project/linux_sdk/ubunturootfs/rk3399_ubuntu18.04_LXDE.img
+├── trust.img -&gt; ~/project/linux_sdk/u-boot/trust.img
+├── uboot.img -&gt; ~/project/linux_sdk/u-boot/uboot.img
+└── userdata.img
+</pre></div>
+</div>
+<p>可以运行 <code class="docutils literal notranslate"><span class="pre">./mkfirmware.sh</span></code> 更新链接</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">mkfirmware</span><span class="o">.</span><span class="n">sh</span>
+</pre></div>
+</div>
+<p>提示：若不是编译全部的分区镜像，在运行 <code class="docutils literal notranslate"><span class="pre">./mkfirmware</span></code> 时，会遇到如下类似情况：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>error: /home/ljh/proj/linux-sdk/buildroot/output/rockchip_rk3399_recovery/images/recovery.img not found!
+表示recovery分区没有编译出镜像，其他的情况类似，如oem.img、userdata.img
+上文提到，这些属于可省略分区镜像，可以不用理会。
+</pre></div>
+</div>
+</div>
+<div class="section" id="da-bao-tong-yi-gu-jian">
+<h3>打包统一固件<a class="headerlink" href="#da-bao-tong-yi-gu-jian" title="永久链接至标题">¶</a></h3>
+<p><strong>注意：</strong> 打包前请确认 <code class="docutils literal notranslate"><span class="pre">tools/linux/Linux_Pack_Firmware/rockdev/package-file</span></code> 是否正确。打包会根据此文件进行分区打包。此文件链接会在 <code class="docutils literal notranslate"><span class="pre">./build.sh</span> <span class="pre">aio-3399j.mk</span></code> 命令时更新，如果配置不对请返回<a class="reference external" href="linux_sdk#mkconfig">配置</a>一节重新配置一次。</p>
+<p>整合统一固件：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">build</span><span class="o">.</span><span class="n">sh</span> <span class="n">updateimg</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="fen-qu-jie-shao">
+<h2>分区介绍<a class="headerlink" href="#fen-qu-jie-shao" title="永久链接至标题">¶</a></h2>
+<div class="section" id="parameter">
+<h3>parameter<a class="headerlink" href="#parameter" title="永久链接至标题">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">parameter.txt</span></code> 包含了固件的分区信息十分重要,你可以在 <code class="docutils literal notranslate"><span class="pre">device/rockchip/rk3399</span></code> 目录下找到一些 <code class="docutils literal notranslate"><span class="pre">parameter.txt</span></code> 文件,下面以 <code class="docutils literal notranslate"><span class="pre">parameter-debian.txt</span></code> 为例子做介绍:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">FIRMWARE_VER</span><span class="p">:</span> <span class="mf">8.1</span>                                                                                                                             
+<span class="n">MACHINE_MODEL</span><span class="p">:</span> <span class="n">RK3399</span>
+<span class="n">MACHINE_ID</span><span class="p">:</span> <span class="mi">007</span> 
+<span class="n">MANUFACTURER</span><span class="p">:</span> <span class="n">RK3399</span>
+<span class="n">MAGIC</span><span class="p">:</span> <span class="mh">0x5041524B</span>
+<span class="n">ATAG</span><span class="p">:</span> <span class="mh">0x00200800</span>
+<span class="n">MACHINE</span><span class="p">:</span> <span class="mi">3399</span>
+<span class="n">CHECK_MASK</span><span class="p">:</span> <span class="mh">0x80</span>
+<span class="n">PWR_HLD</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">A</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span>
+<span class="n">TYPE</span><span class="p">:</span> <span class="n">GPT</span> 
+<span class="n">CMDLINE</span><span class="p">:</span> <span class="n">mtdparts</span><span class="o">=</span><span class="n">rk29xxnand</span><span class="p">:</span><span class="mh">0x00002000</span><span class="nd">@0x00004000</span><span class="p">(</span><span class="n">uboot</span><span class="p">),</span><span class="mh">0x00002000</span><span class="nd">@0x00006000</span><span class="p">(</span><span class="n">trust</span><span class="p">),</span><span class="mh">0x00002000</span><span class="nd">@0x00008000</span><span class="p">(</span><span class="n">misc</span><span class="p">),</span><span class="mh">0x00010000</span><span class="nd">@0x0000a000</span><span class="p">(</span><span class="n">boot</span><span class="p">),</span><span class="mh">0x00010000</span><span class="nd">@0x0001a000</span><span class="p">(</span><span class="n">recovery</span><span class="p">),</span><span class="mh">0x00010000</span><span class="nd">@0x0002a000</span><span class="p">(</span><span class="n">backup</span><span class="p">),</span><span class="mh">0x00020000</span><span class="nd">@0x0003a000</span><span class="p">(</span><span class="n">oem</span><span class="p">),</span><span class="mh">0x00700000</span><span class="nd">@0x0005a000</span><span class="p">(</span><span class="n">rootfs</span><span class="p">),</span><span class="o">-</span><span class="nd">@0x0075a000</span><span class="p">(</span><span class="n">userdata</span><span class="p">:</span><span class="n">grow</span><span class="p">)</span>
+<span class="n">uuid</span><span class="p">:</span><span class="n">rootfs</span><span class="o">=</span><span class="mf">614e0000</span><span class="o">-</span><span class="mi">0000</span><span class="o">-</span><span class="mi">4</span><span class="n">b53</span><span class="o">-</span><span class="mi">8000</span><span class="o">-</span><span class="mi">1</span><span class="n">d28000054a9</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">CMDLINE</span></code> 属性是我们关注的地方。以 Uboot 为例 <code class="docutils literal notranslate"><span class="pre">0x00002000&#64;0x00004000(uboot)</span></code> 中 <code class="docutils literal notranslate"><span class="pre">0x00004000</span></code> 为 Uboot 分区的起始位置 <code class="docutils literal notranslate"><span class="pre">0x00002000</span></code> 为分区的大小。后面的分区规则相同。用户可以根据自己需要增减或者修改分区信息，但是请最少保留 uboot, trust, boot, rootfs 分区，这是机器能正常启动的前提条件。<code class="docutils literal notranslate"><span class="pre">parameter-ubuntu.txt</span></code> 中使用的就是这样的最简分区方案。</p>
+<p>分区介绍：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>uboot 分区: 烧写 uboot 编译出来的 uboot.img。
+trust 分区: 烧写 uboot 编译出来的 trust.img。
+misc 分区: 烧写 misc.img。开机检测进入 recovery 模式。（可省略）
+boot 分区: 烧写 kernel 编译出来的 boot.img 包含 kernel 和设备树信息。
+recovery 分区: 烧写 recovery.img。（可省略）
+backup 分区: 预留,暂时没有用。后续跟 android 一样作为 recovery 的 backup 使用。（可省略）
+oem 分区: 给厂家使用,存放厂家的 app 或数据。只读。代替原来音箱的 data 分区。挂载在/oem 目录。（可省略）
+rootfs 分区: 存放 buildroot 或者 debian 编出来的 rootfs.img,只读.
+userdata 分 区 : 存放 app 临时生成的文件或者是给最终用户使用。可读写,挂载在 /userdata 目录下。（可省略）
+</pre></div>
+</div>
+</div>
+<div class="section" id="package-file">
+<h3>package-file<a class="headerlink" href="#package-file" title="永久链接至标题">¶</a></h3>
+<p>此文件应当与 <code class="docutils literal notranslate"><span class="pre">parameter</span></code> 保持一致，用于固件打包。可以在 <code class="docutils literal notranslate"><span class="pre">tools/linux/Linux_Pack_Firmware/rockdev</span></code> 下找到相关文件。以 <code class="docutils literal notranslate"><span class="pre">rk3399-ubuntu-package-file</span></code> 为例介绍:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># NAME          Relative path</span>
+<span class="c1">#</span>
+<span class="c1">#HWDEF          HWDEF</span>
+<span class="n">package</span><span class="o">-</span><span class="n">file</span>    <span class="n">package</span><span class="o">-</span><span class="n">file</span>
+<span class="n">bootloader</span>      <span class="n">Image</span><span class="o">/</span><span class="n">MiniLoaderAll</span><span class="o">.</span><span class="n">bin</span>
+<span class="n">parameter</span>       <span class="n">Image</span><span class="o">/</span><span class="n">parameter</span><span class="o">.</span><span class="n">txt</span>                                                                                                           
+<span class="n">trust</span>           <span class="n">Image</span><span class="o">/</span><span class="n">trust</span><span class="o">.</span><span class="n">img</span>
+<span class="n">uboot</span>           <span class="n">Image</span><span class="o">/</span><span class="n">uboot</span><span class="o">.</span><span class="n">img</span>
+<span class="n">boot</span>            <span class="n">Image</span><span class="o">/</span><span class="n">boot</span><span class="o">.</span><span class="n">img</span>
+<span class="n">rootfs</span><span class="p">:</span><span class="n">grow</span>     <span class="n">Image</span><span class="o">/</span><span class="n">rootfs</span><span class="o">.</span><span class="n">img</span>
+<span class="n">backup</span>          <span class="n">RESERVED</span>
+</pre></div>
+</div>
+<p>以上是SDK编译后生成的镜像文件。根据 <code class="docutils literal notranslate"><span class="pre">parameter.txt</span></code> 只打包自己用到的 img 文件。</p>
+</div>
+</div>
+<div class="section" id="chang-jian-wen-ti">
+<h2>常见问题<a class="headerlink" href="#chang-jian-wen-ti" title="永久链接至标题">¶</a></h2>
+<div class="section" id="ru-he-jin-ru-sheng-ji-mo-shi">
+<h3>如何进入升级模式<a class="headerlink" href="#ru-he-jin-ru-sheng-ji-mo-shi" title="永久链接至标题">¶</a></h3>
+<p>操作方法见<a class="reference external" href="upgrade_firmware.html">《升级固件》</a></p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="ubuntu_support.html" class="btn btn-neutral float-right" title="Ubuntu 应用层支持" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="linux_build_ubuntu_rootfs.html" class="btn btn-neutral float-left" title="创建 Ubuntu 根文件系统" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Firefly Team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

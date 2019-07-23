@@ -1,0 +1,245 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="zh-CN" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="zh-CN" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>烧写须知(重要) &mdash; Firefly Wiki</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script type="text/javascript" src="_static/translations.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="搜索" href="search.html" />
+    <link rel="next" title="升级固件" href="upgrade_firmware.html" />
+    <link rel="prev" title="启动模式说明" href="bootmode.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Firefly-RK3399 Manual
+          
+
+          
+            
+            <img src="_static/Logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">上手教程</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="started.html">入手指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="debug.html">串口调试</a></li>
+</ul>
+<p class="caption"><span class="caption-text">烧写固件</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="bootmode.html">启动模式说明</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">烧写须知(重要)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="upgrade_firmware.html">升级固件</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maskrom_mode.html">MaskRom模式</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Linux开发</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="linux_build_ubuntu_rootfs.html">创建 Ubuntu 根文件系统</a></li>
+<li class="toctree-l1"><a class="reference internal" href="linux_compile_gpt.html">编译 Ubuntu 固件 ( GPT )</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ubuntu_support.html">Ubuntu 应用层支持</a></li>
+<li class="toctree-l1"><a class="reference internal" href="buildroot_compile.html">编译 Buildroot 固件</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Firefly-RK3399 Manual</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>烧写须知(重要)</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/upgrade_table.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="shao-xie-xu-zhi-zhong-yao">
+<h1>烧写须知(重要)<a class="headerlink" href="#shao-xie-xu-zhi-zhong-yao" title="永久链接至标题">¶</a></h1>
+<p><font color=#ff0000 size=5>请认真阅读本章再对 eMMC 进行烧写！！！</font></p>
+<ul class="simple">
+<li><p>烧写工具下载地址(根据下表下载对应版本)</p>
+<ul>
+<li><p><a class="reference external" href="http://www.t-firefly.com/doc/download/page/id/53.html#other_168">upgrade_tool</a></p></li>
+<li><p><a class="reference external" href="http://www.t-firefly.com/doc/download/page/id/53.html#other_167">Android_tool</a></p></li>
+</ul>
+</li>
+<li><p>固件</p>
+<ul>
+<li><p><font color=#ff0000>官方固件</font>:官方云盘提供的 Ubuntu 固件中，带 <code class="docutils literal notranslate"><span class="pre">MBR</span></code> 字样的为旧版本 SDK 编译出来的MBR固件，带 <code class="docutils literal notranslate"><span class="pre">GPT</span></code> 字样的为新 SDK 编译出来的GPT固件.</p></li>
+<li><p><font color=#ff0000>DIY固件</font>:根据<a class="reference external" href="linux_compile_gpt.html">《编译Ubuntu固件(GPT)》</a>编译出来的固件为 GPT 固件</p></li>
+</ul>
+</li>
+</ul>
+<p><font color=#ff0000>请认真阅读下表，再进行烧写:</font>
+<img alt="img/3399c-table.jpg" src="img/3399c-table.jpg" /></p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="upgrade_firmware.html" class="btn btn-neutral float-right" title="升级固件" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="bootmode.html" class="btn btn-neutral float-left" title="启动模式说明" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Firefly Team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

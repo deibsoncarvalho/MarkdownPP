@@ -1,0 +1,459 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="zh-CN" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="zh-CN" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>编译 Buildroot 固件 &mdash; Firefly Wiki</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script type="text/javascript" src="_static/translations.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="搜索" href="search.html" />
+    <link rel="prev" title="Ubuntu 应用层支持" href="ubuntu_support.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Firefly-RK3399 Manual
+          
+
+          
+            
+            <img src="_static/Logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">上手教程</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="started.html">入手指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="debug.html">串口调试</a></li>
+</ul>
+<p class="caption"><span class="caption-text">烧写固件</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="bootmode.html">启动模式说明</a></li>
+<li class="toctree-l1"><a class="reference internal" href="upgrade_table.html">烧写须知(重要)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="upgrade_firmware.html">升级固件</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maskrom_mode.html">MaskRom模式</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Linux开发</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="linux_build_ubuntu_rootfs.html">创建 Ubuntu 根文件系统</a></li>
+<li class="toctree-l1"><a class="reference internal" href="linux_compile_gpt.html">编译 Ubuntu 固件 ( GPT )</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ubuntu_support.html">Ubuntu 应用层支持</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">编译 Buildroot 固件</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#zhun-bei-gong-zuo">准备工作</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#xia-zai-yuan-ma">下载源码</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pei-zhi-bian-yi-huan-jing">配置编译环境</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#bian-yi-sdk">编译SDK</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pei-zhi-bian-yi-wen-jian">配置编译文件</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#quan-zi-dong-bian-yi">全自动编译</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bu-fen-bian-yi">部分编译</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#gu-jian-da-bao">固件打包</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#geng-xin-lian-jie">更新链接</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#da-bao-gu-jian">打包固件</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#buildroot-jie-shao">Buildroot 介绍</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#output-mu-lu">output 目录</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#zi-ding-yi-buildroot">自定义 Buildroot</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#mo-kuai-pei-zhi">模块配置</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#busybox-pei-zhi-xiu-gai">busybox 配置修改</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#wen-jian-xi-tong-fu-gai">文件系统覆盖</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#buildroot-guan-wang">Buildroot 官网</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Firefly-RK3399 Manual</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>编译 Buildroot 固件</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/buildroot_compile.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="bian-yi-buildroot-gu-jian">
+<h1>编译 Buildroot 固件<a class="headerlink" href="#bian-yi-buildroot-gu-jian" title="永久链接至标题">¶</a></h1>
+<p>本章介绍 Buildroot 固件的编译使用。</p>
+<div class="section" id="zhun-bei-gong-zuo">
+<h2>准备工作<a class="headerlink" href="#zhun-bei-gong-zuo" title="永久链接至标题">¶</a></h2>
+<div class="section" id="xia-zai-yuan-ma">
+<h3>下载源码<a class="headerlink" href="#xia-zai-yuan-ma" title="永久链接至标题">¶</a></h3>
+<p>下载repo工具：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir linux
+<span class="nb">cd</span> linux
+git clone https://github.com/FireflyTeam/repo.git
+</pre></div>
+</div>
+<p>下载 Linux-SDK：</p>
+<ul class="simple">
+<li><p>方法一</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir linux-sdk
+<span class="nb">cd</span> linux-sdk
+
+<span class="c1"># 初始化repo仓库</span>
+../repo/repo init --repo-url https://github.com/FireflyTeam/repo.git -u https://github.com/FireflyTeam/manifests.git -b linux-sdk -m rk3399/rk3399_linux_release.xml
+
+<span class="c1"># 同步源码</span>
+../repo/repo sync -c
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>方法二</p></li>
+</ul>
+<p>下载<a class="reference external" href="http://www.t-firefly.com/doc/download/page/id/54.html#other_186">Linux_SDK.7z</a></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 把压缩包放在上一步下载repo工具的目录下</span>
+7z x Linux_SDK.7z
+
+<span class="c1"># 更新代码</span>
+repo sync -c
+</pre></div>
+</div>
+</div>
+<div class="section" id="pei-zhi-bian-yi-huan-jing">
+<h3>配置编译环境<a class="headerlink" href="#pei-zhi-bian-yi-huan-jing" title="永久链接至标题">¶</a></h3>
+<p>安装编译所需工具，确保工具都正确安装：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo apt-get install repo git-core gitk git-gui gcc-arm-linux-gnueabihf u-boot-tools device-tree-compiler <span class="se">\</span>
+gcc-aarch64-linux-gnu mtools parted libudev-dev libusb-1.0-0-dev python-linaro-image-tools <span class="se">\</span>
+linaro-image-tools autoconf autotools-dev libsigsegv2 m4 intltool libdrm-dev curl sed make <span class="se">\</span>
+binutils build-essential gcc g++ bash patch gzip bzip2 perl tar cpio python unzip rsync file bc wget <span class="se">\</span>
+libncurses5 libqt4-dev libglib2.0-dev libgtk2.0-dev libglade2-dev cvs git mercurial rsync openssh-client <span class="se">\</span>
+subversion asciidoc w3m dblatex graphviz python-matplotlib libc6:i386 libssl-dev texinfo <span class="se">\</span>
+liblz4-tool genext2fs lib32stdc++6
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="bian-yi-sdk">
+<h2>编译SDK<a class="headerlink" href="#bian-yi-sdk" title="永久链接至标题">¶</a></h2>
+<div class="section" id="pei-zhi-bian-yi-wen-jian">
+<h3>配置编译文件<a class="headerlink" href="#pei-zhi-bian-yi-wen-jian" title="永久链接至标题">¶</a></h3>
+<p>选择开发板对应的配置文件。配置文件会链接到 <code class="docutils literal notranslate"><span class="pre">device/rockchip/.BoardConfig.mk</span></code>，查看该文件可确认当前所使用的配置文件：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./build.sh firefly-rk3399.mk
+
+<span class="c1"># 文件路径在 `device/rockchip/rk3399/firefly-rk3399.mk`</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">.mk</span></code> 文件默认配置为编译 Buildroot 固件，下面对 Buildroot 相关配置进行说明：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Buildroot config</span>
+<span class="nb">export</span> <span class="nv">RK_CFG_BUILDROOT</span><span class="o">=</span>rockchip_rk3399     <span class="c1"># Buildroot 根文件系统配置文件</span>
+
+<span class="c1"># 文件路径在 `buildroot/configs/rockchip_rk3399_defconfig`</span>
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Recovery config</span>
+<span class="nb">export</span> <span class="nv">RK_CFG_RECOVERY</span><span class="o">=</span>rockchip_rk3399_recovery     <span class="c1"># recovery 模式下根文件系统配置文件（可省略）</span>
+
+<span class="c1"># 文件路径在 `buildroot/configs/rockchip_rk3399_recovery_defconfig`</span>
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># rootfs image path</span>
+<span class="nb">export</span> <span class="nv">RK_ROOTFS_IMG</span><span class="o">=</span>buildroot/output/<span class="nv">$RK_CFG_BUILDROOT</span>/images/rootfs.<span class="nv">$RK_ROOTFS_TYPE</span>   <span class="c1"># Buildroot 根文件系统镜像路径</span>
+
+<span class="c1"># 本例中，文件路径在 `buildroot/output/rockchip_rk3399/images/rootfs.ext4`</span>
+<span class="c1"># 注：该文件路径将在首次编译根文件系统后生成</span>
+</pre></div>
+</div>
+<p>执行编译命令时，将会根据 <code class="docutils literal notranslate"><span class="pre">.mk</span></code> 文件进行编译。</p>
+</div>
+<div class="section" id="quan-zi-dong-bian-yi">
+<h3>全自动编译<a class="headerlink" href="#quan-zi-dong-bian-yi" title="永久链接至标题">¶</a></h3>
+<p>全自动编译会编译并打包固件 <code class="docutils literal notranslate"><span class="pre">update.img</span></code>，生成固件目录 <code class="docutils literal notranslate"><span class="pre">rockdev/</span></code>：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./build.sh
+</pre></div>
+</div>
+</div>
+<div class="section" id="bu-fen-bian-yi">
+<h3>部分编译<a class="headerlink" href="#bu-fen-bian-yi" title="永久链接至标题">¶</a></h3>
+<ul class="simple">
+<li><p>编译 kernel</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./build.sh kernel
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>编译 u-boot</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./build.sh uboot
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>编译 rootfs</p></li>
+</ul>
+<p>编译 Buildroot 根文件系统，将会在 <code class="docutils literal notranslate"><span class="pre">buildroot/output</span></code> 生成编译输出目录：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./build.sh buildroot
+
+<span class="c1"># 注：确保作为普通用户编译 Buildroot 根文件系统，避免不必要的错误。编译过程中会自动下载所需软件包，请保持联网状态</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="gu-jian-da-bao">
+<h2>固件打包<a class="headerlink" href="#gu-jian-da-bao" title="永久链接至标题">¶</a></h2>
+<div class="section" id="geng-xin-lian-jie">
+<h3>更新链接<a class="headerlink" href="#geng-xin-lian-jie" title="永久链接至标题">¶</a></h3>
+<p>为确保 <code class="docutils literal notranslate"><span class="pre">rockdev/</span></code> 目录下文件链接正确，更新各部分镜像链接：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./mkfirmware.sh
+</pre></div>
+</div>
+</div>
+<div class="section" id="da-bao-gu-jian">
+<h3>打包固件<a class="headerlink" href="#da-bao-gu-jian" title="永久链接至标题">¶</a></h3>
+<p>将 <code class="docutils literal notranslate"><span class="pre">rockdev</span></code> 目录的各部分镜像打包成固件 <code class="docutils literal notranslate"><span class="pre">update.img</span></code>：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./build.sh updateimg
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="buildroot-jie-shao">
+<h2>Buildroot 介绍<a class="headerlink" href="#buildroot-jie-shao" title="永久链接至标题">¶</a></h2>
+<div class="section" id="output-mu-lu">
+<h3>output 目录<a class="headerlink" href="#output-mu-lu" title="永久链接至标题">¶</a></h3>
+<p>Buildroot 编译输出结果保存在 <code class="docutils literal notranslate"><span class="pre">output</span></code> 目录，具体目录由配置文件决定，本例保存在 <code class="docutils literal notranslate"><span class="pre">buildroot/output/rockchip_rk3399</span></code> 目录，后续可以在该目录执行 <code class="docutils literal notranslate"><span class="pre">make</span></code> 编译根文件系统。</p>
+<p>采用全自动编译方式时，默认会生成 <code class="docutils literal notranslate"><span class="pre">buildroot/output/rockchip_rk3399_recovery</span></code> 目录，这是 <code class="docutils literal notranslate"><span class="pre">recovery</span></code> 的编译输出目录。</p>
+<p>子目录说明：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">build/</span></code> 包含所有的源文件，包括 Buildroot 所需主机工具和选择的包，这个目录包含所有
+模块源码。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">host/</span></code> 主机端编译需要的工具包括交叉编译工具。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">images/</span></code> 包含压缩好的根文件系统镜像文件。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">staging/</span></code> 这个目录类似根文件系统的目录结构，包含编译生成的所有头文件和库，以及其他开发文件，不过他们没有裁剪，比较庞大，不适用于目标文件系统。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">target/</span></code> 包含完整的根文件系统，对比 <code class="docutils literal notranslate"><span class="pre">staging/</span></code>，它没有开发文件，不包含头文件，二进制文件也经过 <code class="docutils literal notranslate"><span class="pre">strip</span></code> 处理。</p></li>
+</ul>
+</div>
+<div class="section" id="zi-ding-yi-buildroot">
+<h3>自定义 Buildroot<a class="headerlink" href="#zi-ding-yi-buildroot" title="永久链接至标题">¶</a></h3>
+<p>下文将介绍一些自定义 Buildroot 的方法。</p>
+<div class="section" id="mo-kuai-pei-zhi">
+<h4>模块配置<a class="headerlink" href="#mo-kuai-pei-zhi" title="永久链接至标题">¶</a></h4>
+<p>默认编译好的根文件系统不一定满足我们的需求，我们可能需要增加一些第三方包，或者修改包的配置选项，Buildroot 支持图形化方式去做选择配置：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> buildroot/output/rockchip_rk3399/
+
+<span class="c1"># 进入图形化配置界面，选择所需模块，保存退出</span>
+make menuconfig
+
+<span class="c1"># 保存到配置文件 &#39;buildroot/configs/rockchip_rk3399_defconfig&#39;</span>
+make savedefconfig
+
+<span class="c1">#编译 Buildroot 根文件系统</span>
+make
+</pre></div>
+</div>
+<p>需要了解的是：</p>
+<ul class="simple">
+<li><p>进行编译时，Buildroot 根据配置，会自动从网络获取相关的软件包，包括一些第三方库，插件，实用工具等，放在dl/目录。</p></li>
+<li><p>软件包会解压在 <code class="docutils literal notranslate"><span class="pre">output/build/</span></code> 目录下，然后进行编译。</p></li>
+<li><p>如果要修改软件包的源码，可以通过打补丁的方式进行修改，补丁集中放在 <code class="docutils literal notranslate"><span class="pre">package/</span></code> 目录，Buildroot 会在解压软件包时为其打上相应的补丁。</p></li>
+</ul>
+</div>
+<div class="section" id="busybox-pei-zhi-xiu-gai">
+<h4>busybox 配置修改<a class="headerlink" href="#busybox-pei-zhi-xiu-gai" title="永久链接至标题">¶</a></h4>
+<p>busybox 用于管理系统的命令工具，可按如下方式修改：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> buildroot/output/rockchip_rk3399/
+
+<span class="c1"># 进入图形化配置界面，选择所需工具，退出保存</span>
+make busybox-menuconfig
+
+<span class="c1"># 保存到配置文件 `board/rockchip/common/base/busybox.config`</span>
+make busybox-update-config
+
+make
+</pre></div>
+</div>
+</div>
+<div class="section" id="wen-jian-xi-tong-fu-gai">
+<h4>文件系统覆盖<a class="headerlink" href="#wen-jian-xi-tong-fu-gai" title="永久链接至标题">¶</a></h4>
+<p>文件系统覆盖是指在目标文件系统编译完成后将文件覆盖到文件系统目录。通过这种方式，我们可以简单的添加或修改一些文件：</p>
+<ul class="simple">
+<li><p>本例覆盖目录 <code class="docutils literal notranslate"><span class="pre">buildroot/board/rockchip/rk3399/fs-overlay-64</span></code></p></li>
+<li><p>公有覆盖目录 <code class="docutils literal notranslate"><span class="pre">buildroot/board/rockchip/common</span></code></p></li>
+</ul>
+<p>例：<code class="docutils literal notranslate"><span class="pre">buildroot/board/rockchip/rk3399/fs-overlay-64/etc/input-event-daemon.conf</span></code> 将覆盖文件系统的 <code class="docutils literal notranslate"><span class="pre">/etc/input-event-daemon.conf</span></code> 文件。</p>
+</div>
+</div>
+<div class="section" id="buildroot-guan-wang">
+<h3>Buildroot 官网<a class="headerlink" href="#buildroot-guan-wang" title="永久链接至标题">¶</a></h3>
+<p>更加详细具体的开发技巧可到 Buildroot 官网学习。</p>
+<p><a class="reference external" href="https://buildroot.org/">Buildroot 官网</a></p>
+<p><a class="reference external" href="https://buildroot.org/downloads/manual/manual.html">Buildroot 开发手册</a></p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="ubuntu_support.html" class="btn btn-neutral float-left" title="Ubuntu 应用层支持" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Firefly Team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
