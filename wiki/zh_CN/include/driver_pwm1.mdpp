@@ -1,0 +1,25 @@
+{# ~~~~这一句是注释，为了排版，不要删除，不要理会~~~~~ #}
+
+{%- if board_name == "Firefly-RK3399" -%}
+Firefly-RK3399 开发板上有 4 路 PWM 输出，分别为 PWM0 ~ PWM3，4 路 PWM 分别使用在 EDP 背光、MIPI 背光、VDDLOG 供电、红外 IR。
+{% endif %}
+
+{%- if board_name == "AIO-3399J" -%}
+AIO-3399J 开发板上有 4 路 PWM 输出，分别为 PWM0 ~ PWM3，4 路 PWM 分别使用在 EDP 背光、MIPI 背光、VDDLOG 供电、红外 IR。
+{% endif %}
+
+{%- if board_name == "AIO-3399C" -%}
+AIO-3399C 开发板上引出有 3 路 PWM 输出，分别为：
+
+* PWM0 屏背光
+* PWM2 使用在 VDDLOG 供电
+* PWM3 使用在红外 IR
+{% endif %}
+
+{%- if board_name == "AIO-3399PRO-JD4" -%}
+AIO-3399PRO-JD4 开发板上引出有 3 路 PWM 输出，分别为：
+
+* PWM0 屏背光
+* PWM2 使用在 VDDLOG 供电
+* PWM3 使用在红外 IR
+{% endif %}

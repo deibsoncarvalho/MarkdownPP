@@ -1,45 +1,23 @@
+{#- 根据板子不同定义局部变量的值 -#}
+
+{%- if board_name == "Firefly-RK3399" -%}
+{%- set mk_file_name="firefly-rk3399" -%}
+
+{%- elif board_name == "AIO-3399J" -%}
+{%- set mk_file_name="aio-3399j" -%}
+
+{%- elif board_name == "AIO-3399C" -%}
+{%- set mk_file_name="aio-3399c" -%}
+
+{%- elif board_name == "AIO-3399PRO-JD4" -%}
+{%- set mk_file_name="aio-rk3399pro-jd4" -%}
+
+{%- endif -%}
 # 编译 Buildroot 固件
 
 本章介绍 Buildroot 固件的编译使用。
 
-## 准备工作
-
-### 下载源码
-
-下载repo工具：
-
-```bash
-mkdir linux
-cd linux
-git clone https://github.com/FireflyTeam/repo.git
-```
-
-下载 Linux-SDK：
-
-* 方法一
-
-```bash
-mkdir linux-sdk
-cd linux-sdk
-
-# 初始化repo仓库
-../repo/repo init --repo-url https://github.com/FireflyTeam/repo.git -u https://github.com/FireflyTeam/manifests.git -b linux-sdk -m rk3399/rk3399_linux_release.xml
-
-# 同步源码
-../repo/repo sync -c
-```
-
-* 方法二
-
-下载[Linux_SDK.7z](http://www.t-firefly.com/doc/download/page/id/54.html#other_186)
-
-```bash
-# 把压缩包放在上一步下载repo工具的目录下
-7z x Linux_SDK.7z
-
-# 更新代码
-repo sync -c
-```
+!INCLUDE "include/get_linux_sdk.mdpp"
 
 ### 配置编译环境
 
@@ -55,14 +33,14 @@ subversion asciidoc w3m dblatex graphviz python-matplotlib libc6:i386 libssl-dev
 liblz4-tool genext2fs lib32stdc++6
 ```
 
-## 编译SDK
+## 编译 SDK
 
 ### 配置编译文件
 
 选择开发板对应的配置文件。配置文件会链接到 `device/rockchip/.BoardConfig.mk`，查看该文件可确认当前所使用的配置文件：
 
 ```bash
-./build.sh firefly-rk3399.mk
+./build.sh {{mk_file_name}}.mk
 
 # 文件路径在 `device/rockchip/rk3399/firefly-rk3399.mk`
 ```
@@ -183,7 +161,7 @@ make
 
 需要了解的是：
 
-* 进行编译时，Buildroot 根据配置，会自动从网络获取相关的软件包，包括一些第三方库，插件，实用工具等，放在dl/目录。
+* 进行编译时，Buildroot 根据配置，会自动从网络获取相关的软件包，包括一些第三方库，插件，实用工具等，放在 `dl/` 目录。
 * 软件包会解压在 `output/build/` 目录下，然后进行编译。
 * 如果要修改软件包的源码，可以通过打补丁的方式进行修改，补丁集中放在 `package/` 目录，Buildroot 会在解压软件包时为其打上相应的补丁。
 
@@ -216,6 +194,16 @@ make
 
 更加详细具体的开发技巧可到 Buildroot 官网学习。
 
-[Buildroot 官网](https://buildroot.org/)
+[Buildroot 官网]:(https://buildroot.org/)
 
-[Buildroot 开发手册](https://buildroot.org/downloads/manual/manual.html)
+[Buildroot 开发手册]: (https://buildroot.org/downloads/manual/manual.html)
+
+{% if board_name == "Firefly-RK3399" %}
+[Linux_SDK.7z]:http://www.t-firefly.com/doc/download/page/id/3.html
+{% elif board_name == "AIO-3399J" %} 
+[Linux_SDK.7z]:http://www.t-firefly.com/doc/download/page/id/31.html
+{% elif board_name == "AIO-3399C" %}
+[Linux_SDK.7z]:http://www.t-firefly.com/doc/download/page/id/54.html#other_186
+{% elif board_name == "AIO-3399PRO-JD4" %}
+[Linux_SDK.7z]:http://www.t-firefly.com/doc/download/65.html
+{% endif %}

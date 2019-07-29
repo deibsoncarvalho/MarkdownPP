@@ -102,7 +102,7 @@
 <li class="toctree-l1"><a class="reference internal" href="upgrade_firmware.html">升级固件</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">MaskRom模式</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#jian-jie">简介</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#aio-3399j-jin-ru-maskrom">AIO-3399J 进入 MaskRom</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#firefly-rk3399-jin-ru-maskrom">Firefly-RK3399 进入 MaskRom</a></li>
 </ul>
 </li>
 </ul>
@@ -112,6 +112,12 @@
 <li class="toctree-l1"><a class="reference internal" href="linux_compile_gpt.html">编译 Ubuntu 固件 ( GPT )</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ubuntu_support.html">Ubuntu 应用层支持</a></li>
 <li class="toctree-l1"><a class="reference internal" href="buildroot_compile.html">编译 Buildroot 固件</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Android开发</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="adb_use.html">ADB 使用</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compile_android8.1_firmware.html">编译 Android8.1 固件</a></li>
+<li class="toctree-l1"><a class="reference internal" href="customize_android_firmware.html">定制 Android 固件</a></li>
 </ul>
 
             
@@ -182,20 +188,25 @@
 <div class="section" id="jian-jie">
 <h2>简介<a class="headerlink" href="#jian-jie" title="永久链接至标题">¶</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">MaskRom</span></code> 模式是设备变砖的最后一条防线。强行进入 <code class="docutils literal notranslate"><span class="pre">MaskRom</span></code> 涉及硬件操作，有一定风险，因此仅在设备进入不了 <code class="docutils literal notranslate"><span class="pre">Loader</span></code> 模式的情况下，方可尝试 <code class="docutils literal notranslate"><span class="pre">MaskRom</span></code> 模式。进入 <code class="docutils literal notranslate"><span class="pre">MaskRom</span></code> 的原理是人为的把 Flash 的数据脚与地线短接，系统会认为 Flash 数据出错，从而清除 Flash 数据。</p>
-<p>** 请小心阅读，并谨慎操作！**</p>
+<p><strong>请小心阅读，并谨慎操作！</strong></p>
 </div>
-<div class="section" id="aio-3399j-jin-ru-maskrom">
-<h2>AIO-3399J 进入 MaskRom<a class="headerlink" href="#aio-3399j-jin-ru-maskrom" title="永久链接至标题">¶</a></h2>
+<div class="section" id="firefly-rk3399-jin-ru-maskrom">
+<h2>Firefly-RK3399 进入 MaskRom<a class="headerlink" href="#firefly-rk3399-jin-ru-maskrom" title="永久链接至标题">¶</a></h2>
 <p>操作步骤如下：</p>
-<p>1、设备断开所有电源。
-2、拔出 SD 卡。
-3、用双公头 USB 线连接好设备和主机。
-4、用金属镊子接通核心板上的如下图所示的两个测试点，并保持。</p>
-<p><img alt="img/AIO-3399J_maskrom1.png" src="img/AIO-3399J_maskrom1.png" /></p>
-<p>5、设备插入电源。
-6、稍候片刻，之后松开镊子。</p>
+<ol class="simple">
+<li><p>找到 Firefly-RK3399 预留的焊点 (TP31, TP32)，在开发板的背面，如下图所示：</p></li>
+</ol>
+<p><img alt="_images/Firefly-RK3399_maskrom1.jpg" src="_images/Firefly-RK3399_maskrom1.jpg" /></p>
+<ol class="simple">
+<li><p>设备断开所有电源。</p></li>
+<li><p>拔出 SD 卡。</p></li>
+<li><p>用 USB Type-C 线连接好设备和主机。</p></li>
+<li><p>用金属镊子接通 Firefly-RK3399 预留的焊点 (TP31, TP32)，并保持。</p></li>
+<li><p>设备插入电源。</p></li>
+<li><p>稍候片刻，之后松开镊子。</p></li>
+</ol>
 <p>此时设备就会进入 MaskRom 模式。</p>
-<p><img alt="img/maskrom2.jpg" src="img/maskrom2.jpg" /></p>
+<p><img alt="_images/maskrom2.png" src="_images/maskrom2.png" /></p>
 </div>
 </div>
 

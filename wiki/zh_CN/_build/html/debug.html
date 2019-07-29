@@ -123,6 +123,12 @@
 <li class="toctree-l1"><a class="reference internal" href="ubuntu_support.html">Ubuntu 应用层支持</a></li>
 <li class="toctree-l1"><a class="reference internal" href="buildroot_compile.html">编译 Buildroot 固件</a></li>
 </ul>
+<p class="caption"><span class="caption-text">Android开发</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="adb_use.html">ADB 使用</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compile_android8.1_firmware.html">编译 Android8.1 固件</a></li>
+<li class="toctree-l1"><a class="reference internal" href="customize_android_firmware.html">定制 Android 固件</a></li>
+</ul>
 
             
           
@@ -198,7 +204,7 @@
 <li><p>CH340</p></li>
 </ul>
 <p>一般来说，采用 CH340 芯片的适配器，性能比较稳定，价格上贵一些。</p>
-<p><strong>注意：</strong> AIO-3399J 默认的波特率是 1500000，有些USB转串口芯片波特率无法达到 1500000，同一芯片的不同系列也可能会有差异，所以在选购之前一定要确认是否支持。</p>
+<p><strong>注意：</strong> Firefly-RK3399 默认的波特率是 1500000，有些USB转串口芯片波特率无法达到 1500000，同一芯片的不同系列也可能会有差异，所以在选购之前一定要确认是否支持。</p>
 </div>
 <div class="section" id="ying-jian-lian-jie">
 <h2>硬件连接<a class="headerlink" href="#ying-jian-lian-jie" title="永久链接至标题">¶</a></h2>
@@ -210,12 +216,12 @@
 <li><p>RXD，串口的输入线，接开发板串口的 RX 针</p></li>
 </ul>
 <p><strong>注意：</strong> 如使用其它串口适配器遇到 TX 和 RX 不能输入和输出的问题，可以尝试对调 TX 和 RX 的连接。</p>
-<p>AIO-3399J 串口连接图：</p>
-<p><img alt="img/AIO-3399J_debug1.jpg" src="img/AIO-3399J_debug1.jpg" /></p>
+<p>Firefly-RK3399 串口连接图：</p>
+<p><img alt="_images/Firefly-RK3399_debug1.jpg" src="_images/Firefly-RK3399_debug1.jpg" /></p>
 </div>
 <div class="section" id="chuan-kou-can-shu-pei-zhi">
 <h2>串口参数配置<a class="headerlink" href="#chuan-kou-can-shu-pei-zhi" title="永久链接至标题">¶</a></h2>
-<p>AIO-3399J 使用以下串口参数：</p>
+<p>Firefly-RK3399 使用以下串口参数：</p>
 <ul class="simple">
 <li><p>波特率：1500000</p></li>
 <li><p>数据位：8</p></li>

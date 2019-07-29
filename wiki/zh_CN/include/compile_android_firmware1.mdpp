@@ -1,0 +1,106 @@
+{# ~~~~这一句是注释，为了排版，不要删除，不要理会~~~~~ #}
+
+{%- if board_name == "Firefly-RK3399" -%}
+
+* 默认编译 HDMI+DP
+
+```
+./FFTools/make.sh -j8
+./FFTools/mkupdate/mkupdate.sh
+```
+
+* EDP7.85 编译
+
+```
+./FFTools/make.sh -j8 -d rk3399-firefly-edp -l rk3399_firefly_edp_box-userdebug
+./FFTools/mkupdate/mkupdate.sh -l rk3399_firefly_edp_box-userdebug
+```
+
+* MIPI7.85 编译
+
+```
+./FFTools/make.sh -j8 -d rk3399-firefly-mipi -l rk3399_firefly_mipi_box-userdebug
+./FFTools/mkupdate/mkupdate.sh -l rk3399_firefly_mipi_box-userdebug
+```
+{% endif %}
+
+
+
+{%- if board_name == "AIO-3399J" -%}
+### HDMI 显示编译
+
+```
+./FFTools/make.sh  -d rk3399-firefly-aio -j8 -l rk3399_firefly_aio_box-userdebug
+./FFTools/mkupdate/mkupdate.sh -l rk3399_firefly_aio_box-userdebug
+```
+
+### HDMI + LVDS 编译
+
+* 双 LVDS
+
+```
+./FFTools/make.sh  -d rk3399-firefly-aio-lvds -j8 -l rk3399_firefly_aio_lvds_box-userdebug
+./FFTools/mkupdate/mkupdate.sh -l rk3399_firefly_aio_lvds_box-userdebug
+```
+
+* 单 LVDS
+
+```
+./FFTools/make.sh  -d rk3399-firefly-aio-lvds-HSX101H40C -j8 -l rk3399_firefly_aio_lvds_box-userdebug
+./FFTools/mkupdate/mkupdate.sh -l rk3399_firefly_aio_lvds_box-userdebug
+```
+{% endif %}
+
+{%- if board_name == "AIO-3399C" -%}
+
+### HDMI 显示编译
+
+1.AIOC 标准版
+
+```
+./FFTools/make.sh  -d rk3399-firefly-aioc -j8 -l rk3399_firefly_aioc_box-userdebug
+./FFTools/mkupdate/mkupdate.sh -l rk3399_firefly_aioc_box-userdebug
+```
+
+2.AIOC AI 版
+
+```
+./FFTools/make.sh  -d rk3399-firefly-aioc-ai -j8 -l rk3399_firefly_aioc_ai_box-userdebug
+./FFTools/mkupdate/mkupdate.sh -l rk3399_firefly_aioc_ai_box-userdebug
+```
+
+### HDMI + LVDS 编译
+
+1.AIOC 标准版
+
+* 双 LVDS
+
+```
+./FFTools/make.sh  -d rk3399-firefly-aioc-lvds -j8 -l rk3399_firefly_aioc_lvds_box-userdebug
+./FFTools/mkupdate/mkupdate.sh -l rk3399_firefly_aioc_lvds_box-userdebug
+```
+
+* 单 LVDS
+
+```
+./FFTools/make.sh  -d rk3399-firefly-aioc-lvds-HSX101H40C -j8 -l rk3399_firefly_aioc_lvds_box-userdebug
+./FFTools/mkupdate/mkupdate.sh -l rk3399_firefly_aioc_lvds_box-userdebug
+
+```
+
+2.AIOC AI 版
+
+* 双 LVDS
+
+```
+./FFTools/make.sh  -d rk3399-firefly-aioc-ai-lvds -j8 -l rk3399_firefly_aioc_ai_lvds_box-userdebug
+./FFTools/mkupdate/mkupdate.sh -l rk3399_firefly_aioc_ai_lvds_box-userdebug
+```
+
+* 单 LVDS
+
+```
+./FFTools/make.sh  -d rk3399-firefly-aioc-ai-lvds-HSX101H40C -j8 -l rk3399_firefly_aioc_ai_lvds_box-userdebug
+./FFTools/mkupdate/mkupdate.sh -l rk3399_firefly_aioc_ai_lvds_box-userdebug
+```
+{% endif %}

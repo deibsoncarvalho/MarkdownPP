@@ -221,7 +221,7 @@ Playing WAVE 'Front_Center.wav' : Signed 16 bit Little Endian, Rate 48000 Hz, Mo
 
 ![](img/autostart2.png)
 
-## ABD 调试
+## ADB 调试
 
 ADB，全称 Android Debug Bridge，是 Android 的命令行调试工具，可以完成多种功能，如跟踪系统日志，上传下载文件，安装应用等。以 Firefly-RK3399 为例，为了在 Ubuntu 系统也能使用 ADB 工具进行调试，我们移植了 ADB 服务。但由于并非 Android 系统，很多 ADB 命令类似 `adb logcat`、`adb install` 等不能使用，仅作为普通的调试辅助工具，可以进行 shell 交互、上传下载文件等操作。同样的网络远程 ADB 调试也不能使用。
 

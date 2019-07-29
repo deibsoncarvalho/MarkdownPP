@@ -131,6 +131,12 @@
 <li class="toctree-l1"><a class="reference internal" href="ubuntu_support.html">Ubuntu 应用层支持</a></li>
 <li class="toctree-l1"><a class="reference internal" href="buildroot_compile.html">编译 Buildroot 固件</a></li>
 </ul>
+<p class="caption"><span class="caption-text">Android开发</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="adb_use.html">ADB 使用</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compile_android8.1_firmware.html">编译 Android8.1 固件</a></li>
+<li class="toctree-l1"><a class="reference internal" href="customize_android_firmware.html">定制 Android 固件</a></li>
+</ul>
 
             
           
@@ -198,21 +204,21 @@
 <h1>升级固件<a class="headerlink" href="#sheng-ji-gu-jian" title="永久链接至标题">¶</a></h1>
 <div class="section" id="qian-yan">
 <h2>前言<a class="headerlink" href="#qian-yan" title="永久链接至标题">¶</a></h2>
-<p>本文介绍了如何将主机上的固件文件，通过 双公头 USB 数据线烧录到开发板的闪存中。升级时，需要根据主机操作系统和固件类型来选择合适的升级方式。</p>
+<p>本文介绍了如何将主机上的固件文件，通过 Type-C 数据线烧录到开发板的闪存中。升级时，需要根据主机操作系统和固件类型来选择合适的升级方式。</p>
 </div>
 <div class="section" id="zhun-bei-gong-zuo">
 <h2>准备工作<a class="headerlink" href="#zhun-bei-gong-zuo" title="永久链接至标题">¶</a></h2>
 <ul class="simple">
-<li><p>AIO-3399J 开发板</p></li>
+<li><p>Firefly-RK3399 开发板</p></li>
 <li><p>固件</p></li>
 <li><p>主机</p></li>
-<li><p>良好的双公头 USB 数据线文介绍了如何将主机上的固件文件，通过双公头 USB 数据线烧录到开发板的闪存中。升级时，需要根据主机操作系统和固件类型来选择合适的升级方式。</p></li>
+<li><p>良好的 Type-C 数据线</p></li>
 </ul>
 <p>固件文件一般有两种：</p>
 <ul class="simple">
 <li><p>单个统一固件 update.img, 将启动加载器、参数和所有分区镜像都打包到一起，用于固件发布。</p></li>
 <li><p>多个分区镜像,如 kernel.img, rootfs.img, recovery.img 等，在开发阶段生成。</p></li>
-<li><p>可以在这里找到已编译好的统一 <a class="reference external" href="http://http://www.t-firefly.com/doc/download/page/id/31.html#other_80">AIO-3399J 固件</a>，下载后解压。也可以参考编译固件的说明自行编译。</p></li>
+<li><p>可以在这里找到已编译好的统一 <a class="reference external" href="http://www.t-firefly.com/doc/download/page/id/3.html#other_14">Firefly-RK3399 固件</a>，下载后解压。也可以参考编译固件的说明自行编译。</p></li>
 </ul>
 <p>主机操作系统支持：</p>
 <blockquote>
@@ -239,17 +245,17 @@
 <h3>连接设备<a class="headerlink" href="#lian-jie-she-bei" title="永久链接至标题">¶</a></h3>
 <p>设备进入升级模式的方式如下：</p>
 <ul class="simple">
-<li><p>一种方法是设备先断开电源适配器和双公头 USB 数据线的连接：</p>
+<li><p>一种方法是设备先断开电源适配器和 Type-C 数据线的连接：</p>
 <ul>
-<li><p>双公头 USB 数据线一端连接主机，一端连接开发板</p></li>
+<li><p>USB 一端连接主机，Type-C 一端连接开发板 Type-C 母口</p></li>
 <li><p>按住设备上的 RECOVERY （恢复）键并保持</p></li>
 <li><p>接上电源</p></li>
 <li><p>大约两秒钟后，松开 RECOVERY 键</p></li>
 </ul>
 </li>
-<li><p>另一种方法，无需断开电源适配器和双公头 USB 数据线的连接：</p>
+<li><p>另一种方法，无需断开电源适配器和 Type-C 数据线的连接：</p>
 <ul>
-<li><p>双公头 USB 数据线一端连接主机，一端连接开发板</p></li>
+<li><p>USB 一端连接主机，Type-C 一端连接开发板 Type-C 母口</p></li>
 <li><p>按住设备上的 RECOVERY （恢复）键并保持</p></li>
 <li><p>短按一下 RESET（复位）键</p></li>
 <li><p>大约两秒钟后，松开 RECOVERY 键</p></li>
@@ -304,7 +310,7 @@
 <p><strong><font color=#ff0000 >注意</font></strong>:不同固件使用的工具版本可能不同,请根据<a class="reference external" href="upgrade_table.html">烧写须知</a>下载对应的版本</p>
 <div class="section" id="upgrade-tool">
 <h3>upgrade_tool<a class="headerlink" href="#upgrade-tool" title="永久链接至标题">¶</a></h3>
-<p>下载 <a class="reference external" href="http://www.t-firefly.com/doc/download/page/id/31.html#linux_12">Linux_Upgrade_Tool</a> (<strong>系统是 Android8.1 则需要 Linux_Upgrde_Tool_for_android8.1</strong>), 并按以下方法安装到系统中，方便调用：</p>
+<p>下载 <a class="reference external" href="http://www.t-firefly.com/doc/download/page/id/3.html#linux_12">Linux_Upgrade_Tool</a> (<strong>系统是 Android8.1 则需要 Linux_Upgrde_Tool_for_android8.1</strong>), 并按以下方法安装到系统中，方便调用：</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">unzip</span> <span class="n">Linux_Upgrade_Tool_xxxx</span><span class="o">.</span><span class="n">zip</span>
 <span class="n">cd</span> <span class="n">Linux_UpgradeTool_xxxx</span>
 <span class="n">sudo</span> <span class="n">mv</span> <span class="n">upgrade_tool</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="nb">bin</span>

@@ -1,0 +1,124 @@
+## 准备连接
+
+{# ~~~~这一句是注释，为了排版，不要删除，不要理会~~~~~ #}
+
+{%- if board_name == "Firefly-RK3399" -%}
+
+在开发板上进入选项 -> 开发人员选项，勾上 `USB 调试` 选项。Firefly-RK3399 用 Type-C 数据线连接设备和主机。
+
+### Android8.1
+
+*	设置 -> 系统 -> 关于平板 -> 点击5下版本号 -> 系统 -> 开发者选项 -> Root 授权 -> 打开 ADB
+*	连接命令:
+
+```
+1.(首次启动) --更新 SDK 到 (commit 8034582b4cf130132af20b212af7854af5746bcc) 后可以跳过步骤1直接进入步骤2
+adb root
+adb disable-verity
+adb reboot
+2.(重启后)
+adb root
+adb remount
+```
+
+##### 网络 ADB
+
+*    设置 -> 开发者选项 -> 网络 ADB 调试
+
+查看开发板 IP 地址，PC 端通过网络访问：
+
+```
+adb connect + IP
+adb shell
+```
+{% endif %}
+
+
+
+
+{%- if board_name == "AIO-3399J" -%}
+
+在开发板上进入选项 -> 开发人员选项，勾上 `USB 调试` 选项。AIO-3399J 用双公头 USB 数据线连接设备 USB3.0 双层上口(工程样机接下口)和主机。
+
+### Android7.1
+
+OTG ADB
+
+* 设置 -> USB -> 连接到 PC
+
+### Android8.1
+
+1. 设置 -> 系统 -> 关于平板 -> 点击5下版本号 -> 系统 -> 开发者选项 -> Root 授权 -> 打开 ADB
+2. 设置 -> 系统 -> Connect to PC
+3. 连接命令：
+
+```
+1.(首次启动) --更新 SDK 到 (commit 8034582b4cf130132af20b212af7854af5746bcc) 后可以跳过步骤1直接进入步骤2
+adb root
+adb disable-verity
+adb reboot
+2.(重启后)
+adb root
+adb remount
+```
+
+##### 网络 ADB
+
+*    设置 -> 开发者选项 -> 网络 ADB 调试
+
+查看开发板 IP 地址，PC 端通过网络访问：
+
+```
+adb connect + IP
+adb shell
+```
+{% endif %}
+
+
+
+{%- if board_name == "AIO-3399C" -%}
+
+### USB 数据线 ADB
+
+* AIO-3399C 用 Type-C 数据线连接设备 Type-C 口和主机。
+* AIO-3399C(AI) 用双端公头 USB 数据线连接设备蓝色 USB 3.0 口和主机,还需要在 AI0-3399C(AI) 勾上 ***设置 -> USB -> Connect to PC*** 。
+
+![](img/AIO-3399C_adb_use1.png)
+
+当设备端状态栏提示 `USB debugging connected` 时，便可进行调试：
+
+```
+adb devices
+adb shell
+```
+
+### 网络 ADB
+
+* 设备端接入局域网后，还需要打开网络 ADB 调试开关 ***设置 -> 开发者选项 -> 网络ADB调试***
+
+查看开发板的 IP 地址，PC 端通过网络访问：
+
+```
+adb connect + IP
+adb shell
+```
+{% endif %}
+
+
+
+
+{%- if board_name == "AIO-3399PRO-JD4" -%}
+在开发板上进入选项 -> 开发人员选项，勾上 `usb 调试`选项。AIO-3399PRO-JD4 用双公头 USB 数据线连接设备 USB3.0 口和主机。
+
++ host/device 模式切换
++ OTG ADB
+  - 设置 -> connected devices(已关联的设备) -> connect to pc(连接到 PC)
+ 
++ 网络ADB
+  - 查看 rk3399pro 的 IP 地址，PC 端通过网络访问。例:
+
+```
+adb connect + IP
+adb shell
+```
+{% endif %}

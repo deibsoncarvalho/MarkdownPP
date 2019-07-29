@@ -6,38 +6,58 @@
 
 ### 下载源码
 
-下载repo工具：
+下载 repo 工具：
 
-```bash
+```
 mkdir linux
 cd linux
 git clone https://github.com/FireflyTeam/repo.git
 ```
 
-下载 Linux-SDK：
+#### 下载完整 SDK
 
 * 方法一
 
-```bash
+初始化 repo 仓库：
+
+```
 mkdir linux-sdk
 cd linux-sdk
-
-# 初始化repo仓库
 ../repo/repo init --repo-url https://github.com/FireflyTeam/repo.git -u https://github.com/FireflyTeam/manifests.git -b linux-sdk -m rk3399/rk3399_linux_release.xml
 
-# 同步源码
+
+```
+
+同步源码:
+
+```
 ../repo/repo sync -c
 ```
 
-* 方法二
+同步过程中,网络波动会导致下载速度过低中断同步,可以使用下面脚本同步代码:
 
-下载[Linux_SDK.7z](http://www.t-firefly.com/doc/download/page/id/54.html#other_186)
+```
+#! /bin/bash
 
-```bash
-# 把压缩包放在上一步下载repo工具的目录下
+../repo/repo sync -c
+
+while [ $? -ne 0 ] ;
+do
+        ../repo/repo sync -c; 
+done
+```
+
+* 方法二(国内用户推荐使用)
+
+因为国内用户可能 git 拉代码会比较慢，所以官方提供了基础得源码包 `Linux_SDK.7z`.
+
+下载 [Linux_SDK.7z]
+
+```
+#1.把压缩包放在上一步下载repo工具的目录下
 7z x Linux_SDK.7z
 
-# 更新代码
+#2.更新代码
 repo sync -c
 ```
 
@@ -55,7 +75,7 @@ subversion asciidoc w3m dblatex graphviz python-matplotlib libc6:i386 libssl-dev
 liblz4-tool genext2fs lib32stdc++6
 ```
 
-## 编译SDK
+## 编译 SDK
 
 ### 配置编译文件
 
@@ -183,7 +203,7 @@ make
 
 需要了解的是：
 
-* 进行编译时，Buildroot 根据配置，会自动从网络获取相关的软件包，包括一些第三方库，插件，实用工具等，放在dl/目录。
+* 进行编译时，Buildroot 根据配置，会自动从网络获取相关的软件包，包括一些第三方库，插件，实用工具等，放在 `dl/` 目录。
 * 软件包会解压在 `output/build/` 目录下，然后进行编译。
 * 如果要修改软件包的源码，可以通过打补丁的方式进行修改，补丁集中放在 `package/` 目录，Buildroot 会在解压软件包时为其打上相应的补丁。
 
@@ -216,6 +236,9 @@ make
 
 更加详细具体的开发技巧可到 Buildroot 官网学习。
 
-[Buildroot 官网](https://buildroot.org/)
+[Buildroot 官网]:(https://buildroot.org/)
 
-[Buildroot 开发手册](https://buildroot.org/downloads/manual/manual.html)
+[Buildroot 开发手册]: (https://buildroot.org/downloads/manual/manual.html)
+
+
+[Linux_SDK.7z]:http://www.t-firefly.com/doc/download/page/id/3.html

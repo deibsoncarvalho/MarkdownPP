@@ -2,19 +2,19 @@
 
 ## 前言
 
-AIO-3399J 有灵活的启动方式。一般情况下，除非硬件损坏，AIO-3399J 开发板是不会变砖的。
+Firefly-RK3399 有灵活的启动方式。一般情况下，除非硬件损坏，Firefly-RK3399 开发板是不会变砖的。
 
 如果在升级过程中出现意外，bootloader 损坏，导致无法重新升级，此时仍可以进入 `MaskRom` 模式来修复。
 
 ## 加载方式
 
-AIO-3399J 有 20KB 的 BootRom 和 100KB 的内部 SRAM，支持从以下设备加载系统：
+Firefly-RK3399 有 20KB 的 BootRom 和 100KB 的内部 SRAM，支持从以下设备加载系统：
 
 * SPI 接口
 * eMMC 接口
 * SDMMC 接口
 
-另外 AIO-3399J 支持从 USB OTG 接口下载系统代码。
+另外 Firefly-RK3399 支持从 Type-C 接口下载系统代码。
 
 ## 启动次序
 
@@ -28,7 +28,7 @@ AIO-3399J 有 20KB 的 BootRom 和 100KB 的内部 SRAM，支持从以下设备�
 
 ## 启动模式
 
-AIO-3399J有三种启动模式：
+Firefly-RK3399有三种启动模式：
 
 * Normal 模式
 * Loader 模式

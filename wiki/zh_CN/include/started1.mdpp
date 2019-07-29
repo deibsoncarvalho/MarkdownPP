@@ -25,11 +25,11 @@
 
 *    发货清单参考
 
-![](img/Firefly-RK3399_start1.png)
+![](img/Firefly-RK3399_started1.png)
 
 * 安装方法
 
-![](img/Firefly-RK3399_start2.jpg)
+![](img/Firefly-RK3399_started2.jpg)
 
 Firefly-RK3399_支持从以下存储设备启动：
 
@@ -65,7 +65,7 @@ Firefly-RK3399_支持从以下存储设备启动：
 
 *    发货清单参考
 
-![](img/AIO-3399J_start1.jpg)
+![](img/AIO-3399J_started1.jpg)
 {% endif %}
 
 {%- if board_name == "AIO-3399C" -%}
@@ -94,7 +94,7 @@ Firefly-RK3399_支持从以下存储设备启动：
 
 *    发货清单参考
 
-![](img/AIO-3399C_start1.jpg)
+![](img/AIO-3399C_started1.png)
 {% endif %}
 
 {%- if board_name == "AIO-3399PRO-JD4" -%}

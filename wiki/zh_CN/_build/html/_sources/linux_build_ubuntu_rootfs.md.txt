@@ -10,8 +10,8 @@
 
 下载和解压 ubuntu-core
 
-AIO-3399J Ubuntu 根文件系统是基于 Ubuntu base 16.04 来创建的。用户可以
-到
+Firefly-RK3399 Ubuntu 根文件系统是基于 Ubuntu base 16.04 来创建的。用
+户可以到
 
 ubuntu cdimg
 

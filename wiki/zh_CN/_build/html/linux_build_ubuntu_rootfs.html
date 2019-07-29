@@ -127,6 +127,12 @@
 <li class="toctree-l1"><a class="reference internal" href="ubuntu_support.html">Ubuntu 应用层支持</a></li>
 <li class="toctree-l1"><a class="reference internal" href="buildroot_compile.html">编译 Buildroot 固件</a></li>
 </ul>
+<p class="caption"><span class="caption-text">Android开发</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="adb_use.html">ADB 使用</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compile_android8.1_firmware.html">编译 Android8.1 固件</a></li>
+<li class="toctree-l1"><a class="reference internal" href="customize_android_firmware.html">定制 Android 固件</a></li>
+</ul>
 
             
           
@@ -203,7 +209,7 @@
 </div>
 <div class="section" id="xia-zai-he-jie-ya-ubuntu-core">
 <h3>下载和解压 ubuntu-core<a class="headerlink" href="#xia-zai-he-jie-ya-ubuntu-core" title="永久链接至标题">¶</a></h3>
-<p>AIO-3399J Ubuntu 根文件系统是基于 Ubuntu base 16.04 来创建的。用户可以到 <a class="reference external" href="http://cdimage.ubuntu.com/ubuntu-base/releases/16.04/release/">ubuntu cdimg</a> 下载，选择下载 ubuntu-base-16.04.1-base-arm64.tar.gz 。</p>
+<p>Firefly-RK3399 Ubuntu 根文件系统是基于 Ubuntu base 16.04 来创建的。用户可以到 <a class="reference external" href="http://cdimage.ubuntu.com/ubuntu-base/releases/16.04/release/">ubuntu cdimg</a> 下载，选择下载 ubuntu-base-16.04.1-base-arm64.tar.gz 。</p>
 <p>下载完之后，创建临时文件夹并解压根文件系统：</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="n">temp</span>
 <span class="n">sudo</span> <span class="n">tar</span> <span class="o">-</span><span class="n">xpf</span> <span class="n">ubuntu</span><span class="o">-</span><span class="n">base</span><span class="o">-</span><span class="mf">16.04</span><span class="o">.</span><span class="mi">1</span><span class="o">-</span><span class="n">base</span><span class="o">-</span><span class="n">arm64</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span> <span class="o">-</span><span class="n">C</span> <span class="n">temp</span>

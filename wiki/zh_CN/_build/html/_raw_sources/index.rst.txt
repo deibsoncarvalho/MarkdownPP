@@ -2,9 +2,10 @@
    sphinx-quickstart on Wed May 3 14:17:57 2018.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
-
-Welcome to Firefly-RK3399 Manual
+Welcome to AIO-3399PRO-JD4 Manual
 =====================================
+
+
 
 .. toctree::
    :glob:
@@ -40,7 +41,6 @@ Welcome to Firefly-RK3399 Manual
    :caption: Android开发
    
    adb_use
-   compile_android_firmware
    compile_android8.1_firmware
    customize_android_firmware
    
@@ -96,4 +96,3 @@ Welcome to Firefly-RK3399 Manual
    
    interface_definition
    hardware_doc
-

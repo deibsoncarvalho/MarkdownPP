@@ -1,0 +1,418 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="zh-CN" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="zh-CN" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>编译 Android 固件 &mdash; Firefly Wiki</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script type="text/javascript" src="_static/translations.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="搜索" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Firefly-RK3399 Manual
+          
+
+          
+            
+            <img src="_static/Logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">上手教程</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="started.html">入手指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="debug.html">串口调试</a></li>
+</ul>
+<p class="caption"><span class="caption-text">烧写固件</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="bootmode.html">启动模式说明</a></li>
+<li class="toctree-l1"><a class="reference internal" href="upgrade_table.html">烧写须知(重要)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="upgrade_firmware.html">升级固件</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maskrom_mode.html">MaskRom模式</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Linux开发</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="linux_build_ubuntu_rootfs.html">创建 Ubuntu 根文件系统</a></li>
+<li class="toctree-l1"><a class="reference internal" href="linux_compile_gpt.html">编译 Ubuntu 固件 ( GPT )</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ubuntu_support.html">Ubuntu 应用层支持</a></li>
+<li class="toctree-l1"><a class="reference internal" href="buildroot_compile.html">编译 Buildroot 固件</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Android开发</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="adb_use.html">ADB 使用</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compile_android8.1_firmware.html">编译 Android8.1 固件</a></li>
+<li class="toctree-l1"><a class="reference internal" href="customize_android_firmware.html">定制 Android 固件</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Firefly-RK3399 Manual</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>编译 Android 固件</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/compile_android_firmware.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="bian-yi-android-gu-jian">
+<h1>编译 Android 固件<a class="headerlink" href="#bian-yi-android-gu-jian" title="永久链接至标题">¶</a></h1>
+<div class="section" id="zhun-bei-gong-zuo">
+<h2>准备工作<a class="headerlink" href="#zhun-bei-gong-zuo" title="永久链接至标题">¶</a></h2>
+<p>编译 Android 对机器的配置要求较高：</p>
+<ul class="simple">
+<li><p>64 位 CPU</p></li>
+<li><p>16GB 物理内存+交换内存</p></li>
+<li><p>30GB 空闲的磁盘空间用于构建，源码树另外占用大约 25GB</p></li>
+</ul>
+<p>官方推荐 Ubuntu 14.04 操作系统，经测试，Ubuntu 12.04 也可以编译运行成功，只需要满足 <a class="reference external" href="http://source.android.com/source/building.html">http://source.android.com/source/building.html</a> 里的软硬件配置即可。
+编译环境的初始化可参考 <a class="reference external" href="http://source.android.com/source/initializing.html">http://source.android.com/source/initializing.html</a> 。</p>
+<ul class="simple">
+<li><p>安装 OpenJDK 8:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">openjdk</span><span class="o">-</span><span class="mi">8</span><span class="o">-</span><span class="n">jdk</span>
+</pre></div>
+</div>
+<p>提示：安装 openjdk-8-jdk，会更改 JDK 的默认链接，这时可用：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo update-alternatives --config java
+$ sudo update-alternatives --config javac
+</pre></div>
+</div>
+<p>来切换 JDK 版本。SDK 在找不到操作系统默认 JDK 的时候会使用内部设定的 JDK 路径，因此，为了让同一台机器可以编译 Android 5.1 及之前的版本，去掉链接更方便：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo /var/lib/dpkg/info/openjdk-8-jdk:amd64.prerm remove
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Ubuntu 12.04 软件包安装：</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">git</span> <span class="n">gnupg</span> <span class="n">flex</span> <span class="n">bison</span> <span class="n">gperf</span> <span class="n">build</span><span class="o">-</span><span class="n">essential</span> \
+<span class="nb">zip</span> <span class="n">curl</span> <span class="n">libc6</span><span class="o">-</span><span class="n">dev</span> <span class="n">libncurses5</span><span class="o">-</span><span class="n">dev</span><span class="p">:</span><span class="n">i386</span> <span class="n">x11proto</span><span class="o">-</span><span class="n">core</span><span class="o">-</span><span class="n">dev</span> \
+<span class="n">libx11</span><span class="o">-</span><span class="n">dev</span><span class="p">:</span><span class="n">i386</span> <span class="n">libreadline6</span><span class="o">-</span><span class="n">dev</span><span class="p">:</span><span class="n">i386</span> <span class="n">libgl1</span><span class="o">-</span><span class="n">mesa</span><span class="o">-</span><span class="n">glx</span><span class="p">:</span><span class="n">i386</span> \
+<span class="n">g</span><span class="o">++-</span><span class="n">multilib</span> <span class="n">mingw32</span> <span class="n">tofrodos</span> <span class="n">gcc</span><span class="o">-</span><span class="n">multilib</span> <span class="n">ia32</span><span class="o">-</span><span class="n">libs</span> \
+<span class="n">python</span><span class="o">-</span><span class="n">markdown</span> <span class="n">libxml2</span><span class="o">-</span><span class="n">utils</span> <span class="n">xsltproc</span> <span class="n">zlib1g</span><span class="o">-</span><span class="n">dev</span><span class="p">:</span><span class="n">i386</span> \
+<span class="n">lzop</span> <span class="n">libssl1</span><span class="o">.</span><span class="mf">0.0</span> <span class="n">libssl</span><span class="o">-</span><span class="n">dev</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Ubuntu 14.04 软件包安装：</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">git</span><span class="o">-</span><span class="n">core</span> <span class="n">gnupg</span> <span class="n">flex</span> <span class="n">bison</span> <span class="n">gperf</span> <span class="n">libsdl1</span><span class="o">.</span><span class="mi">2</span><span class="o">-</span><span class="n">dev</span> \
+<span class="n">libesd0</span><span class="o">-</span><span class="n">dev</span> <span class="n">libwxgtk2</span><span class="o">.</span><span class="mi">8</span><span class="o">-</span><span class="n">dev</span> <span class="n">squashfs</span><span class="o">-</span><span class="n">tools</span> <span class="n">build</span><span class="o">-</span><span class="n">essential</span> <span class="nb">zip</span> <span class="n">curl</span> \
+<span class="n">libncurses5</span><span class="o">-</span><span class="n">dev</span> <span class="n">zlib1g</span><span class="o">-</span><span class="n">dev</span> <span class="n">pngcrush</span> <span class="n">schedtool</span> <span class="n">libxml2</span> <span class="n">libxml2</span><span class="o">-</span><span class="n">utils</span> \
+<span class="n">xsltproc</span> <span class="n">lzop</span> <span class="n">libc6</span><span class="o">-</span><span class="n">dev</span> <span class="n">schedtool</span> <span class="n">g</span><span class="o">++-</span><span class="n">multilib</span> <span class="n">lib32z1</span><span class="o">-</span><span class="n">dev</span> <span class="n">lib32ncurses5</span><span class="o">-</span><span class="n">dev</span> \
+<span class="n">lib32readline</span><span class="o">-</span><span class="n">gplv2</span><span class="o">-</span><span class="n">dev</span> <span class="n">gcc</span><span class="o">-</span><span class="n">multilib</span> <span class="n">libswitch</span><span class="o">-</span><span class="n">perl</span> \
+<span class="n">libssl1</span><span class="o">.</span><span class="mf">0.0</span> <span class="n">libssl</span><span class="o">-</span><span class="n">dev</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="xia-zai-android-sdk">
+<h2>下载 Android SDK<a class="headerlink" href="#xia-zai-android-sdk" title="永久链接至标题">¶</a></h2>
+<p><strong>Android SDK 源码包比较大,可以通过如下方式获取 Android7.1 源码包：</strong>
+<a class="reference external" href="http://www.t-firefly.com/doc/download/page/id/3.html#other_18">下载链接</a></p>
+<p>下载完成后先验证一下 MD5 码：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ md5sum /path/to/Firefly-RK3399_Android7.1.2_git_20180126.7z
+
+699cff05bfa39a341e7aae3857cea4a7  Firefly-RK3399_Android7.1.2_git_20180126.7z
+</pre></div>
+</div>
+<p>确认无误后，就可以解压：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="o">~/</span><span class="n">proj</span><span class="o">/</span><span class="n">firefly</span><span class="o">-</span><span class="n">rk3399</span>
+<span class="n">cd</span> <span class="o">~/</span><span class="n">proj</span><span class="o">/</span><span class="n">firefly</span><span class="o">-</span><span class="n">rk3399</span>
+<span class="mi">7</span><span class="n">z</span> <span class="n">x</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">Firefly</span><span class="o">-</span><span class="n">RK3399_Android7</span><span class="o">.</span><span class="mf">1.2</span><span class="n">_git_20180126</span><span class="o">.</span><span class="mi">7</span><span class="n">z</span> <span class="o">-</span><span class="n">r</span> <span class="o">-</span><span class="n">o</span><span class="o">./</span>
+<span class="n">git</span> <span class="n">reset</span> <span class="o">--</span><span class="n">hard</span>
+</pre></div>
+</div>
+<p>注意：解压后务必要先更新下远程仓库。以下为从 gitlab 处更新的方法：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># 进入 SDK 根目录</span>
+<span class="n">cd</span> <span class="o">~/</span><span class="n">proj</span><span class="o">/</span><span class="n">firefly</span><span class="o">-</span><span class="n">rk3399</span>
+<span class="c1"># 如果没有拉取远程仓库,需要先拉取对应 bundle 仓库</span>
+<span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">gitlab</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">TeeFirefly</span><span class="o">/</span><span class="n">rk3399</span><span class="o">-</span><span class="n">nougat</span><span class="o">-</span><span class="n">bundle</span><span class="o">.</span><span class="n">git</span> <span class="o">.</span><span class="n">bundle</span>
+<span class="c1"># 更新 SDK，并且后续更新不需要再次拉取远程仓库，直接执行以下命令即可</span>
+<span class="o">.</span><span class="n">bundle</span><span class="o">/</span><span class="n">update</span>
+<span class="c1"># 按照提示已经更新内容到 FETCH_HEAD，同步 FETCH_HEAD 到 firefly-rk3399 分支</span>
+<span class="n">git</span> <span class="n">rebase</span> <span class="n">FETCH_HEAD</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="shi-yong-firefly-guan-fang-jiao-ben-bian-yi">
+<h2>使用 Firefly 官方脚本编译<a class="headerlink" href="#shi-yong-firefly-guan-fang-jiao-ben-bian-yi" title="永久链接至标题">¶</a></h2>
+<ul class="simple">
+<li><p>单独编译 kernel：</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">~/</span><span class="n">proj</span><span class="o">/</span><span class="n">firefly</span><span class="o">-</span><span class="n">rk3399</span><span class="o">/</span>
+<span class="o">./</span><span class="n">FFTools</span><span class="o">/</span><span class="n">make</span><span class="o">.</span><span class="n">sh</span> <span class="o">-</span><span class="n">k</span> <span class="o">-</span><span class="n">j8</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>单独编译 uboot：</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">~/</span><span class="n">proj</span><span class="o">/</span><span class="n">firefly</span><span class="o">-</span><span class="n">rk3399</span><span class="o">/</span>
+<span class="o">./</span><span class="n">FFTools</span><span class="o">/</span><span class="n">make</span><span class="o">.</span><span class="n">sh</span> <span class="o">-</span><span class="n">u</span> <span class="o">-</span><span class="n">j8</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>单独编译 Android 上层：</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">~/</span><span class="n">proj</span><span class="o">/</span><span class="n">firefly</span><span class="o">-</span><span class="n">rk3399</span><span class="o">/</span>
+<span class="o">./</span><span class="n">FFTools</span><span class="o">/</span><span class="n">make</span><span class="o">.</span><span class="n">sh</span> <span class="o">-</span><span class="n">a</span> <span class="o">-</span><span class="n">j8</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>同时编译 ubooot、kernel、android：</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">~/</span><span class="n">proj</span><span class="o">/</span><span class="n">firefly</span><span class="o">-</span><span class="n">rk3399</span><span class="o">/</span>
+<span class="o">./</span><span class="n">FFTools</span><span class="o">/</span><span class="n">make</span><span class="o">.</span><span class="n">sh</span> <span class="o">-</span><span class="n">j8</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="firefly-rk3399-chan-pin-bian-yi-fang-fa">
+<h2>Firefly-RK3399 产品编译方法<a class="headerlink" href="#firefly-rk3399-chan-pin-bian-yi-fang-fa" title="永久链接至标题">¶</a></h2>
+<ul class="simple">
+<li><p>默认编译 HDMI+DP</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">FFTools</span><span class="o">/</span><span class="n">make</span><span class="o">.</span><span class="n">sh</span> <span class="o">-</span><span class="n">j8</span>
+<span class="o">./</span><span class="n">FFTools</span><span class="o">/</span><span class="n">mkupdate</span><span class="o">/</span><span class="n">mkupdate</span><span class="o">.</span><span class="n">sh</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>EDP7.85 编译</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">FFTools</span><span class="o">/</span><span class="n">make</span><span class="o">.</span><span class="n">sh</span> <span class="o">-</span><span class="n">j8</span> <span class="o">-</span><span class="n">d</span> <span class="n">rk3399</span><span class="o">-</span><span class="n">firefly</span><span class="o">-</span><span class="n">edp</span> <span class="o">-</span><span class="n">l</span> <span class="n">rk3399_firefly_edp_box</span><span class="o">-</span><span class="n">userdebug</span>
+<span class="o">./</span><span class="n">FFTools</span><span class="o">/</span><span class="n">mkupdate</span><span class="o">/</span><span class="n">mkupdate</span><span class="o">.</span><span class="n">sh</span> <span class="o">-</span><span class="n">l</span> <span class="n">rk3399_firefly_edp_box</span><span class="o">-</span><span class="n">userdebug</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>MIPI7.85 编译</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">FFTools</span><span class="o">/</span><span class="n">make</span><span class="o">.</span><span class="n">sh</span> <span class="o">-</span><span class="n">j8</span> <span class="o">-</span><span class="n">d</span> <span class="n">rk3399</span><span class="o">-</span><span class="n">firefly</span><span class="o">-</span><span class="n">mipi</span> <span class="o">-</span><span class="n">l</span> <span class="n">rk3399_firefly_mipi_box</span><span class="o">-</span><span class="n">userdebug</span>
+<span class="o">./</span><span class="n">FFTools</span><span class="o">/</span><span class="n">mkupdate</span><span class="o">/</span><span class="n">mkupdate</span><span class="o">.</span><span class="n">sh</span> <span class="o">-</span><span class="n">l</span> <span class="n">rk3399_firefly_mipi_box</span><span class="o">-</span><span class="n">userdebug</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="shou-dong-bian-yi-firefly-rk3399">
+<h2>手动编译 Firefly-RK3399<a class="headerlink" href="#shou-dong-bian-yi-firefly-rk3399" title="永久链接至标题">¶</a></h2>
+<p>编译前执行如下命令配置环境变量：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+export PATH=$JAVA_HOME/bin:$PATH
+export CLASSPATH=.:$JAVA_HOME/lib:$JAVA_HOME/lib/tools.jar
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>编译 kernel：</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">~/</span><span class="n">proj</span><span class="o">/</span><span class="n">firefly</span><span class="o">-</span><span class="n">rk3399</span><span class="o">/</span><span class="n">kernel</span><span class="o">/</span>
+<span class="n">make</span> <span class="n">ARCH</span><span class="o">=</span><span class="n">arm64</span> <span class="n">firefly_defconfig</span>
+<span class="n">make</span> <span class="o">-</span><span class="n">j8</span> <span class="n">ARCH</span><span class="o">=</span><span class="n">arm64</span> <span class="n">rk3399</span><span class="o">-</span><span class="n">firefly</span><span class="o">.</span><span class="n">img</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>编译 uboot：</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">~/</span><span class="n">proj</span><span class="o">/</span><span class="n">firefly</span><span class="o">-</span><span class="n">rk3399</span><span class="o">/</span><span class="n">u</span><span class="o">-</span><span class="n">boot</span><span class="o">/</span>
+<span class="n">make</span> <span class="n">rk3399_box_defconfig</span>
+<span class="n">make</span> <span class="n">ARCHV</span><span class="o">=</span><span class="n">aarch64</span> <span class="o">-</span><span class="n">j8</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>编译 Android：</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">~/</span><span class="n">proj</span><span class="o">/</span><span class="n">firefly</span><span class="o">-</span><span class="n">rk3399</span><span class="o">/</span>
+<span class="n">source</span> <span class="n">build</span><span class="o">/</span><span class="n">envsetup</span><span class="o">.</span><span class="n">sh</span>
+<span class="n">lunch</span> <span class="n">rk3399_firefly_box</span><span class="o">-</span><span class="n">userdebug</span>
+<span class="n">make</span> <span class="o">-</span><span class="n">j8</span>
+<span class="o">./</span><span class="n">mkimage</span><span class="o">.</span><span class="n">sh</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="da-bao-cheng-tong-yi-gu-jian-update-img">
+<h2>打包成统一固件 update.img<a class="headerlink" href="#da-bao-cheng-tong-yi-gu-jian-update-img" title="永久链接至标题">¶</a></h2>
+<p>编译完可以用 Firefly 官方的脚本打包成统一固件，执行如下命令：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">FFTools</span><span class="o">/</span><span class="n">mkupdate</span><span class="o">/</span><span class="n">mkupdate</span><span class="o">.</span><span class="n">sh</span> <span class="n">update</span>
+</pre></div>
+</div>
+<p>打包完成后将在 <code class="docutils literal notranslate"><span class="pre">rockdev/Image-rk3399_firefly_box/</span></code> 下生成统一固件：<code class="docutils literal notranslate"><span class="pre">update.img</span></code></p>
+<p>在 Windows 下打包统一固件 <code class="docutils literal notranslate"><span class="pre">update.img</span></code> 也很简单，将编译生成的文件拷贝到 AndroidTool 的 <code class="docutils literal notranslate"><span class="pre">rockdev\Image</span></code> 目录中，然后运行 <code class="docutils literal notranslate"><span class="pre">rockdev</span></code> 目录下的 <code class="docutils literal notranslate"><span class="pre">mkupdate.bat</span></code> 批处理文件即可创建 <code class="docutils literal notranslate"><span class="pre">update.img</span></code> 并存放到 <code class="docutils literal notranslate"><span class="pre">rockdev\Image</span></code> 目录里。</p>
+</div>
+<div class="section" id="shao-xie-fen-qu-ying-xiang">
+<h2>烧写分区映像<a class="headerlink" href="#shao-xie-fen-qu-ying-xiang" title="永久链接至标题">¶</a></h2>
+<p>编译的时候执行 <code class="docutils literal notranslate"><span class="pre">./mkimage.sh</span></code> 会重新打包 <code class="docutils literal notranslate"><span class="pre">boot.img</span></code> 和 <code class="docutils literal notranslate"><span class="pre">system.img</span></code>, 并将其它相关的映像文件拷贝到目录 <code class="docutils literal notranslate"><span class="pre">rockdev/Image-rk3399_firefly_box/</span></code> 中。以下列出一般固件用到的映像文件：</p>
+<ul class="simple">
+<li><p>boot.img ：Android 的初始文件映像，负责初始化并加载 system 分区。</p></li>
+<li><p>kernel.img ：内核映像。</p></li>
+<li><p>misc.img ：misc 分区映像，负责启动模式切换和急救模式的参数传递。</p></li>
+<li><p>parameter.txt ：emmc的分区信息</p></li>
+<li><p>recovery.img ：急救模式映像。</p></li>
+<li><p>resource.img ：资源映像，内含开机图片和内核的设备树信息。</p></li>
+<li><p>system.img ：Android 的 system 分区映像，ext4 文件系统格式。</p></li>
+<li><p>trust.img ：休眠唤醒相关的文件</p></li>
+<li><p>RK3399MiniLoaderAll_V1.05.bin ：Loader文件</p></li>
+<li><p>uboot.img ：uboot文件</p></li>
+</ul>
+<p>请参照 <a class="reference external" href="upgrade_firmware.html">如何升级固件</a> 一文来烧写分区映像文件。</p>
+<p>如果使用的是 Windows 系统，将上述映像文件拷贝到 AndroidTool（Windows 下的固件升级工具）的 <code class="docutils literal notranslate"><span class="pre">rockdev\Image</span></code> 目录中，之后参照升级文档烧写分区映像即可，这样的好处是使用默认配置即可，不用修改文件的路径。</p>
+<p>update.img 方便固件的发布，供终端用户升级系统使用。一般开发时使用分区映像比较方便。</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Firefly Team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

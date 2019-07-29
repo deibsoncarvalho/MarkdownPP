@@ -120,6 +120,12 @@
 <li class="toctree-l1"><a class="reference internal" href="ubuntu_support.html">Ubuntu 应用层支持</a></li>
 <li class="toctree-l1"><a class="reference internal" href="buildroot_compile.html">编译 Buildroot 固件</a></li>
 </ul>
+<p class="caption"><span class="caption-text">Android开发</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="adb_use.html">ADB 使用</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compile_android8.1_firmware.html">编译 Android8.1 固件</a></li>
+<li class="toctree-l1"><a class="reference internal" href="customize_android_firmware.html">定制 Android 固件</a></li>
+</ul>
 
             
           
@@ -187,18 +193,18 @@
 <h1>启动模式说明<a class="headerlink" href="#qi-dong-mo-shi-shuo-ming" title="永久链接至标题">¶</a></h1>
 <div class="section" id="qian-yan">
 <h2>前言<a class="headerlink" href="#qian-yan" title="永久链接至标题">¶</a></h2>
-<p>AIO-3399J 有灵活的启动方式。一般情况下，除非硬件损坏，AIO-3399J 开发板是不会变砖的。</p>
+<p>Firefly-RK3399 有灵活的启动方式。一般情况下，除非硬件损坏，Firefly-RK3399 开发板是不会变砖的。</p>
 <p>如果在升级过程中出现意外，bootloader 损坏，导致无法重新升级，此时仍可以进入 <code class="docutils literal notranslate"><span class="pre">MaskRom</span></code> 模式来修复。</p>
 </div>
 <div class="section" id="jia-zai-fang-shi">
 <h2>加载方式<a class="headerlink" href="#jia-zai-fang-shi" title="永久链接至标题">¶</a></h2>
-<p>AIO-3399J 有 20KB 的 BootRom 和 100KB 的内部 SRAM，支持从以下设备加载系统：</p>
+<p>Firefly-RK3399 有 20KB 的 BootRom 和 100KB 的内部 SRAM，支持从以下设备加载系统：</p>
 <ul class="simple">
 <li><p>SPI 接口</p></li>
 <li><p>eMMC 接口</p></li>
 <li><p>SDMMC 接口</p></li>
 </ul>
-<p>另外 AIO-3399J 支持从 USB OTG 接口下载系统代码。</p>
+<p>另外 Firefly-RK3399 支持从 Type-C 接口下载系统代码。</p>
 </div>
 <div class="section" id="qi-dong-ci-xu">
 <h2>启动次序<a class="headerlink" href="#qi-dong-ci-xu" title="永久链接至标题">¶</a></h2>
@@ -213,7 +219,7 @@
 </div>
 <div class="section" id="qi-dong-mo-shi">
 <h2>启动模式<a class="headerlink" href="#qi-dong-mo-shi" title="永久链接至标题">¶</a></h2>
-<p>AIO-3399J有三种启动模式：</p>
+<p>Firefly-RK3399有三种启动模式：</p>
 <ul class="simple">
 <li><p>Normal 模式</p></li>
 <li><p>Loader 模式</p></li>

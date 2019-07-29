@@ -1,0 +1,123 @@
+{# ~~~~这一句是注释，为了排版，不要删除，不要理会~~~~~ #}
+
+{%- if board_name == "Firefly-RK3399" -%}
+*    编译 kernel：
+
+```
+cd ~/proj/firefly-rk3399/kernel/
+make ARCH=arm64 firefly_defconfig
+make -j8 ARCH=arm64 rk3399-firefly.img
+```
+
+* 编译 uboot：
+
+```
+cd ~/proj/firefly-rk3399/u-boot/
+make rk3399_defconfig
+make ARCHV=aarch64 -j8
+```
+
+* 编译 Android：
+
+```
+cd ~/proj/firefly-rk3399/
+source build/envsetup.sh
+lunch rk3399_firefly_mid-userdebug
+make -j8
+./mkimage.sh
+```
+{% endif %}
+
+
+
+
+{%- if board_name == "AIO-3399J" -%}
+* 编译 kernel：
+
+```
+cd ~/proj/firefly-rk3399/kernel/
+make ARCH=arm64 firefly_defconfig
+make -j8 ARCH=arm64 rk3399-firefly-aio.img
+```
+
+* 编译 uboot：
+
+```
+cd ~/proj/firefly-rk3399/u-boot/
+make rk3399_defconfig
+make ARCHV=aarch64 -j8
+```
+
+* 编译 Android：
+
+```
+cd ~/proj/firefly-rk3399/
+source build/envsetup.sh
+lunch rk3399_firefly_aio_mid-userdebug
+make -j8
+./mkimage.sh
+```
+{% endif %}
+
+
+
+
+{%- if board_name == "AIO-3399C" -%}
+* 编译 kernel：
+
+```
+cd ~/proj/firefly-rk3399/kernel/
+make ARCH=arm64 firefly_defconfig
+make -j8 ARCH=arm64 rk3399-firefly-aioc.img
+```
+
+* 编译 uboot：
+
+```
+cd ~/proj/firefly-rk3399/u-boot/
+make rk3399_defconfig
+make ARCHV=aarch64 -j8
+```
+
+* 编译 Android：
+
+```
+cd ~/proj/firefly-rk3399/
+source build/envsetup.sh
+lunch rk3399_firefly_aioc_mid-userdebug
+make -j8
+./mkimage.sh
+```
+{% endif %}
+
+
+
+
+
+{%- if board_name == "AIO-3399PRO-JD4" -%}
+* 编译 kernel：
+
+```
+cd ~/proj/AIO-RK3399ProJD4/kernel/
+make ARCH=arm64 firefly_defconfig
+make -j8 ARCH=arm64 rk3399pro-firefly-aiojd4.img
+```
+
+* 编译 uboot：
+
+```
+cd ~/proj/AIO-RK3399ProJD4/u-boot/
+make rk3399_defconfig
+make ARCHV=aarch64 -j8
+```
+
+* 编译 Android：
+
+```
+cd ~/proj/AIO-RK3399ProJD4/
+source build/envsetup.sh
+lunch rk3399pro_firefly_aioJD4-userdebug
+make -j8
+./mkimage.sh
+```
+{% endif %}

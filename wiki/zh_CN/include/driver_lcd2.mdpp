@@ -1,0 +1,15 @@
+{# ~~~~这一句是注释，为了排版，不要删除，不要理会~~~~~ #}
+{%- if board_name == "AIO-3399J" -%}
+{%- endif -%}
+
+{%- if board_name == "AIO-3399C" -%}
+另外板子也支持MIPI屏幕，但需要注意的是MIPI和LVDS是复用的，使用MIPI之后不能使用LVDS。需要客户自行焊接MIPI接口，如下图，还需要拆除红框内3排电阻拆掉:
+
+![](img/AIO-3399C_driver_lcd2.jpg)
+{% endif %}
+
+{%- if board_name == "AIO-3399PRO-JD4" -%}
+另外板子也支持MIPI屏幕，但需要注意的是MIPI和LVDS是复用的，使用MIPI之后不能使用LVDS。MIPI接口如下
+
+![](img/AIO-3399PRO-JD4_driver_lcd2.png)
+{% endif %}

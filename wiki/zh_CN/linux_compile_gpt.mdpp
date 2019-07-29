@@ -1,59 +1,35 @@
+{#- 根据板子不同定义局部变量的值 -#}
+{%- if board_name == "Firefly-RK3399" -%}
+{%- set mk_file_name="firefly-rk3399" -%}
+{%- set rk_uboot_defconfig="firefly-rk3399" -%}
+{%- set rk_kernel_defconfig="firefly_linux_defconfig" -%}
+{%- set rk_kernel_dts="rk3399-firefly" -%}
+
+
+{%- elif board_name == "AIO-3399J" -%}
+{%- set mk_file_name="aio-3399j" -%}
+{%- set rk_uboot_defconfig="firefly-rk3399" -%}
+{%- set rk_kernel_defconfig="firefly_linux_defconfig" -%}
+{%- set rk_kernel_dts="rk3399-firefly-aio" -%}
+
+{%- elif board_name == "AIO-3399C" -%}
+{%- set mk_file_name="aio-3399c" -%}
+{%- set rk_uboot_defconfig="firefly-rk3399" -%}
+{%- set rk_kernel_defconfig="firefly_linux_defconfig" -%}
+{%- set rk_kernel_dts="rk3399-firefly-aioc" -%}
+
+{%- elif board_name == "AIO-3399PRO-JD4" -%}
+{%- set mk_file_name="aio-rk3399pro-jd4" -%}
+{%- set rk_uboot_defconfig="rk3399pro" -%}
+{%- set rk_kernel_defconfig="firefly3399pro_linux_defconfig" -%}
+{%- set rk_kernel_dts="rk3399pro-firefly-aiojd4" -%}
+
+{%- endif -%}
 # 编译 Ubuntu 固件 ( GPT )
 
 为了方便用户的使用与开发，官方提供了 Linux 开发的整套 SDK，本章详细的说明 SDK 的具体用法。
 
-## 准备工作
-
-### 下载源码
-
-下载 repo 工具：
-
-```
-mkdir linux
-cd linux
-git clone https://github.com/FireflyTeam/repo.git
-```
-
-#### 下载完整 SDK
-
-* 方法一
-
-初始化 repo 仓库：
-
-!INCLUDECODE "include/linux_compile_gpt1.mdpp"
-
-同步源码:
-
-```
-../repo/repo sync -c
-```
-
-同步过程中,网络波动会导致下载速度过低中断同步,可以使用下面脚本同步代码:
-
-```
-#! /bin/bash
-
-../repo/repo sync -c
-
-while [ $? -ne 0 ] ;
-do
-        ../repo/repo sync -c; 
-done
-```
-
-* 方法二(国内用户推荐使用)
-
-因为国内用户可能 git 拉代码会比较慢，所以官方提供了基础得源码包 `Linux_SDK.7z`.
-
-下载 [Linux_SDK.7z]
-
-```
-#1.把压缩包放在上一步下载repo工具的目录下
-7z x Linux_SDK.7z
-
-#2.更新代码
-repo sync -c
-```
+!INCLUDE "include/get_linux_sdk.mdpp"
 
 #### 下载裁剪版 SDK
 
@@ -162,7 +138,26 @@ sudo apt-get install lib32gcc-7-dev g++-7 libstdc++-7-dev
 
 **注意**: `{{mk_file_name}}.mk` 为编译生成 Buildroot 固件的配置文件。同时用户也可以通过参考该配置生成新的配置文件来适配自己所需要的固件。
 
-!INCLUDE "include/linux_compile_gpt2.mdpp"
+```
+# uboot defconfig
+export rk_uboot_defconfig={{rk_uboot_defconfig}}     编译uboot配置文件
+
+# kernel defconfig
+export rk_kernel_defconfig={{rk_kernel_defconfig}}   编译kernel配置文件
+
+# kernel dts
+export rk_kernel_dts={{rk_kernel_dts}}               编译kernel用到的dts
+
+# parameter for gpt table
+export rk_parameter=parameter-ubuntu.txt             分区信息(十分重要)
+
+# packagefile for make update image 
+export rk_package_file=rk3399-ubuntu-package-file    打包配置文件
+
+# rootfs image path
+export rk_rootfs_img=xxxx/xxxx.img                   根文件系统镜像路径
+```
+
 **<font color=#ff0000 >注意,十分重要！！</font>**
 
 默认配置编译 Buildroot 固件，如果想编译其他固件（如 Ubuntu 固件）请执行一下操作:

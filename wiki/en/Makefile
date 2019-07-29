@@ -2,7 +2,7 @@
 #
 
 # You can set these variables from the command line.
-JSON		  = ../json/firefly-rk3399.json
+BOARD		  = firefly-rk3399
 SPHINXOPTS    =
 SPHINXBUILD   = sphinx-build
 SOURCEDIR     = .
@@ -20,13 +20,16 @@ help:
 
 # Catch-all target: route all unknown targets to Sphinx using the new
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
-html latex: Makefile mdpp
+html latex: Makefile mdpp index.rst
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
 mdpp: $(MDPP_TARGET)
 
+index.rst: index.rstpp
+	@$(MDPP) -f ../json/$(BOARD).json -e latexrender $< -o $@
+	
 %.md: %.mdpp FORCE_MAKE
-	@$(MDPP) -f $(JSON) -e latexrender $< -o $@
+	@$(MDPP) -f ../json/$(BOARD).json -e latexrender $< -o $@
 
 pdf: latex
 	rm -f "$(BUILDDIR)"/latex/*.pdf

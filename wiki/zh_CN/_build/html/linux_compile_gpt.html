@@ -147,6 +147,12 @@
 <li class="toctree-l1"><a class="reference internal" href="ubuntu_support.html">Ubuntu 应用层支持</a></li>
 <li class="toctree-l1"><a class="reference internal" href="buildroot_compile.html">编译 Buildroot 固件</a></li>
 </ul>
+<p class="caption"><span class="caption-text">Android开发</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="adb_use.html">ADB 使用</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compile_android8.1_firmware.html">编译 Android8.1 固件</a></li>
+<li class="toctree-l1"><a class="reference internal" href="customize_android_firmware.html">定制 Android 固件</a></li>
+</ul>
 
             
           
@@ -254,7 +260,7 @@ done
 <li><p>方法二(国内用户推荐使用)</p></li>
 </ul>
 <p>因为国内用户可能 git 拉代码会比较慢，所以官方提供了基础得源码包 <code class="docutils literal notranslate"><span class="pre">Linux_SDK.7z</span></code>.</p>
-<p>下载 <a class="reference external" href="http://www.t-firefly.com/doc/download/page/id/31.html">Linux_SDK.7z</a></p>
+<p>下载 <a class="reference external" href="http://www.t-firefly.com/doc/download/page/id/3.html">Linux_SDK.7z</a></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#1.把压缩包放在上一步下载repo工具的目录下</span>
 <span class="mi">7</span><span class="n">z</span> <span class="n">x</span> <span class="n">Linux_SDK</span><span class="o">.</span><span class="mi">7</span><span class="n">z</span>
 
@@ -347,23 +353,22 @@ done
 <h2>编译SDK<a class="headerlink" href="#bian-yi-sdk" title="永久链接至标题">¶</a></h2>
 <div class="section" id="bian-yi-qian-pei-zhi">
 <h3>编译前配置<a class="headerlink" href="#bian-yi-qian-pei-zhi" title="永久链接至标题">¶</a></h3>
-<p>配置文件 aio-3399j.mk:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">build</span><span class="o">.</span><span class="n">sh</span> <span class="n">aio</span><span class="o">-</span><span class="mi">3399</span><span class="n">j</span><span class="o">.</span><span class="n">mk</span>
+<p>配置文件 firefly-rk3399.mk:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">build</span><span class="o">.</span><span class="n">sh</span> <span class="n">firefly</span><span class="o">-</span><span class="n">rk3399</span><span class="o">.</span><span class="n">mk</span>
 
-<span class="c1">#文件路径在`device/rockchip/rk3399/aio-3399j.mk`</span>
+<span class="c1">#文件路径在`device/rockchip/rk3399/firefly-rk3399.mk`</span>
 </pre></div>
 </div>
 <p>如果配置文件生效会连接到 <code class="docutils literal notranslate"><span class="pre">device/rockchip/.BoardConfig.mk</span></code> ,检查该文件可以验证是否配置成功</p>
-<p><strong>注意</strong>: <code class="docutils literal notranslate"><span class="pre">aio-3399j.mk</span></code> 为编译生成 Buildroot 固件的配置文件。同时用户也可以通过参考该配置生成新的配置文件来适配自己所需要的固件。</p>
-<p>重要配置介绍：(如果需要自己制作固件，可能需要修改下列配置信息)</p>
+<p><strong>注意</strong>: <code class="docutils literal notranslate"><span class="pre">firefly-rk3399.mk</span></code> 为编译生成 Buildroot 固件的配置文件。同时用户也可以通过参考该配置生成新的配置文件来适配自己所需要的固件。</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># uboot defconfig</span>
-<span class="n">export</span> <span class="n">rk_uboot_defconfig</span><span class="o">=</span><span class="n">firefly</span><span class="o">-</span><span class="n">rk3399</span>             <span class="n">编译uboot配置文件</span>
+<span class="n">export</span> <span class="n">rk_uboot_defconfig</span><span class="o">=</span><span class="n">firefly</span><span class="o">-</span><span class="n">rk3399</span>     <span class="n">编译uboot配置文件</span>
 
 <span class="c1"># kernel defconfig</span>
 <span class="n">export</span> <span class="n">rk_kernel_defconfig</span><span class="o">=</span><span class="n">firefly_linux_defconfig</span>   <span class="n">编译kernel配置文件</span>
 
 <span class="c1"># kernel dts</span>
-<span class="n">export</span> <span class="n">rk_kernel_dts</span><span class="o">=</span><span class="n">rk3399</span><span class="o">-</span><span class="n">firefly</span><span class="o">-</span><span class="n">aio</span>              <span class="n">编译kernel用到的dts</span>
+<span class="n">export</span> <span class="n">rk_kernel_dts</span><span class="o">=</span><span class="n">rk3399</span><span class="o">-</span><span class="n">firefly</span>               <span class="n">编译kernel用到的dts</span>
 
 <span class="c1"># parameter for gpt table</span>
 <span class="n">export</span> <span class="n">rk_parameter</span><span class="o">=</span><span class="n">parameter</span><span class="o">-</span><span class="n">ubuntu</span><span class="o">.</span><span class="n">txt</span>             <span class="n">分区信息</span><span class="p">(</span><span class="n">十分重要</span><span class="p">)</span>
@@ -388,8 +393,8 @@ done
 <span class="n">mkdir</span> <span class="n">ubunturootfs</span>
 <span class="n">mv</span> <span class="n">rk3399_ubuntu18</span><span class="o">.</span><span class="mi">04</span><span class="n">_LXDE</span><span class="o">.</span><span class="n">img</span> <span class="n">ubunturootfs</span><span class="o">/</span>
 
-<span class="c1">#修改aio-3399j.mk文件</span>
-<span class="n">vim</span> <span class="n">device</span><span class="o">/</span><span class="n">rockchip</span><span class="o">/</span><span class="n">rk3399</span><span class="o">/</span><span class="n">aio</span><span class="o">-</span><span class="mi">3399</span><span class="n">j</span><span class="o">.</span><span class="n">mk</span>
+<span class="c1">#修改firefly-rk3399.mk文件</span>
+<span class="n">vim</span> <span class="n">device</span><span class="o">/</span><span class="n">rockchip</span><span class="o">/</span><span class="n">rk3399</span><span class="o">/</span><span class="n">firefly</span><span class="o">-</span><span class="n">rk3399</span><span class="o">.</span><span class="n">mk</span>
 
 <span class="c1">#把RK_ROOTFS_IMG属性改成ubuntu文件系统镜像得路径(也就是rk3399_ubuntu18.04_LXDE.img)</span>
 <span class="n">RK_ROOTFS_IMG</span><span class="o">=</span><span class="n">ubunturootfs</span><span class="o">/</span><span class="n">rk3399_ubuntu18</span><span class="o">.</span><span class="mi">04</span><span class="n">_LXDE</span><span class="o">.</span><span class="n">img</span>
@@ -472,8 +477,8 @@ done
 <span class="n">mv</span> <span class="n">linaro</span><span class="o">-</span><span class="n">rootfs</span><span class="o">.</span><span class="n">img</span> <span class="o">../</span><span class="n">distro</span><span class="o">/</span>
 
 <span class="mi">5</span><span class="p">:</span>
-<span class="c1">#修改aio-3399j.mk文件</span>
-<span class="n">vim</span> <span class="n">device</span><span class="o">/</span><span class="n">rockchip</span><span class="o">/</span><span class="n">rk3399</span><span class="o">/</span><span class="n">aio</span><span class="o">-</span><span class="mi">3399</span><span class="n">j</span><span class="o">.</span><span class="n">mk</span>
+<span class="c1">#修改firefly-rk3399.mk文件</span>
+<span class="n">vim</span> <span class="n">device</span><span class="o">/</span><span class="n">rockchip</span><span class="o">/</span><span class="n">rk3399</span><span class="o">/</span><span class="n">firefly</span><span class="o">-</span><span class="n">rk3399</span><span class="o">.</span><span class="n">mk</span>
 
 <span class="c1">#把RK_ROOTFS_IMG属性改成ubuntu文件系统镜像得路径(也就是linaro-rootfs.img)</span>
 <span class="n">RK_ROOTFS_IMG</span><span class="o">=</span><span class="n">distro</span><span class="o">/</span><span class="n">linaro</span><span class="o">-</span><span class="n">rootfs</span><span class="o">.</span><span class="n">img</span>
@@ -491,8 +496,8 @@ done
 <span class="n">mkdir</span> <span class="n">ubunturootfs</span>
 <span class="n">mv</span> <span class="n">rk3399_ubuntu18</span><span class="o">.</span><span class="mi">04</span><span class="n">_LXDE</span><span class="o">.</span><span class="n">img</span> <span class="n">ubunturootfs</span><span class="o">/</span>
 
-<span class="c1">#修改aio-3399j.mk文件</span>
-<span class="n">vim</span> <span class="n">device</span><span class="o">/</span><span class="n">rockchip</span><span class="o">/</span><span class="n">rk3399</span><span class="o">/</span><span class="n">aio</span><span class="o">-</span><span class="mi">3399</span><span class="n">j</span><span class="o">.</span><span class="n">mk</span>
+<span class="c1">#修改firefly-rk3399.mk文件</span>
+<span class="n">vim</span> <span class="n">device</span><span class="o">/</span><span class="n">rockchip</span><span class="o">/</span><span class="n">rk3399</span><span class="o">/</span><span class="n">firefly</span><span class="o">-</span><span class="n">rk3399</span><span class="o">.</span><span class="n">mk</span>
 
 <span class="c1">#把RK_ROOTFS_IMG属性改成ubuntu文件系统镜像得路径(也就是rk3399_ubuntu18.04_LXDE.img)</span>
 <span class="n">RK_ROOTFS_IMG</span><span class="o">=</span><span class="n">ubunturootfs</span><span class="o">/</span><span class="n">rk3399_ubuntu18</span><span class="o">.</span><span class="mi">04</span><span class="n">_LXDE</span><span class="o">.</span><span class="n">img</span>
@@ -537,7 +542,7 @@ done
 </div>
 <div class="section" id="da-bao-tong-yi-gu-jian">
 <h3>打包统一固件<a class="headerlink" href="#da-bao-tong-yi-gu-jian" title="永久链接至标题">¶</a></h3>
-<p><strong>注意：</strong> 打包前请确认 <code class="docutils literal notranslate"><span class="pre">tools/linux/Linux_Pack_Firmware/rockdev/package-file</span></code> 是否正确。打包会根据此文件进行分区打包。此文件链接会在 <code class="docutils literal notranslate"><span class="pre">./build.sh</span> <span class="pre">aio-3399j.mk</span></code> 命令时更新，如果配置不对请返回<a class="reference external" href="linux_sdk#mkconfig">配置</a>一节重新配置一次。</p>
+<p><strong>注意：</strong> 打包前请确认 <code class="docutils literal notranslate"><span class="pre">tools/linux/Linux_Pack_Firmware/rockdev/package-file</span></code> 是否正确。打包会根据此文件进行分区打包。此文件链接会在 <code class="docutils literal notranslate"><span class="pre">./build.sh</span> <span class="pre">firefly-rk3399.mk</span></code> 命令时更新，如果配置不对请返回<a class="reference external" href="linux_sdk#mkconfig">配置</a>一节重新配置一次。</p>
 <p>整合统一固件：</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">build</span><span class="o">.</span><span class="n">sh</span> <span class="n">updateimg</span>
 </pre></div>

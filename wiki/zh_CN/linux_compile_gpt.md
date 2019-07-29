@@ -156,29 +156,27 @@ sudo apt-get install lib32gcc-7-dev g++-7 libstdc++-7-dev
 
 ### 编译前配置
 
-配置文件 aio-3399j.mk:
+配置文件 firefly-rk3399.mk:
 
 ```
-./build.sh aio-3399j.mk
+./build.sh firefly-rk3399.mk
 
-#文件路径在`device/rockchip/rk3399/aio-3399j.mk`
+#文件路径在`device/rockchip/rk3399/firefly-rk3399.mk`
 ```
 
 如果配置文件生效会连接到 `device/rockchip/.BoardConfig.mk` ,检查该文件可以验证是否配置成功
 
-**注意**: `aio-3399j.mk` 为编译生成 Buildroot 固件的配置文件。同时用户也可以通过参考该配置生成新的配置文件来适配自己所需要的固件。
-
-重要配置介绍：(如果需要自己制作固件，可能需要修改下列配置信息)
+**注意**: `firefly-rk3399.mk` 为编译生成 Buildroot 固件的配置文件。同时用户也可以通过参考该配置生成新的配置文件来适配自己所需要的固件。
 
 ```
 # uboot defconfig
-export rk_uboot_defconfig=firefly-rk3399             编译uboot配置文件
+export rk_uboot_defconfig=firefly-rk3399     编译uboot配置文件
 
 # kernel defconfig
 export rk_kernel_defconfig=firefly_linux_defconfig   编译kernel配置文件
 
 # kernel dts
-export rk_kernel_dts=rk3399-firefly-aio              编译kernel用到的dts
+export rk_kernel_dts=rk3399-firefly               编译kernel用到的dts
 
 # parameter for gpt table
 export rk_parameter=parameter-ubuntu.txt             分区信息(十分重要)
@@ -206,8 +204,8 @@ tar -xvf rk3399_ubuntu18.04_LXDE.img.tgz
 mkdir ubunturootfs
 mv rk3399_ubuntu18.04_LXDE.img ubunturootfs/
 
-#修改aio-3399j.mk文件
-vim device/rockchip/rk3399/aio-3399j.mk
+#修改firefly-rk3399.mk文件
+vim device/rockchip/rk3399/firefly-rk3399.mk
 
 #把RK_ROOTFS_IMG属性改成ubuntu文件系统镜像得路径(也就是rk3399_ubuntu18.04_LXDE.img)
 RK_ROOTFS_IMG=ubunturootfs/rk3399_ubuntu18.04_LXDE.img
@@ -294,8 +292,8 @@ VERSION=debug ARCH=arm64 ./mk-rootfs-stretch-arm64.sh
 mv linaro-rootfs.img ../distro/
 
 5:
-#修改aio-3399j.mk文件
-vim device/rockchip/rk3399/aio-3399j.mk
+#修改firefly-rk3399.mk文件
+vim device/rockchip/rk3399/firefly-rk3399.mk
 
 #把RK_ROOTFS_IMG属性改成ubuntu文件系统镜像得路径(也就是linaro-rootfs.img)
 RK_ROOTFS_IMG=distro/linaro-rootfs.img
@@ -315,8 +313,8 @@ tar -xvf rk3399_ubuntu18.04_LXDE.img.tgz
 mkdir ubunturootfs
 mv rk3399_ubuntu18.04_LXDE.img ubunturootfs/
 
-#修改aio-3399j.mk文件
-vim device/rockchip/rk3399/aio-3399j.mk
+#修改firefly-rk3399.mk文件
+vim device/rockchip/rk3399/firefly-rk3399.mk
 
 #把RK_ROOTFS_IMG属性改成ubuntu文件系统镜像得路径(也就是rk3399_ubuntu18.04_LXDE.img)
 RK_ROOTFS_IMG=ubunturootfs/rk3399_ubuntu18.04_LXDE.img
@@ -365,7 +363,7 @@ error: /home/ljh/proj/linux-sdk/buildroot/output/rockchip_rk3399_recovery/images
 
 ### 打包统一固件
 
-**注意：** 打包前请确认 `tools/linux/Linux_Pack_Firmware/rockdev/package-file` 是否正确。打包会根据此文件进行分区打包。此文件链接会在 `./build.sh aio-3399j.mk` 命令时更新，如果配置不对请返回[配置]一节重新配置一次。
+**注意：** 打包前请确认 `tools/linux/Linux_Pack_Firmware/rockdev/package-file` 是否正确。打包会根据此文件进行分区打包。此文件链接会在 `./build.sh firefly-rk3399.mk` 命令时更新，如果配置不对请返回[配置]一节重新配置一次。
 
 整合统一固件：
 
@@ -442,5 +440,5 @@ backup          RESERVED
 [RK固件]:started.html#rk-firmware-formate
 [分区固件]:started.html#partition-image
 [maskrom]:maskrom_mode.html
- 
-[Linux_SDK.7z]:http://www.t-firefly.com/doc/download/page/id/31.html
+
+[Linux_SDK.7z]:http://www.t-firefly.com/doc/download/page/id/3.html

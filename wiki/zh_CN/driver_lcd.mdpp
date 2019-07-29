@@ -1,0 +1,7 @@
+{%- if board_name == "Firefly-RK3399" -%}
+!INCLUDE "include/Firefly-RK3399_driver_lcd.mdpp"
+{% endif %}
+
+{%- if board_name == "AIO-3399J" or board_name == "AIO-3399C" or board_name == "AIO-3399PRO-JD4" -%}
+!INCLUDE "include/driver_lcd1.mdpp"
+{% endif %}
