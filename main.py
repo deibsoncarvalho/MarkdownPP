@@ -132,18 +132,28 @@ def main():
                 else:
                     print('Cannot exclude ', module, ' - no such module')
                     
-        MarkdownPP.MarkdownPP(input=mdpp, output=md, modules=modules)
-        md.close()
-
-
         if md != sys.stdout:
             Env = Environment(loader = FileSystemLoader(searchpath="./"))
-            template = Env.get_template(args.output)
-            md = open(args.output, 'w')
-            md.write(template.render(env_dict))
-            md.close()
+            template = Env.get_template(args.FILENAME)
+            temp = open("temp", 'w')
+            temp.write(template.render(env_dict))
+            temp.close()
+            mdpp.close()
+            mdpp = open("temp", 'r')
 
+        MarkdownPP.MarkdownPP(input=mdpp, output=md, modules=modules)
+        md.close()
         mdpp.close()
+
+
+#        if md != sys.stdout:
+#            Env = Environment(loader = FileSystemLoader(searchpath="./"))
+#            template = Env.get_template(args.output)
+#            md = open(args.output, 'w')
+#            md.write(template.render(env_dict))
+#            md.close()
+
+#        mdpp.close()
 
 if __name__ == "__main__":
     main()
