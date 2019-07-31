@@ -1,0 +1,13 @@
+在开发板上进入选项 -> 开发人员选项，勾上 `usb 调试`选项。AIO-3399PRO-JD4 用双公头 USB 数据线连接设备 USB3.0 口和主机。
+
++ host/device 模式切换
++ OTG ADB
+  - 设置 -> connected devices(已关联的设备) -> connect to pc(连接到 PC)
+ 
++ 网络ADB
+  - 查看 rk3399pro 的 IP 地址，PC 端通过网络访问。例:
+
+```
+adb connect + IP
+adb shell
+```

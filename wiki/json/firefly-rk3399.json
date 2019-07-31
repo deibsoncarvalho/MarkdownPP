@@ -1,3 +1,4 @@
 { 
-    "board_name": "Firefly-RK3399"
+    "board_name": "Firefly-RK3399",
+    "dts": "rk3399-firefly"
 }

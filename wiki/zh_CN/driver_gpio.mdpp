@@ -15,7 +15,17 @@ kernel/drivers/pinctrl/pinctrl-rockchip.c
 
 其核心是填充 GPIO bank 的方法和参数，并调用 gpiochip_add 注册到内核中。
 
-!INCLUDE "include/driver_gpio1.mdpp"
+{% if board_name == "Firefly-RK3399" or board_name == "AIO-3399C" %}
+{{board_name}} 开发板为方便用户开发使用，引出了一排通用的 GPIO 口，其对应引脚如下图：
+
+![](img/{{board_name}}/gpio_general.jpg)
+{% elif board_name == "AIO-3399J" %}
+AIO-3399J 开发板为方便用户开发使用，并没有引出通用的 GPIO 口，但是可以将其他接口用作 GPIO，例如 LED 扩展接口，在不用的情况可以将其当作一般的 GPIO 口使用，其对应引脚如下图：
+
+![](img/{{board_name}}/gpio_general.jpg)
+{% endif %}
+
+
 本文以 TP_RST(GPIO0_B4) 和 LCD_RST(GPIO4_D5) 这两个通用 GPIO 口为例写了一份简单操作 GPIO 口的驱动，在 SDK 的路径为：
 
 ```
@@ -81,7 +91,7 @@ static int firefly_gpio_probe(struct platform_device *pdev)
 }
 ```
 
-of_get_named_gpio_flags 从设备树中读取 firefly-gpio 和 firefly-irq-gpio 的 GPIO 配置编号和标志，gpio_is_valid 判断该 GPIO 编号是否有效，gpio_request 则申请占用该 GPIO。如果初始化过程出错，需要调用 gpio_free 来释放之前申请过且成功的 GPIO 。 在驱动中调用 gpio_direction_output 就可以设置输出高还是低电平，这里默认输出从 DTS 获取得到的有效电平 GPIO_ACTIVE_HIGH，即为高电平，如果驱动正常工作，可以用万用表测得对应的引脚应该为高电平。 实际中如果要读出 GPIO，需要先设置成输入模式，然后再读取值：
+of_get_named_gpio_flags 从设备树中读取 firefly-gpio 和 firefly-irq-gpio 的 GPIO 配置编号和标志，gpio_is_valid 判断该 GPIO 编号是否有效，gpio_request 则申请占用该 GPIO。如果初始化过程出错，需要调用 gpio_free 来释放之前申请过且成功的 GPIO 。在驱动中调用 gpio_direction_output 就可以设置输出高还是低电平，这里默认输出从 DTS 获取得到的有效电平 GPIO_ACTIVE_HIGH，即为高电平，如果驱动正常工作，可以用万用表测得对应的引脚应该为高电平。实际中如果要读出 GPIO，需要先设置成输入模式，然后再读取值：
 
 ```
 int val;
@@ -316,7 +326,7 @@ int pinctrl_select_state(struct pinctrl *p, struct pinctrl_state *s);
 
 {{board_name}} 原理图上的 Power Domain Map 表以及配置如下表所示：
 
-![](img/driver_gpio.png)
+![](img/gpio_power_domain.jpg)
 
 通过 RK3399 SDK 的原理图可以看到 bt656-supply 的电压域连接的是 vcc18_dvp, vcc_io 是从 PMIC RK808 的 VLDO1 出来的；
 
@@ -366,8 +376,7 @@ io -4 -w 0x1000 //写从0x1000起的4位寄存器的值
 
 使用示例：
 
-*    查看GPIO1_B3引脚的复用情况
-
+*  查看GPIO1_B3引脚的复用情况
 *  从主控的datasheet查到GPIO1对应寄存器基地址为：0xff320000
 *  从主控的datasheet查到GPIO1B_IOMUX的偏移量为：0x00014
 *  GPIO1_B3的iomux寄存器地址为：基址(Operational Base) + 偏移量(offset)=0xff320000+0x00014=0xff320014
@@ -401,7 +410,8 @@ GPIO1B[3] iomux select
 
 Debugfs 文件系统目的是为开发人员提供更多内核数据，方便调试。 这里 GPIO 的调试也可以用 Debugfs 文件系统，获得更多的内核信息。GPIO 在 Debugfs 文件系统中的接口为 `/sys/kernel/debug/gpio`，可以这样读取该接口的信息：
 
-!INCLUDE "include/driver_gpio2.mdpp"
+!INCLUDE "include/{{board_name}}/gpio_interface_msg.mdpp"
+
 ## FAQs
 
 ### Q1: 如何将 PIN 的 MUX 值切换为一般的 GPIO？

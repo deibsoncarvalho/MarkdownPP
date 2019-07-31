@@ -1,3 +1,4 @@
 { 
-    "board_name": "AIO-3399J"
+    "board_name": "AIO-3399J",
+    "dts": "rk3399-firefly-aio"
 }

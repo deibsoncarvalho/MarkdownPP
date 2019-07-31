@@ -1,0 +1,38 @@
+下载完成后先验证一下 MD5 码：
+
+```
+$ md5sum /path/to/rk3399pro_firefly_aiojd4_android8.1_20190430.7z.001
+$ md5sum /path/to/rk3399pro_firefly_aiojd4_android8.1_20190430.7z.002
+$ md5sum /path/to/rk3399pro_firefly_aiojd4_android8.1_20190430.7z.003
+
+70dd51416594d36e140d2eef0738e270  rk3399pro_firefly_aiojd4_android8.1_20190430.7z.001
+ac8234b94df1b812afd6a4c8c42976cb  rk3399pro_firefly_aiojd4_android8.1_20190430.7z.002
+68b2da1653aed2d9d80871d7ad21272d  rk3399pro_firefly_aiojd4_android8.1_20190430.7z.003
+```
+
+确认无误后，就可以解压：
+
+```
+cd ~/proj/
+7z x ./rk3399pro_firefly_aiojd4_android8.1_20190430.7z.001 -oAIO-RK3399ProJD4
+cd ./AIO-RK3399proJD4
+git reset --hard
+```
+
+**注意：** 解压后务必要先更新下远程仓库。
+
+以下为从 gitlab 处更新的方法：
+
+```
+# 进入SDK根目录
+cd ~/proj/AIO-RK3399ProJD4
+
+# 如果没有拉取远程仓库,需要先拉取对应bundle仓库
+git clone https://gitlab.com/TeeFirefly/rk3399pro-oreo-bundle.git .bundle
+
+# 更新SDK，并且后续更新不需要再次拉取远程仓库，直接执行以下命令即可
+.bundle/update     
+
+# 按照提示已经更新内容到 FETCH_HEAD,同步FETCH_HEAD到firefly分支
+git rebase FETCH_HEAD
+```

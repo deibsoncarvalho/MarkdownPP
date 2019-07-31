@@ -1,0 +1,29 @@
+下载完成后先验证一下 MD5 码：
+
+```
+$ md5sum /path/to/Firefly-RK3399_Android8.1_git_SDK_20180901.7z.001
+$ md5sum /path/to/Firefly-RK3399_Android8.1_git_SDK_20180901.7z.002
+
+8efed8db2687a395df0c0d2791202cc0  Firefly-RK3399_Android8.1_git_SDK_20180901.7z.001
+05b5db991bbb9b763d330fa476f2ed76  Firefly-RK3399_Android8.1_git_SDK_20180901.7z.002
+```
+
+确认无误后，就可以解压：
+
+```
+cd ~/proj/
+7z x ./Firefly-RK3399_Android8.1_git_SDK_20180901.7z.001 -oFirefly-rk3399
+cd ./Firefly-rk3399
+git reset --hard
+```
+
+**注意：** 解压后务必要先更新下远程仓库。
+
+以下为从 gitlab 处更新的方法：
+
+```
+git remote add gitlab https://gitlab.com/TeeFirefly/firenow-oreo-rk3399.git
+git pull gitlab firefly-rk3399:firefly-rk3399
+```
+
+也可以到 [[https://gitlab.com/TeeFirefly/firenow-oreo-rk3399#]](https://gitlab.com/TeeFirefly/firenow-oreo-rk3399#) 在线浏览源码。

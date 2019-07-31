@@ -194,9 +194,9 @@ make
 
 更加详细具体的开发技巧可到 Buildroot 官网学习。
 
-[Buildroot 官网]:(https://buildroot.org/)
+[Buildroot 官网](https://buildroot.org/)
 
-[Buildroot 开发手册]: (https://buildroot.org/downloads/manual/manual.html)
+[Buildroot 开发手册](https://buildroot.org/downloads/manual/manual.html)
 
 {% if board_name == "Firefly-RK3399" %}
 [Linux_SDK.7z]:http://www.t-firefly.com/doc/download/page/id/3.html

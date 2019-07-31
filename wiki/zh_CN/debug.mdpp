@@ -27,7 +27,7 @@
 
 {{board_name}} 串口连接图：
 
-![](img/{{board_name}}_debug1.jpg)
+![](img/{{board_name}}/debug_connect.jpg)
 
 ## 串口参数配置
 
@@ -54,7 +54,8 @@
 如果在 Windows 系统上安装官网的 CP210X 驱动，使用 PUTTY 或 SecureCRT 等工具设置串口波特率为 1500000，如果出现设置不了或无效的问题，可以下载旧版本[驱动](http://t-firefly.oss-cn-hangzhou.aliyuncs.com/product/Tools/Driver/CP210X/CP210x_VCP_Windows.zip)。
 
 插入适配器后，系统会提示发现新硬件，并初始化，之后可以在设备管理器找到对应的 COM 口：
-![](img/debug2.png)
+
+![](img/debug_find_com.jpg)
 
 ### 安装软件
 
@@ -67,7 +68,7 @@ Windows 上一般用 putty 或 SecureCRT。其中 putty 是开源软件，在这
 3. 设置 "Speed" 为 1500000。
 4. 点击 "Open" 按钮。
 
-![](img/debug3.png)
+![](img/debug_set_putty.jpg)
 
 ## Ubuntu 上使用串口调试
 

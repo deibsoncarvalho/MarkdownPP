@@ -1,23 +1,10 @@
-{%- if board_name == "Firefly-RK3399" -%}
-{%- set i2c_img = "Firefly-RK3399_driver_i2c.png" -%}
-
-{%- elif board_name == "AIO-3399J" -%}
-{%- set i2c_img = "AIO-3399J_driver_i2c.png" -%}
-
-{%- elif board_name == "AIO-3399C" -%}
-{%- set i2c_img = "AIO-3399C_driver_i2c.jpg" -%}
-
-{%- elif board_name == "AIO-3399PRO-JD4" -%}
-{%- set i2c_img = "AIO-3399PRO-JD4_driver_i2c.jpg" -%}
-
-{%- endif -%}
 # I2C 使用
 
 ## 简介
 
 {{board_name}} 开发板上有 9 个片上 I2C 控制器，各个 I2C 的使用情况如下表：
 
-![](img/{{i2c_img}})
+![](img/{{board_name}}/i2c_list.jpg)
 
 本文主要描述如何在该开发板上配置 I2C。
 

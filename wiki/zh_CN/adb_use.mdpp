@@ -4,7 +4,8 @@
 
 ADB，全称 Android Debug Bridge，是 Android 的命令行调试工具，可以完成多种功能，如跟踪系统日志，上传下载文件，安装应用等。
 
-!INCLUDE "include/adb_use1.mdpp"
+!INCLUDE "include/{{board_name}}/adb_connect.mdpp"
+
 ## Windows下的 ADB 安装
 
 首先参照[安装 RK USB 驱动](upgrade_firmware.html#windows)一节安装好驱动。然后到 [http://adbshell.com/download/download-adb-for-windows.html](http://adbshell.com/download/download-adb-for-windows.html) 下载 `adb.zip`，解压到 `C:\adb` 以方便调用。

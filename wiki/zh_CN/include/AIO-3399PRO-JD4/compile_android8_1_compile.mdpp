@@ -1,0 +1,25 @@
+* 编译 kernel：
+
+```
+cd ~/proj/AIO-RK3399ProJD4/kernel/
+make ARCH=arm64 firefly_defconfig
+make -j8 ARCH=arm64 rk3399pro-firefly-aiojd4.img
+```
+
+* 编译 uboot：
+
+```
+cd ~/proj/AIO-RK3399ProJD4/u-boot/
+make rk3399_defconfig
+make ARCHV=aarch64 -j8
+```
+
+* 编译 Android：
+
+```
+cd ~/proj/AIO-RK3399ProJD4/
+source build/envsetup.sh
+lunch rk3399pro_firefly_aioJD4-userdebug
+make -j8
+./mkimage.sh
+```

@@ -1,0 +1,20 @@
+* 默认编译 HDMI+DP
+
+```
+./FFTools/make.sh -j8
+./FFTools/mkupdate/mkupdate.sh
+```
+
+* EDP7.85 编译
+
+```
+./FFTools/make.sh -j8 -d rk3399-firefly-edp -l rk3399_firefly_edp_box-userdebug
+./FFTools/mkupdate/mkupdate.sh -l rk3399_firefly_edp_box-userdebug
+```
+
+* MIPI7.85 编译
+
+```
+./FFTools/make.sh -j8 -d rk3399-firefly-mipi -l rk3399_firefly_mipi_box-userdebug
+./FFTools/mkupdate/mkupdate.sh -l rk3399_firefly_mipi_box-userdebug
+```

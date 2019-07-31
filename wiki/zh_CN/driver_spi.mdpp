@@ -1,6 +1,17 @@
 # SPI 使用
 
-!INCLUDE "include/driver_spi1.mdpp"
+{% if board_name == "Firefly-RK3399" %}
+SPI 是一种高速的，全双工，同步串行通信接口，用于连接微控制器、传感器、存储设备等。 Firefly-RK3399 开发板提供了 SPI1（单片选）接口，具体位置如下图：
+
+{% elif board_name == "AIO-3399J" %}
+SPI 是一种高速的，全双工，同步串行通信接口，用于连接微控制器、传感器、存储设备等。 由于 AIO-3399J SPI 没有引出来，而且已经被用到其他功能上，所以这章以 Firefly-RK3399 作为例子。 Firefly-RK3399 开发板提供了 SPI1 （单片选）接口，具体位置如下图：
+
+{% elif board_name == "AIO-3399C" or board_name == "AIO-3399PRO-JD4" %}
+SPI 是一种高速的，全双工，同步串行通信接口，用于连接微控制器、传感器、存储设备等。{{board_name}} SPI 引出来了一路 SPI2 (可复用 GPIO )给外部使用。AIO-3399C 开发板提供了 SPI12（单片选）接口，具体位置如下图：
+
+{% endif %}
+
+![](img/{{board_name}}/spi_interface.jpg)
 
 ## SPI 工作方式
 
@@ -26,7 +37,7 @@ CPOL：表示时钟信号的初始电平的状态，０为低电平，１为高�
 CPHA：表示在哪个时钟沿采样，０为第一个时钟沿采样，１为第二个时钟沿采样。  
 SPI 的四种工作模式波形图如下：
 
-![](img/spi1.jpg)
+![](img/spi_waveform.jpg)
 
 ## 驱动编写
 
@@ -36,7 +47,7 @@ SPI 的四种工作模式波形图如下：
 
 {{board_name}} 与 W25Q128FV 硬件连接如下表：
 
-![](img/{{board_name}}/spi3.png)
+![](img/{{board_name}}/spi_hardware_connection.jpg)
     
 ### 编写Makefile/Kconfig
 

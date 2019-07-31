@@ -146,10 +146,9 @@ Welcome to {{board_name}} Manual
    driver_ir
    driver_lcd
    driver_led
-   driver_camera
+   driver_mipi_csi
    driver_pwm
    driver_spi
-   driver_rtc
    driver_timer
    driver_uart
 

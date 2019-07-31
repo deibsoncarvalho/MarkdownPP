@@ -1,3 +1,16 @@
+{%- if board_name == "Firefly-RK3399" -%}
+{%- set cable_type = " Type-C 数据线"-%}
+
+{%- elif board_name == "AIO-3399J" -%}
+{%- set cable_type = "双公头 USB 数据线"-%}
+
+{%- elif board_name == "AIO-3399C" -%}
+{%- set cable_type = " Type-C 数据线"-%}
+
+{%- elif board_name == "AIO-3399PRO-JD4" -%}
+{%- set cable_type = "双公头 USB 数据线"-%}
+
+{%- endif -%}
 # 烧写SD卡 
 
 ## 前言
@@ -6,7 +19,12 @@
 
 ## 准备工作
 
-!INCLUDE "include/upgrade_firmware_sd1.mdpp"
+* {{board_name}} 开发板
+* 固件
+* 主机
+* SD卡
+* 良好的{{cable_type}}
+
 ## Windows
 
  <a id="Etcher"></a>
@@ -15,7 +33,7 @@
 
 * SD Firmware Tool
 
-Etcher是windows、linux、Mac下都可以使用的图形化SD卡烧写工具。下载方式[Etcher 官网](https://etcher.io)
+Etcher 是 windows、linux、Mac 下都可以使用的图形化 SD 卡烧写工具。下载方式 [Etcher 官网](https://etcher.io)
 
 <a id="SD_Firmware_Tool"></a>
 
@@ -25,19 +43,19 @@ Etcher是windows、linux、Mac下都可以使用的图形化SD卡烧写工具。
 
 [原始固件]:
 
-使用Etcher进行烧写比较简单
+使用 Etcher 进行烧写比较简单
 
 * 选择固件
 * 选择设备
 * 开始烧写
 
-![](img/Etcher.png)
+![](img/Etcher.jpg)
 
 [RK 固件]:
 
 运行 `sd_firmware_tool.exe`:
 
-![](img/sdfirmwaretool.zh_CN.png)
+![](img/sdfirmwaretool.zh_CN.jpg)
 
 1. 插入 SD 卡。
 2. 从组合框中选择 SD 卡对应的设备。
@@ -47,7 +65,7 @@ Etcher是windows、linux、Mac下都可以使用的图形化SD卡烧写工具。
 6. 然后会显示警告对话框，选择 "是" 来确保选择了正确的SD卡设备。
 7. 等待操作完成，直到提示成功对话框出现：
 
-![](img/sdfirmwaretool_done.zh_CN.png)
+![](img/sdfirmwaretool_done.zh_CN.jpg)
 
 8. 拔出 SD 卡。
 

@@ -1,0 +1,11 @@
+从以下摄像头接口原理图可知，需要配置的引脚有：CIF_PWR、DVP_PWR 和 MIPI_RST。
+
+* MIPI 接口
+
+![](img/AIO-3399PRO-JD4/mipi_csi_schematics.jpg)
+
+* DVP_PWR 对应 RK3399 的 GPIO1_C1;
+* CIF_PWR 对应 RK3399 的 GPIO1_A1;
+* MIPI_RST 对应 GPIO0_B0;
+
+在开发板中，这三个引脚都是在 `cam_board.xml` 中设置。

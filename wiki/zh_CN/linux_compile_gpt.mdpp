@@ -76,7 +76,7 @@ cd linux-sdk
 
 <a id="mkconfig"></a>
 
-### 搭建SDK编译环境
+### 搭建 SDK 编译环境
 
 编译 Buildroot 固件:
 
@@ -122,7 +122,7 @@ liblz4-tool genext2fs lib32stdc++6
 sudo apt-get install lib32gcc-7-dev g++-7 libstdc++-7-dev
 ```
 
-## 编译SDK
+## 编译 SDK
 
 ### 编译前配置
 
@@ -163,7 +163,6 @@ export rk_rootfs_img=xxxx/xxxx.img                   根文件系统镜像路径
 默认配置编译 Buildroot 固件，如果想编译其他固件（如 Ubuntu 固件）请执行一下操作:
 
 *  [下载 Ubuntu 根文件系统镜像](https://pan.baidu.com/s/1DuCzTGARDi7APxyKs9Nl1A#list/path=%2F)
-
 *  把得到的镜像放到 SDK 的指定目录:
 
 ```
@@ -269,8 +268,7 @@ vim device/rockchip/rk3399/{{mk_file_name}}.mk
 RK_ROOTFS_IMG=distro/linaro-rootfs.img
 ```
 
-* Ubuntu18.04,可以通过云盘下载:
-
+* Ubuntu18.04，可以通过云盘下载：
 [下载链接](https://pan.baidu.com/s/1DuCzTGARDi7APxyKs9Nl1A#list/path=%2F)
 
 把得到的镜像放到 SDK 的根目录处：
@@ -396,7 +394,7 @@ rootfs:grow     Image/rootfs.img
 backup          RESERVED
 ```
 
-以上是SDK编译后生成的镜像文件。根据 `parameter.txt` 只打包自己用到的 img 文件。
+以上是 SDK 编译后生成的镜像文件。根据 `parameter.txt` 只打包自己用到的 img 文件。
 
 ## 常见问题
 
@@ -410,6 +408,8 @@ backup          RESERVED
 [RK固件]:started.html#rk-firmware-formate
 [分区固件]:started.html#partition-image
 [maskrom]:maskrom_mode.html
+
+
 {% if board_name == "Firefly-RK3399" %}
 [Linux_SDK.7z]:http://www.t-firefly.com/doc/download/page/id/3.html
 {% elif board_name == "AIO-3399J" %} 

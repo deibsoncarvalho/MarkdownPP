@@ -79,7 +79,7 @@ libssl1.0.0 libssl-dev
 **Android SDK 源码包比较大,可以通过如下方式获取 Android8.1 源码包：**
 [下载链接]
 
-!INCLUDE "include/compile_android8_1_firmware1.mdpp"
+!INCLUDE "include/compile_android8_1_get_sdk.mdpp"
 
 ## 使用 Firefly 官方脚本编译
 
@@ -113,7 +113,8 @@ cd ~/proj/firefly-rk3399/
 
 ## {{board_name}} 产品编译方法
 
-!INCLUDE "include/compile_android8_1_firmware2.mdpp"
+!INCLUDE "include/{{board_name}}/compile_android8_1_method.mdpp"
+
 ## 手动编译
 
 编译前执行如下命令配置环境变量：
@@ -124,7 +125,8 @@ export PATH=$JAVA_HOME/bin:$PATH
 export CLASSPATH=.:$JAVA_HOME/lib:$JAVA_HOME/lib/tools.jar
 ```
 
-!INCLUDE "include/compile_android8_1_firmware3.mdpp"
+!INCLUDE "include/{{board_name}}/compile_android8_1_compile.mdpp"
+
 ## 打包成统一固件 update.img
 
 编译完可以用 Firefly 官方的脚本打包成统一固件，执行如下命令：

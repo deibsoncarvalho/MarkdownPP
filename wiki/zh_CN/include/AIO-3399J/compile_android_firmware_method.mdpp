@@ -1,0 +1,22 @@
+### HDMI 显示编译
+
+```
+./FFTools/make.sh  -d rk3399-firefly-aio -j8 -l rk3399_firefly_aio_box-userdebug
+./FFTools/mkupdate/mkupdate.sh -l rk3399_firefly_aio_box-userdebug
+```
+
+### HDMI + LVDS 编译
+
+* 双 LVDS
+
+```
+./FFTools/make.sh  -d rk3399-firefly-aio-lvds -j8 -l rk3399_firefly_aio_lvds_box-userdebug
+./FFTools/mkupdate/mkupdate.sh -l rk3399_firefly_aio_lvds_box-userdebug
+```
+
+* 单 LVDS
+
+```
+./FFTools/make.sh  -d rk3399-firefly-aio-lvds-HSX101H40C -j8 -l rk3399_firefly_aio_lvds_box-userdebug
+./FFTools/mkupdate/mkupdate.sh -l rk3399_firefly_aio_lvds_box-userdebug
+```

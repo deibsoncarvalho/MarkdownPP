@@ -1,3 +1,25 @@
+{%- if board_name == "Firefly-RK3399" -%}
+{%- set BootRom_size = "20KB" -%}
+{%- set SRAM_size = "100KB" -%}
+{%- set interface_type = "Type-C"-%}
+
+
+{%- elif board_name == "AIO-3399J" -%}
+{%- set BootRom_size = "20KB" -%}
+{%- set SRAM_size = "100KB" -%}
+{%- set interface_type = "USB OTG"-%}
+
+{%- elif board_name == "AIO-3399C" -%}
+{%- set BootRom_size = "32KB" -%}
+{%- set SRAM_size = "200KB" -%}
+{%- set interface_type = "USB OTG"-%}
+
+{%- elif board_name == "AIO-3399PRO-JD4" -%}
+{%- set BootRom_size = "32KB" -%}
+{%- set SRAM_size = "200KB" -%}
+{%- set interface_type = "USB OTG"-%}
+
+{%- endif -%}
 # 启动模式说明
 
 ## 前言
@@ -8,7 +30,14 @@
 
 ## 加载方式
 
-!INCLUDE "include/bootmode1.mdpp"
+{{board_name}} 有 {{BootRom_size}} 的 BootRom 和 {{SRAM_size}} 的内部 SRAM，支持从以下设备加载系统：
+
+* SPI 接口
+* eMMC 接口
+* SDMMC 接口
+
+另外 Firefly-RK3399 支持从 {{interface_type}} 接口下载系统代码。
+
 ## 启动次序
 
 启动的次序是这样的：
@@ -33,7 +62,10 @@ Normal 模式就是正常的启动过程，各个组件依次加载，正常进�
 
 ### Loader 模式
 
-!INCLUDE "include/bootmode2.mdpp"
+在 Loader 模式下，bootloader 会进入升级状态，等待主机命令，用于固件升级等。要进入 Loader 模式，必须让 bootloader 在启动时检测到 `RECOVERY`（恢复）键按下，且 USB 处于连接状态。使设备进入升级模式的方法如下:
+
+!INCLUDE "include/{{board_name}}/bootmode_enter_loader.mdpp"
+
 ### MaskRom 模式
 
 MaskRom 模式用于 bootloader 损坏时的系统修复。

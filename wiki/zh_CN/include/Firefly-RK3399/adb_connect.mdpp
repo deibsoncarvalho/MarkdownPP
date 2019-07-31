@@ -1,0 +1,27 @@
+在开发板上进入选项 -> 开发人员选项，勾上 `USB 调试` 选项。Firefly-RK3399 用 Type-C 数据线连接设备和主机。
+
+### Android8.1
+
+*	设置 -> 系统 -> 关于平板 -> 点击5下版本号 -> 系统 -> 开发者选项 -> Root 授权 -> 打开 ADB
+*	连接命令:
+
+```
+1.(首次启动) --更新 SDK 到 (commit 8034582b4cf130132af20b212af7854af5746bcc) 后可以跳过步骤1直接进入步骤2
+adb root
+adb disable-verity
+adb reboot
+2.(重启后)
+adb root
+adb remount
+```
+
+##### 网络 ADB
+
+*    设置 -> 开发者选项 -> 网络 ADB 调试
+
+查看开发板 IP 地址，PC 端通过网络访问：
+
+```
+adb connect + IP
+adb shell
+```

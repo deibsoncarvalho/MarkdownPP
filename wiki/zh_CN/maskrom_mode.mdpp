@@ -1,3 +1,16 @@
+{%- if board_name == "Firefly-RK3399" -%}
+{%- set cable_type = " Type-C 数据线"-%}
+
+{%- elif board_name == "AIO-3399J" -%}
+{%- set cable_type = "双公头 USB 数据线"-%}
+
+{%- elif board_name == "AIO-3399C" -%}
+{%- set cable_type = " Type-C 数据线"-%}
+
+{%- elif board_name == "AIO-3399PRO-JD4" -%}
+{%- set cable_type = "双公头 USB 数据线"-%}
+
+{%- endif -%}
 # MaskRom模式
 
 ***有关启动模式的介绍，请参阅[《启动模式》](bootmode.html)一章*** 
@@ -8,7 +21,24 @@
 
 **请小心阅读，并谨慎操作！**
 
-!INCLUDE "include/maskrom_mode1.mdpp"
+操作步骤如下：
+
+1. 设备断开所有电源。
+2. 拔出 SD 卡。
+3. 用{{cable_type}}连接好设备和主机。
+
+{% if board_name == "Firefly-RK3399" %}
+4. 用金属镊子接通如下图的 Firefly-RK3399 开发板背面预留的测试点 (TP31, TP32)，并保持。
+{% elif board_name == "AIO-3399J" or board_name == "AIO-3399C" or board_name == "AIO-3399PRO-JD4" %}
+4. 用金属镊子接通核心板上的如下图所示的两个测试点，并保持。
+{% endif %}
+
+![](img/{{board_name}}/maskrom_test_points.jpg)
+
+5. 设备插入电源。
+
+6. 稍候片刻，之后松开镊子。
+
 此时设备就会进入 MaskRom 模式。
 
-![](img/maskrom2.png)
+![](img/maskrom.jpg)

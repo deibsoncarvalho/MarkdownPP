@@ -133,9 +133,10 @@ cd ~/proj/firefly-rk3399/
 ./FFTools/make.sh -j8
 ```
 
-## Firefly-RK3399 产品编译方法
+## {{board_name}} 产品编译方法
 
-!INCLUDE "include/compile_android_firmware1.mdpp"
+!INCLUDE "include/{{board_name}}/compile_android_firmware_method.mdpp"
+
 ## 手动编译 {{board_name}}
 
 编译前执行如下命令配置环境变量：
@@ -146,7 +147,8 @@ export PATH=$JAVA_HOME/bin:$PATH
 export CLASSPATH=.:$JAVA_HOME/lib:$JAVA_HOME/lib/tools.jar
 ```
 
-!INCLUDE "include/compile_android_firmware2.mdpp"
+!INCLUDE "include/{{board_name}}/compile_android_firmware_packing.mdpp"
+
 ## 烧写分区映像
 
 编译的时候执行 `./mkimage.sh` 会重新打包 `boot.img` 和 `system.img`, 并将其它相关的映像文件拷贝到目录 `rockdev/{{image_dir}}/` 中。以下列出一般固件用到的映像文件：

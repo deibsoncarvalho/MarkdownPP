@@ -20,8 +20,6 @@ git clone https://github.com/FireflyTeam/repo.git
 mkdir linux-sdk
 cd linux-sdk
 ../repo/repo init --repo-url https://github.com/FireflyTeam/repo.git -u https://github.com/FireflyTeam/manifests.git -b linux-sdk -m rk3399/rk3399_linux_release.xml
-
-
 ```
 
 同步源码:
