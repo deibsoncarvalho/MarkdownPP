@@ -30,17 +30,21 @@ class Include(Module):
     # includes should happen before anything else
     priority = 0
 
-    def transform(self, data):
+    def transform(self, data, path):
         transforms = []
 
         linenum = 0
         for line in data:
             match = self.includere.search(line)
             if match:
-                includedata = self.include(match)
+                if path:
+                    for s in reversed(path):
+                        includedata = self.include_dir(match, s)
+                else:
+                    includedata = self.include(match)
 
                 transform = Transform(linenum=linenum, oper="swap",
-                                      data=includedata)
+                                    data=includedata)
                 transforms.append(transform)
 
             linenum += 1
@@ -98,6 +102,26 @@ class Include(Module):
 
         result = []
         if pwd != "":
+            fileglob = path.join(pwd, fileglob)
+
+        files = sorted(glob.glob(fileglob))
+        if len(files) > 0:
+            for filename in files:
+                result += self.include_file(filename, pwd, shift)
+        else:
+            result.append("")
+
+        return result
+    
+    def include_dir(self, match, pwd=""):
+        # file name is caught in group 1 if it's written with double quotes,
+        # or group 2 if written with single quotes
+        fileglob = match.group(1) or match.group(2)
+
+        shift = int(match.group(3) or 0)
+
+        result = []
+        if -1 == fileglob.find("/"):
             fileglob = path.join(pwd, fileglob)
 
         files = sorted(glob.glob(fileglob))

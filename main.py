@@ -82,6 +82,11 @@ def main():
                         'separated by spaces. '
                         'Example: -E "name=zhangsan args=10". ')
 
+    parser.add_argument('-I', '--include', action='append', help='Indicate the '
+                        'path of .mdpp file. Can indicate multiple path, and the'
+                        'first path has the highest priority.'
+                        'Example: -I "file1/path1" -I "file2/path2"')
+
     args = parser.parse_args()
 
     # If watch flag is on, watch dirs instead of processing individual file
@@ -122,6 +127,11 @@ def main():
             list_env = args.env.split(' ')
             for i in list_env:
                 env_dict[i.split('=')[0]] = i.split('=')[1]
+
+        if args.include:
+            path = args.include
+        else:
+            path = []
         
         modules = list(MarkdownPP.modules)
 
@@ -132,26 +142,26 @@ def main():
                 else:
                     print('Cannot exclude ', module, ' - no such module')
                     
-        if md != sys.stdout:
-            Env = Environment(loader = FileSystemLoader(searchpath="./"))
-            template = Env.get_template(args.FILENAME)
-            temp = open("temp", 'w')
-            temp.write(template.render(env_dict))
-            temp.close()
-            mdpp.close()
-            mdpp = open("temp", 'r')
+#        if md != sys.stdout:
+#            Env = Environment(loader = FileSystemLoader(searchpath="./"))
+#            template = Env.get_template(args.FILENAME)
+#            temp = open("temp", 'w')
+#            temp.write(template.render(env_dict))
+#            temp.close()
+#            mdpp.close()
+#            mdpp = open("temp", 'r')
 
-        MarkdownPP.MarkdownPP(input=mdpp, output=md, modules=modules)
+        MarkdownPP.MarkdownPP(input=mdpp, output=md, modules=modules, path=path)
         md.close()
         mdpp.close()
 
 
-#        if md != sys.stdout:
-#            Env = Environment(loader = FileSystemLoader(searchpath="./"))
-#            template = Env.get_template(args.output)
-#            md = open(args.output, 'w')
-#            md.write(template.render(env_dict))
-#            md.close()
+        if md != sys.stdout:
+            Env = Environment(loader = FileSystemLoader(searchpath="./"))
+            template = Env.get_template(args.output)
+            md = open(args.output, 'w')
+            md.write(template.render(env_dict))
+            md.close()
 
 #        mdpp.close()
 

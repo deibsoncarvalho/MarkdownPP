@@ -36,7 +36,7 @@ class LaTeXRender(Module):
     Rendering is performed using QuickLaTeX via ProblemSetMarmoset.
     """
 
-    def transform(self, data):
+    def transform(self, data, path):
         transforms = []
         linenum = 0
         in_block = False

@@ -16,7 +16,7 @@ class MarkdownPP:
     Automatically executes the preprocessor with the requested modules.
     """
 
-    def __init__(self, input=None, output=None, modules=None):
+    def __init__(self, input=None, output=None, modules=None, path=None):
         pp = Processor()
 
         for name in [m.lower() for m in modules]:
@@ -25,5 +25,5 @@ class MarkdownPP:
                 pp.register(module)
 
         pp.input(input)
-        pp.process()
+        pp.process(path)
         pp.output(output)

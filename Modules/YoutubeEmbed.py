@@ -27,7 +27,7 @@ class YoutubeEmbed(Module):
     taken from Youtube.
     """
 
-    def transform(self, data):
+    def transform(self, data, path):
         transforms = []
         in_fenced_code_block = False
         linenum = 0

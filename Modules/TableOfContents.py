@@ -30,7 +30,7 @@ class TableOfContents(Module):
             title = title.replace(link[0], link[1])
         return title
 
-    def transform(self, data):
+    def transform(self, data, path):
         transforms = []
 
         lowestdepth = 10

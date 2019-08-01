@@ -39,14 +39,14 @@ class Processor:
         """
         self.data = file.readlines()
 
-    def process(self):
+    def process(self, path):
         """
         This method handles the actual processing of Modules and Transforms
         """
         self.modules.sort(key=lambda x: x.priority)
 
         for module in self.modules:
-            transforms = module.transform(self.data)
+            transforms = module.transform(self.data, path)
             transforms.sort(key=lambda x: x.linenum, reverse=True)
 
             for transform in transforms:

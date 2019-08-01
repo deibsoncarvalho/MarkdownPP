@@ -21,7 +21,7 @@ class Reference(Module):
     beginning of a line.
     """
 
-    def transform(self, data):
+    def transform(self, data, path):
         transforms = []
 
         reffound = False
