@@ -18,8 +18,8 @@ import os
 
 # -- Project information -----------------------------------------------------
 
-project = 'Firefly-RK3399 Manual'
-_project_filename = 'Firefly-RK3399_Manual'
+project = '{{board_name}} Manual'
+_project_filename = '{{board_name}}_Manual'
 copyright = '2018, Firefly Team'
 author = 'Firefly Team'
 

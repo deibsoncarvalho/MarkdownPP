@@ -8,16 +8,13 @@
 * DOVDD18、AVDD28 由 DVP_PWR 控制，DVP_PWR 对应 RK3399 的 GPIO1_C1：
 
 ![](img/AIO-3399J/mipi_csi_DVP_PWR.jpg)
-![](img/mipi_csi3.jpg)
 
 * DVDD12 由 CIF_POWER 引脚控制，CIF_POWER 对应 RK3399 上的 GPIO1_A1 引脚：
-     
+
 ![](img/AIO-3399J/mipi_csi_CIF_POWER.jpg)
-![](img/mipi_csi4.jpg)
 
 * MIPI CIF：PWDN0(共用)、PWDN1、RST 对应 GPIO1_C1、GPIO1_A1、GPIO0_B0 引脚：
 
-![](img/mipi_csi5.jpg)
 ![](img/AIO-3399J/mipi_csi_MIPI_CIF.jpg)
 
 在开发板中，除了 DVDD12 (CIF_POWER) 要在 DTS 中设置以外，其它引脚都是在 `cam_board.xml` 中设置。

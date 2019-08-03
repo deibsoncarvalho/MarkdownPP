@@ -72,7 +72,7 @@ sudo cp afptool img_unpack img_maker mkkrnlimg /usr/local/bin
 
 ## 解包
 
-!INCLUDE "include/{{board_name}}/customize_android_firmware_decompression.mdpp"
+!INCLUDE "customize_android_firmware_decompression.mdpp"
 
 这样，固件就解包成功了，下面开始定制。
 
@@ -129,7 +129,7 @@ $ echo $(( 0x00200000 * 512 / 1024 / 1024))M
 
 * 合成 update.img ：
 
-!INCLUDECODE "include/{{board_name}}/customize_android_firmware_packing.mdpp"
+!INCLUDE "customize_android_firmware_packing.mdpp"
 
 * 合成 release_update.img ：
 

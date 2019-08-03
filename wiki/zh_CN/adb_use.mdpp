@@ -4,7 +4,7 @@
 
 ADB，全称 Android Debug Bridge，是 Android 的命令行调试工具，可以完成多种功能，如跟踪系统日志，上传下载文件，安装应用等。
 
-!INCLUDE "include/{{board_name}}/adb_connect.mdpp"
+!INCLUDE "adb_connect.mdpp"
 
 ## Windows下的 ADB 安装
 

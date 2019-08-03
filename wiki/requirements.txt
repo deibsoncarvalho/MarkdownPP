@@ -4,4 +4,4 @@ sphinxprettysearchresults
 readthedocs-sphinx-ext
 jieba
 pypinyin
-MarkdownPP
+-e git+https://github.com/FireflyTeam/recommonmark#egg=MarkdownPP

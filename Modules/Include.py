@@ -7,6 +7,7 @@ from __future__ import unicode_literals
 
 import glob
 import re
+import os
 from os import path
 
 from MarkdownPP.Module import Module
@@ -38,8 +39,8 @@ class Include(Module):
             match = self.includere.search(line)
             if match:
                 if path:
-                    for s in reversed(path):
-                        includedata = self.include_dir(match, s)
+                    #for s in reversed(path):
+                    includedata = self.include_dir(match, path)
                 else:
                     includedata = self.include(match)
 
@@ -109,11 +110,13 @@ class Include(Module):
             for filename in files:
                 result += self.include_file(filename, pwd, shift)
         else:
+            print("no find file:"  ,fileglob)
+            os._exit(1)
             result.append("")
 
         return result
     
-    def include_dir(self, match, pwd=""):
+    def include_dir(self, match, pwd):
         # file name is caught in group 1 if it's written with double quotes,
         # or group 2 if written with single quotes
         fileglob = match.group(1) or match.group(2)
@@ -121,14 +124,22 @@ class Include(Module):
         shift = int(match.group(3) or 0)
 
         result = []
+        fileToFind = fileglob
+
         if -1 == fileglob.find("/"):
-            fileglob = path.join(pwd, fileglob)
+            for files in pwd:
+                f = path.join(files, fileglob)
+                if os.path.exists(f):
+                    break
+            fileglob = f
 
         files = sorted(glob.glob(fileglob))
         if len(files) > 0:
             for filename in files:
                 result += self.include_file(filename, pwd, shift)
         else:
+            print("no find file:", fileToFind)
+            os._exit(1)
             result.append("")
 
         return result

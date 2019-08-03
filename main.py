@@ -74,8 +74,8 @@ def main():
                         'exclude, separated by commas. Available modules: '
                         + ', '.join(MarkdownPP.modules.keys()))
 
-    parser.add_argument('-f', '--file', help='Json file name, to load the '
-                        'environment args. ')
+    parser.add_argument('-f', '--file', action='append', help='Json file name, '
+                        'to load the environment args. ')
 
     parser.add_argument('-E', '--env', help='Indicate environmental variables. '
                         'Can overwrite the variables in Json. Variables are '
@@ -116,12 +116,12 @@ def main():
         else:
             md = sys.stdout
 
+        env_dict = {}
         if args.file:
-            env_f = open(args.file, 'r') 
-            env_dict = json.load(env_f)
-            env_f.close()
-        else:
-            env_dict = {}
+            for files in args.file:
+                env_f = open(files, 'r') 
+                env_dict.update(json.load(env_f))
+                env_f.close()
 
         if args.env:
             list_env = args.env.split(' ')
@@ -142,22 +142,24 @@ def main():
                 else:
                     print('Cannot exclude ', module, ' - no such module')
                     
-#        if md != sys.stdout:
-#            Env = Environment(loader = FileSystemLoader(searchpath="./"))
-#            template = Env.get_template(args.FILENAME)
-#            temp = open("temp", 'w')
-#            temp.write(template.render(env_dict))
-#            temp.close()
-#            mdpp.close()
-#            mdpp = open("temp", 'r')
+        #1.先将.mdpp文件用jinja2渲染后的内容存到到临时文件temp中
+        if md != sys.stdout:
+            Env = Environment(loader = FileSystemLoader(searchpath="./"), undefined=StrictUndefined)
+            template = Env.get_template(args.FILENAME)
+            temp = open("temp", 'w')
+            temp.write(template.render(env_dict))
+            temp.close()
+            mdpp.close()
+            mdpp = open("temp", 'r')
 
+        #2.将temp文件用MarkdownPP生成.md文件
         MarkdownPP.MarkdownPP(input=mdpp, output=md, modules=modules, path=path)
         md.close()
         mdpp.close()
 
-
+        #3.将.md文件再用jinja2渲染一次
         if md != sys.stdout:
-            Env = Environment(loader = FileSystemLoader(searchpath="./"))
+            Env = Environment(loader = FileSystemLoader(searchpath="./"), undefined=StrictUndefined)
             template = Env.get_template(args.output)
             md = open(args.output, 'w')
             md.write(template.render(env_dict))

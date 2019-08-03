@@ -52,7 +52,7 @@
 
 设备进入升级模式的方式如下：
 
-!INCLUDE "include/{{board_name}}/upgrade_firmware_enter_loader.mdpp"
+!INCLUDE "upgrade_firmware_enter_loader.mdpp"
 
 主机应该会提示发现新硬件并配置驱动。打开设备管理器，会见到新设备 `Rockusb Device` 出现，如下图。如果没有，则需要返回上一步重新安装驱动。
 

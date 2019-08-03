@@ -1,3 +1,4 @@
+```
 # 当前的目录仍然为 update/ ，内有 package-file, package-file 所列的文件均存在
 # 将参数文件拷贝一份到 paramter, 因为 afptool 默认要用到
 $ cp Image/parameter.txt parameter
@@ -18,3 +19,4 @@ Add file: ./RESERVED
 Add CRC...
 ------ OK ------
 Pack OK!
+```

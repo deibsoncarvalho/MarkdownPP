@@ -1,10 +1,9 @@
-.. Firefly-RK3399 Manual documentation master file, created by
+.. {{board_name}} Manual documentation master file, created by
    sphinx-quickstart on Wed May 3 14:17:57 2018.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
-Welcome to Firefly-RK3399 Manual
+Welcome to {{board_name}} Manual
 =====================================
-
 .. toctree::
    :glob:
    :maxdepth: 2
@@ -39,7 +38,9 @@ Welcome to Firefly-RK3399 Manual
    :caption: Android开发
    
    adb_use
+{% if board_name == "Firefly-RK3399" or board_name == "AIO-3399J" or board_name == "AIO-3399C" %}
    compile_android_firmware
+{% endif %}
    compile_android8.1_firmware
    customize_android_firmware
    
@@ -54,10 +55,27 @@ Welcome to Firefly-RK3399 Manual
    driver_ir
    driver_lcd
    driver_led
+
+{% if board_name == "Firefly-RK3399" %}
    driver_camera
+   driver_rtc
+{% endif %}
+
+{% if board_name == "AIO-3399J" %}
+   driver_mipi_csi
+   driver_rtc
+{% endif %}
+
+{% if board_name == "AIO-3399C" %}
+   driver_rtc
+{% endif %}
+
+{% if board_name == "AIO-3399PRO-JD4" %}
+   driver_mipi_csi
+{% endif %}
+
    driver_pwm
    driver_spi
-   driver_rtc
    driver_timer
    driver_uart
 
@@ -95,5 +113,3 @@ Welcome to Firefly-RK3399 Manual
    
    interface_definition
    hardware_doc
-
-

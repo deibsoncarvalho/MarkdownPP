@@ -60,7 +60,7 @@ CONFIG_RK32_MIPI_DSI=y
 
 {{board_name}} 的 SDK 有 LVDS DSI 的 DTS 文件：`kernel/arch/arm64/boot/dts/rockchip/{{lvds_dts}}`，从该文件中我们可以看到以下语句：
 
-!INCLUDE "include/{{board_name}}/lcd_dts_conf.mdpp"
+!INCLUDE "lcd_dts_conf.mdpp"
 
 都是高电平有效，具体的引脚配置请参考[《GPIO 使用》](driver_gpio.html)一节。
 
@@ -117,7 +117,7 @@ CONFIG_RK32_MIPI_DSI=y
 };
 ```
 
-pwms 属性：配置 PWM，范例里面默认使用 PWM0，25000ns 是周期 (40 KHz)。LVDS 需要加背光电源控制脚，在 `kernel/arch/arm64/boot/dts/rockchip/{{lvds_dst}}` 中可以看到以下语句：
+pwms 属性：配置 PWM，范例里面默认使用 PWM0，25000ns 是周期 (40 KHz)。LVDS 需要加背光电源控制脚，在 `kernel/arch/arm64/boot/dts/rockchip/{{lvds_dts}}` 中可以看到以下语句：
 
 ```
 &backlight {

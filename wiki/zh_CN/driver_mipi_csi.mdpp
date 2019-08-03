@@ -1,3 +1,5 @@
+{% if board_name == "AIO-3399J" or board_name == "AIO-3399PRO-JD4" %}
+
 {% if board_name == "AIO-3399J" %}
 {% set i2c_channel = "3"%}
 {% elif board_name == "AIO-3399PRO-JD4" %}
@@ -53,7 +55,7 @@ Android：
 
 设置摄像头相关的引脚和时钟，即可完成配置过程。
 
-!INCLUDE "include/{{board_name}}/mipi_csi_schematics.mdpp"
+!INCLUDE "mipi_csi_schematics.mdpp"
 
 ## 配置步骤
 
@@ -400,3 +402,5 @@ make ARCH=arm64 {{dts}}.img
 - 2Mː OV2680
 
 详细资料可查询 SDK/RKDocs
+
+{% endif %}

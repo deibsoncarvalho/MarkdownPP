@@ -1,3 +1,11 @@
+{% if board_name == "Firefly-RK3399" or board_name == "AIO-3399J" or board_name == "AIO-3399C" %}
+{% set platform = "rk3399" %}
+
+{% elif board_name == "AIO-3399PRO-JD4" %}
+{% set platform = "rk3399pro" %}
+
+{% endif %}
+
 ## 准备工作
 
 ### 下载源码
@@ -19,7 +27,7 @@ git clone https://github.com/FireflyTeam/repo.git
 ```
 mkdir linux-sdk
 cd linux-sdk
-../repo/repo init --repo-url https://github.com/FireflyTeam/repo.git -u https://github.com/FireflyTeam/manifests.git -b linux-sdk -m rk3399/rk3399_linux_release.xml
+../repo/repo init --repo-url https://github.com/FireflyTeam/repo.git -u https://github.com/FireflyTeam/manifests.git -b linux-sdk -m {{platform}}/{{platform}}_linux_release.xml
 ```
 
 同步源码:

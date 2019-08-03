@@ -410,7 +410,7 @@ GPIO1B[3] iomux select
 
 Debugfs 文件系统目的是为开发人员提供更多内核数据，方便调试。 这里 GPIO 的调试也可以用 Debugfs 文件系统，获得更多的内核信息。GPIO 在 Debugfs 文件系统中的接口为 `/sys/kernel/debug/gpio`，可以这样读取该接口的信息：
 
-!INCLUDE "include/{{board_name}}/gpio_interface_msg.mdpp"
+!INCLUDE "gpio_interface_msg.mdpp"
 
 ## FAQs
 

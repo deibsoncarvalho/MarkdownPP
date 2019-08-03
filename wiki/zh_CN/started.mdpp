@@ -4,7 +4,7 @@
 
 {{board_name}} 的标准套装包含以下配件：
 
-!INCLUDE "include/{{board_name}}/started_components.mdpp"
+!INCLUDE "started_components.mdpp"
 
  <a id="firmware-format"></a>
 
@@ -31,7 +31,7 @@
 
 以下是支持的系统列表：
 
-!INCLUDE "include/{{board_name}}/started_system_support.mdpp"
+!INCLUDE "started_system_support.mdpp"
 
 根据所使用的操作系统来选择合适的工具去烧写固件：
 
@@ -50,7 +50,7 @@
 
 确认主板配件连接无误后，将电源适配器插入带电的插座上，电源线接口插入开发板，开发板第一次加电会自动开机。 在系统选择关机后，维持开发板供电，此时 {{board_name}} 开机方式如下：
 
-!INCLUDE "include/{{board_name}}/started_bootup.mdpp"
+!INCLUDE "started_bootup.mdpp"
 
 开机时，蓝色的电源指示灯会亮起。如果板子接了 HDMI 显示器，可以看到 Firefly 官方 logo.
 

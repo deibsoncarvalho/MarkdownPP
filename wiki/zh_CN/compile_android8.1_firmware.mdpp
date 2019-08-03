@@ -113,7 +113,7 @@ cd ~/proj/firefly-rk3399/
 
 ## {{board_name}} 产品编译方法
 
-!INCLUDE "include/{{board_name}}/compile_android8_1_method.mdpp"
+!INCLUDE "compile_android8_1_method.mdpp"
 
 ## 手动编译
 
@@ -125,7 +125,7 @@ export PATH=$JAVA_HOME/bin:$PATH
 export CLASSPATH=.:$JAVA_HOME/lib:$JAVA_HOME/lib/tools.jar
 ```
 
-!INCLUDE "include/{{board_name}}/compile_android8_1_compile.mdpp"
+!INCLUDE "compile_android8_1_compile.mdpp"
 
 ## 打包成统一固件 update.img
 

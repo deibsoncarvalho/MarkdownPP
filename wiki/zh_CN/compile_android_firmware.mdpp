@@ -1,3 +1,4 @@
+{%- if board_name == "Firefly-RK3399" or board_name == "AIO-3399J" or board_name == "AIO-3399C"-%}
 {#- 根据板子设置局部变量 -#}
 
 {%- if board_name == "Firefly-RK3399" -%}
@@ -135,7 +136,7 @@ cd ~/proj/firefly-rk3399/
 
 ## {{board_name}} 产品编译方法
 
-!INCLUDE "include/{{board_name}}/compile_android_firmware_method.mdpp"
+!INCLUDE "compile_android_firmware_method.mdpp"
 
 ## 手动编译 {{board_name}}
 
@@ -147,7 +148,7 @@ export PATH=$JAVA_HOME/bin:$PATH
 export CLASSPATH=.:$JAVA_HOME/lib:$JAVA_HOME/lib/tools.jar
 ```
 
-!INCLUDE "include/{{board_name}}/compile_android_firmware_packing.mdpp"
+!INCLUDE "compile_android_firmware_packing.mdpp"
 
 ## 烧写分区映像
 
@@ -180,3 +181,5 @@ update.img 方便固件的发布，供终端用户升级系统使用。一般开
 [下载链接]: http://www.t-firefly.com/doc/download/page/id/54.html#other_151
 
 {%- endif -%}
+
+{% endif %}

@@ -64,7 +64,7 @@ Normal 模式就是正常的启动过程，各个组件依次加载，正常进�
 
 在 Loader 模式下，bootloader 会进入升级状态，等待主机命令，用于固件升级等。要进入 Loader 模式，必须让 bootloader 在启动时检测到 `RECOVERY`（恢复）键按下，且 USB 处于连接状态。使设备进入升级模式的方法如下:
 
-!INCLUDE "include/{{board_name}}/bootmode_enter_loader.mdpp"
+!INCLUDE "bootmode_enter_loader.mdpp"
 
 ### MaskRom 模式
 
