@@ -37,5 +37,6 @@ setup(
     },
     install_requires=[
         'Watchdog >= 0.8.3',
+        'Jinja2 >= 2.10.1', 
     ],
 )
