@@ -7,7 +7,7 @@ SPHINXOPTS    =
 SPHINXBUILD   = sphinx-build
 SOURCEDIR     = .
 BUILDDIR      = _build
-MDPP          = /home/firefly/miniconda3/bin/markdown-pp
+MDPP          = markdown-pp
 MDPP_TARGET   = $(addsuffix .md,$(basename $(wildcard *.mdpp)))
 TPL_TARGET	  = $(basename $(wildcard *.tpl))
 
@@ -40,7 +40,7 @@ mdpp: $(MDPP_TARGET)
 	
 
 %.md: %.mdpp FORCE_MAKE
-	@$(MDPP) -f ../json/common.json -f ../json/$(BOARD).json -I include/$(BOARD) -e latexrender $< -o $@
+	@$(MDPP) -f ../json/common.json -f ../json/$(BOARD).json -I include/$(BOARD) -I include/common -e latexrender $< -o $@
 
 pdf: latex
 	rm -f "$(BUILDDIR)"/latex/*.pdf

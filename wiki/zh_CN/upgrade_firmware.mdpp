@@ -5,7 +5,7 @@
 {%- set cable_type = "双公头 USB 数据线"-%}
 
 {%- elif board_name == "AIO-3399C" -%}
-{%- set cable_type = "双公头 USB 数据线"-%}
+{%- set cable_type = " Type-C 数据线"-%}
 
 {%- elif board_name == "AIO-3399PRO-JD4" -%}
 {%- set cable_type = "双公头 USB 数据线"-%}
@@ -38,13 +38,13 @@
 
 ## Windows
 
-* 工具: [Androidtool_xxx(版本号)](http://www.t-firefly.com/doc/download/page/id/54.html#windows_12)
+* 工具: [Androidtool_xxx(版本号)]
 
 **<font color=#ff0000 >注意</font>**:不同固件使用的工具版本可能不同,请根据[烧写须知]下载对应的版本
 
 ### 安装 RK USB 驱动
 
-下载 [ Release_DriverAssistant.zip](http://www.t-firefly.com/doc/download/page/id/3.html#other_11) ，解压，然后运行里面的 DriverInstall.exe 。为了所有设备都使用更新的驱动，请先选择`驱动卸载`，然后再选择`驱动安装`。
+下载 [Release_DriverAssistant.zip]，解压，然后运行里面的 `DriverInstall.exe` 。为了所有设备都使用更新的驱动，请先选择`驱动卸载`，然后再选择`驱动安装`。
 
 ![](img/upgrade_firmware_install_RK_USB.jpg)
 
@@ -60,7 +60,7 @@
 
 ## 烧写固件
 
-下载 [AndroidTool](http://www.t-firefly.com/doc/download/page/id/3.html#windows_12)(**若系统是 Android8.1 则需要 2.54 以上版本**)，解压，运行 `AndroidTool_Release_v2.38` 目录里面的 `AndroidTool.exe`（注意，如果是 Windows 7/8,需要按鼠标右键，选择以管理员身份运行），如下图：
+下载 [AndroidTool] (**若系统是 Android8.1 则需要 2.54 以上版本**)，解压，运行 `AndroidTool_Release_v2.38` 目录里面的 `AndroidTool.exe`（注意，如果是 Windows 7/8,需要按鼠标右键，选择以管理员身份运行），如下图：
 
 ![](img/upgrade_firmware_androidtool.jpg)
 
@@ -92,13 +92,13 @@
 3. 确保映像文件的路径正确，需要的话，点路径右边的空白表格单元格来重新选择。
 4. 点击`执行`按钮开始升级，升级结束后设备会自动重启。
 
-![](img/upgrade_firmware3.png)
+![](img/upgrade_firmware_androidtool.jpg)
 
 ## Linux
 
  Linux 下无须安装设备驱动，参照 Windows 章节连接设备则可。
 
-* 工具:[upgrade_tool_xxx(版本号)](http://www.t-firefly.com/doc/download/page/id/54.html#linux_12)
+* 工具:[upgrade_tool_xxx(版本号)]
 
 **<font color=#ff0000 >注意</font>**:不同固件使用的工具版本可能不同,请根据[烧写须知]下载对应的版本
 
@@ -130,7 +130,9 @@ sudo upgrade_tool uf update.img
 ```
 
 烧写分区镜像：
+
 Ubuntu(MBR)、Android7.1、Android8.1,使用以下方式:
+
 ```
 sudo upgrade_tool di -b /path/to/boot.img
 sudo upgrade_tool di -k /path/to/kernel.img
@@ -143,6 +145,7 @@ sudo upgrade_tool ul bootloader.bin # 烧写 bootloader
 ```
 
 Ubuntu(GPT),使用以下方式
+
 ```
 sudo upgrade_tool ul $LOADER
 sudo upgrade_tool di -p $PARAMETER
@@ -156,12 +159,13 @@ sudo upgrade_tool di -userdata $USERDATA
 sudo upgrade_tool di -rootfs $ROOTFS
 ```
 
-
 如果因 flash 问题导致升级时出错，可以尝试低级格式化、擦除 nand flash：
+
 ```
 sudo upgrade_tool lf update.img	# 低级格式化
 sudo upgrade_tool ef update.img	# 擦除
 ```
+
 ## 常见问题
 
 ### 如何强行进入 MaskRom 模式
@@ -172,20 +176,37 @@ sudo upgrade_tool ef update.img	# 擦除
 [烧写须知]: upgrade_table.html
 {% if board_name == "Firefly-RK3399" %}
 [{{board_name}} 固件]: http://www.t-firefly.com/doc/download/page/id/3.html#other_14
+[Androidtool_xxx(版本号)]: http://www.t-firefly.com/doc/download/page/id/3.html#windows_12
+[Androidtool]: http://www.t-firefly.com/doc/download/page/id/3.html#windows_12
+[Release_DriverAssistant.zip]: http://www.t-firefly.com/doc/download/page/id/3.html#other_11
 [Linux_Upgrade_Tool]: http://www.t-firefly.com/doc/download/page/id/3.html#linux_12
+[upgrade_tool_xxx(版本号)]: http://www.t-firefly.com/doc/download/page/id/3.html#linux_12
 {%- endif -%}
 
 {% if board_name == "AIO-3399J" %}
 [{{board_name}} 固件]: http://http://www.t-firefly.com/doc/download/page/id/31.html#other_80
+[Androidtool_xxx(版本号)]: http://www.t-firefly.com/doc/download/page/id/31.html#windows_12
+[Androidtool]: http://www.t-firefly.com/doc/download/page/id/31.html#windows_12
+[Release_DriverAssistant.zip]: http://www.t-firefly.com/doc/download/page/id/31.html#other_11
 [Linux_Upgrade_Tool]: http://www.t-firefly.com/doc/download/page/id/31.html#linux_12
+[upgrade_tool_xxx(版本号)]: http://www.t-firefly.com/doc/download/page/id/31.html#linux_12
 {%- endif -%}
 
 {% if board_name == "AIO-3399C" %}
 [{{board_name}} 固件]: http://http://www.t-firefly.com/doc/download/page/id/54.html#other_148
+[Androidtool_xxx(版本号)]: http://www.t-firefly.com/doc/download/page/id/54.html#windows_12
+[Androidtool]: http://www.t-firefly.com/doc/download/page/id/54.html#windows_12
+[Release_DriverAssistant.zip]: http://www.t-firefly.com/doc/download/page/id/3.html#other_11
 [Linux_Upgrade_Tool]: http://www.t-firefly.com/doc/download/page/id/54.html#linux_12
+[upgrade_tool_xxx(版本号)]: http://www.t-firefly.com/doc/download/page/id/54.html#linux_12
+
 {%- endif -%}
 
 {% if board_name == "AIO-3399PRO-JD4" %}
 [{{board_name}} 固件]: http://http://www.t-firefly.com/doc/download/65.html#other_241
+[Androidtool_xxx(版本号)]: http://www.t-firefly.com/doc/download/page/id/65.html#other_248
+[Androidtool]: http://www.t-firefly.com/doc/download/page/id/65.html#other_248
+[Release_DriverAssistant.zip]: http://www.t-firefly.com/doc/download/page/id/65.html#other_246
 [Linux_Upgrade_Tool]: http://www.t-firefly.com/doc/download/65.html#other_247
+[upgrade_tool_xxx(版本号)]: http://www.t-firefly.com/doc/download/65.html#other_247
 {%- endif -%}

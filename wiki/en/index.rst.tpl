@@ -7,7 +7,7 @@ Welcome to {{board_name}} Manual
 .. toctree::
    :glob:
    :maxdepth: 2
-   :caption: 上手教程
+   :caption: Quick Start
 
    started
    debug
@@ -15,7 +15,7 @@ Welcome to {{board_name}} Manual
 .. toctree::
    :glob:
    :maxdepth: 2
-   :caption: 烧写固件
+   :caption: Upgrade Firmware
 
    bootmode
    upgrade_table
@@ -25,7 +25,7 @@ Welcome to {{board_name}} Manual
 .. toctree::
    :glob:
    :maxdepth: 2
-   :caption: Linux开发
+   :caption: Linux
    
    linux_build_ubuntu_rootfs.md  
    linux_compile_gpt.md
@@ -35,7 +35,7 @@ Welcome to {{board_name}} Manual
 .. toctree::
    :glob:
    :maxdepth: 2
-   :caption: Android开发
+   :caption: Android
    
    adb_use
 {% if board_name == "Firefly-RK3399" or board_name == "AIO-3399J" or board_name == "AIO-3399C" %}
@@ -47,7 +47,7 @@ Welcome to {{board_name}} Manual
 .. toctree::
    :glob:
    :maxdepth: 2
-   :caption: 驱动开发
+   :caption: Driver
    
    driver_adc
    driver_gpio
@@ -82,7 +82,7 @@ Welcome to {{board_name}} Manual
 .. toctree::
    :glob:
    :maxdepth: 2
-   :caption: 配件
+   :caption: Accessories
 
    module_transform
    module_display
@@ -95,21 +95,21 @@ Welcome to {{board_name}} Manual
 .. toctree::
    :glob:
    :maxdepth: 2
-   :caption: 其他
+   :caption: Other
    
    uboot_introduction
 
 .. toctree::
    :glob:
    :maxdepth: 2
-   :caption: 常见问题解答
+   :caption: Questions and answers
 
    faqs
 
 .. toctree::
    :glob:
    :maxdepth: 2
-   :caption: 硬件资料
+   :caption: Hardware resources
    
    interface_definition
    hardware_doc

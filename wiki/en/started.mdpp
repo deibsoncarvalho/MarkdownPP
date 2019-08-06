@@ -52,7 +52,7 @@ After confirming the correct connection of motherboard accessories, insert the p
 *  Keep press power button more than 3 seconds. (extension button)
 *  Press “power” button on the infrared remote control. (extension IR button)
 
-{% elif board_name == "AIO-3399C" or baord_name == "AIO-3399PRO-JD4" %}
+{% elif board_name == "AIO-3399C" or board_name == "AIO-3399PRO-JD4" %}
 *  Long press the power button for 3 seconds (extension button)
 
 {% endif %}

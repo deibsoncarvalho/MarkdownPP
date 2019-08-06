@@ -17,7 +17,7 @@
 
 本章介绍 Buildroot 固件的编译使用。
 
-!INCLUDE "include/get_linux_sdk.mdpp"
+!INCLUDE "get_linux_sdk.mdpp"
 
 ### 配置编译环境
 

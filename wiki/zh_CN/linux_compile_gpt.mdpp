@@ -29,7 +29,7 @@
 
 为了方便用户的使用与开发，官方提供了 Linux 开发的整套 SDK，本章详细的说明 SDK 的具体用法。
 
-!INCLUDE "include/get_linux_sdk.mdpp"
+!INCLUDE "get_linux_sdk.mdpp"
 
 #### 下载裁剪版 SDK
 
