@@ -105,6 +105,9 @@ deploy() {
         die "Error: branch '$BRANCH' has no PUBDIR registered!"
     elif [[ "$PUBDIR" == "SKIP" ]]; then
         echo "Skip branch '$branch' according to configuration."
+
+##在这里添加判断
+
         return 0
     fi
     if ! git rev-parse $REF &>/dev/null; then
