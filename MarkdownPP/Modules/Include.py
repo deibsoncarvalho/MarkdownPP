@@ -52,9 +52,9 @@ class Include(Module):
 
         return transforms
 
-    def include_file(self, filename, pwd="", shift=0):
+    def include_file(self, filename, pwd="", shift=0, encoding="utf-8"):
         try:
-            f = open(filename, "r")
+            f = open(filename, "r", encoding=encoding)
             data = f.readlines()
             f.close()
 
